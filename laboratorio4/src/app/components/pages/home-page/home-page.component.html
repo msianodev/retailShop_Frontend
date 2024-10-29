@@ -1,6 +1,9 @@
-<header class="header">
-    <a routerLink= "/home" class="home-btn">
-        <img src="/assets/home-icon.jpeg" alt="home" class="logo">
-    </a>
-    <button class="header-btn">Cart</button>
-</header>
+<mat-toolbar color="primary">
+  <button mat-icon-button routerLink="/home">
+    <mat-icon>home</mat-icon>
+  </button>
+  <span class="spacer"></span>
+  <button mat-icon-button routerLink="/cart">
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
+</mat-toolbar>

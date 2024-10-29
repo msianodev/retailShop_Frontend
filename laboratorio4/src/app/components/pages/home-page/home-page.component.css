@@ -1,26 +1,13 @@
-.header {
-  background-color: #000000;
-  color: white;
-  width: 100%;
-  height: 5rem;
-  display: flex;
-  justify-content: space-between;
-}
-
-.cart-button {
-  width: 5rem;
-  margin: 0.5rem;
-  padding: 1rem 1rem;
-  background-color: red;
-  color: white;
-  border-radius: 0.5rem;
-  cursor: pointer;
+.spacer {
+  flex: 1 1 auto;
 }
 
 .logo {
-  padding: 0 0.5rem;
-  width: 5rem;
-  height: auto;
-  border-radius: 0.5rem;
-  opacity: 0.8;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+mat-toolbar {
+  padding: 0 16px;
 }
