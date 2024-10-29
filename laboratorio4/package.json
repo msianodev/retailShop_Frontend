@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:laboratorio4": "node dist/laboratorio4/server/server.mjs"
+    "serve:ssr:laboratorio4": "node dist/laboratorio4/server/server.mjs",
+    "net": "ng serve --host 0.0.0.0 --port 4200"
   },
   "private": true,
   "dependencies": {
