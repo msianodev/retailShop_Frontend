@@ -1,28 +1,6 @@
-<!-- componente de barra de herramientas-->
-<mat-toolbar color="primary">
-  <button mat-icon-button>
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span class="spacer"></span>
-  <button mat-icon-button routerLink="/cart">
-    <mat-icon>shopping_cart</mat-icon>
-  </button>
-</mat-toolbar>
-
 <!-- componente de menus-->
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav  opened mode="side" [style.width]="'15rem'" >
-    <div class="sidenav-header">
-      <img width=150 height="150" src="/assets/home-button.png" alt="logo" class="home-icon">
-      <h2 class="t2-menu">Retail Shop</h2>
-    </div>
-    <mat-nav-list>
-      <a mat-list-item *ngFor="let item of menuItems" [routerLink]="item.route">
-        <mat-icon>{{ item.icon }}</mat-icon>
-        <span>{{ item.label }}</span>
-      </a>
-    </mat-nav-list>
-  </mat-sidenav>
-  <div class="home-background">
-  </div>
-</mat-sidenav-container>
+<app-header></app-header>
+
+<app-aside></app-aside>
+
+<app-section></app-section>
