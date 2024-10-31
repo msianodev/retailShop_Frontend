@@ -1,0 +1,10 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar {
+  padding: 0 16px;
+  background-color: #000000;
+  position: relative;
+  z-index: 5;
+}

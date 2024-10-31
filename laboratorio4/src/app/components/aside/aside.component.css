@@ -1,0 +1,19 @@
+.sidenav-content {
+  padding: 3rem;
+}
+
+.sidenav-header {
+  padding-top: 1rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.t2-menu {
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+}
+
+.sidenav-container {
+  background-color: #e5e5e5;
+  height: calc(100vh - 64px);
+}
