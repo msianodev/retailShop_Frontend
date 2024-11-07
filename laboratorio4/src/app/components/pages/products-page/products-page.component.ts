@@ -31,7 +31,7 @@ const ELEMENT_DATA: ProductList[] = [
 export class ProductsPageComponent implements AfterViewInit {
   // private _liveAnnouncer = inject(LiveAnnouncer);
   
-  displayedColumns: string[] = ['sku', 'name', 'stock', 'price_unit', 'edit_button'];
+  displayedColumns: string[] = ['sku', 'name', 'stock', 'price_unit', 'edit_button','detail_button'];
   dataSource = new MatTableDataSource<ProductList>(ELEMENT_DATA);
 
   // @ViewChild(MatSort) sort!: MatSort;
@@ -40,6 +40,13 @@ export class ProductsPageComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
+    // Inyecta el servicio de Router
+    constructor(private router: Router) {}
+
+    goToDetail(sku: number): void {
+      this.router.navigate(['/products', sku]);
+    }
 
   // announceSortChange(sortState: Sort) {
   //   // This example uses English messages. If your application supports

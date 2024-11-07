@@ -16,6 +16,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+
 
 
 
@@ -24,6 +26,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { SectionComponent } from './components/section/section.component';
 import { AsideComponent } from './components/aside/aside.component';
 import { ProductsPageComponent } from './components/pages/products-page/products-page.component';
+import { ProductDetailComponent } from './components/pages/product-detail/product-detail.component';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +37,8 @@ import { ProductsPageComponent } from './components/pages/products-page/products
     HeaderComponent,
     SectionComponent,
     AsideComponent,
-    ProductsPageComponent
+    ProductsPageComponent,
+    ProductDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -49,6 +54,7 @@ import { ProductsPageComponent } from './components/pages/products-page/products
     MatTableModule,
     MatSort,
     MatFormFieldModule,
+    MatCardModule,
     FormsModule
   ],
   providers: [

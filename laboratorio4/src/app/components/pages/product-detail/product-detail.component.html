@@ -1,0 +1,15 @@
+<div *ngIf="product" class="product-detail">
+    <h2>Product Details: {{ product.name }}</h2>
+    <mat-card>
+      <mat-card-title>{{ product.name }}</mat-card-title>
+      <mat-card-content>
+        <p><strong>SKU:</strong> {{ product.sku }}</p>
+        <p><strong>Stock:</strong> {{ product.stock }}</p>
+        <p><strong>Price:</strong> ${{ product.price_unit }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div *ngIf="!product">
+    <p>Product not found.</p>
+  </div>
+  
