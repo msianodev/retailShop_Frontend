@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
 
@@ -30,7 +31,7 @@ const ELEMENT_DATA: ProductList[] = [
 export class ProductsPageComponent implements AfterViewInit {
   // private _liveAnnouncer = inject(LiveAnnouncer);
   
-  displayedColumns: string[] = ['sku', 'name', 'stock', 'price_unit'];
+  displayedColumns: string[] = ['sku', 'name', 'stock', 'price_unit', 'edit_button'];
   dataSource = new MatTableDataSource<ProductList>(ELEMENT_DATA);
 
   // @ViewChild(MatSort) sort!: MatSort;
@@ -50,6 +51,10 @@ export class ProductsPageComponent implements AfterViewInit {
   //   } else {
   //     this._liveAnnouncer.announce('Sorting cleared');
   //   }
+  // }
+
+  // edit(element: Elemento) {
+  //   this.router.navigate(['/editar', element.id]);
   // }
 }
   

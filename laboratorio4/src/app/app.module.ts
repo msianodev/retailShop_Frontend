@@ -14,6 +14,10 @@ import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {FormsModule} from '@angular/forms';
+
+
 
 import { HomePageComponent } from './components/pages/home-page/home-page.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -43,7 +47,9 @@ import { ProductsPageComponent } from './components/pages/products-page/products
     MatListModule,
     MatPaginatorModule,
     MatTableModule,
-    MatSort
+    MatSort,
+    MatFormFieldModule,
+    FormsModule
   ],
   providers: [
     provideClientHydration(),
