@@ -48,17 +48,17 @@
         </ng-container>
     
         <!-- Actions Column -->
-         <!-- Edit Column -->
+         <!-- Edit Column
         <ng-container matColumnDef="edit_button">
             <th mat-header-cell *matHeaderCellDef > 
                 Edit
             </th>
             <td mat-cell *matCellDef="let element"> 
-                <!-- <button mat-icon-button color="primary" (click)="edit_button(element)">
+                 <button mat-icon-button color="primary" (click)="edit_button(element)">
                     <mat-icon>edit</mat-icon>
                 </button> -->
-            </td>
-        </ng-container>
+            <!-- </td>
+        </ng-container> --> 
 
         <ng-container matColumnDef="detail_button">
             <th mat-header-cell *matHeaderCellDef> Detail </th>
@@ -69,7 +69,16 @@
             </td>
         </ng-container>
     
-    
+        <ng-container matColumnDef="add_to_cart">
+            <th mat-header-cell *matHeaderCellDef> Add to Cart </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="addToCart(element)">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+        
+
     
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

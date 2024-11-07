@@ -11,15 +11,15 @@ export interface ProductList {
   name: string;
   stock: number;
   price_unit: number;
-  edit_button: string;
+
 }
 
 const ELEMENT_DATA: ProductList[] = [
-  {sku: 1, name: 'Hydrogen', stock: 1.0079, price_unit: 1, edit_button: 'Edit'},
-  {sku: 2, name: 'Helium', stock: 4.0026, price_unit: 2, edit_button: 'Edit'},
-  {sku: 3, name: 'Lithium', stock: 6.941, price_unit: 3, edit_button: 'Edit'},
-  {sku: 4, name: 'Beryllium', stock: 9.0122, price_unit: 4, edit_button: 'Edit'},
-  {sku: 5, name: 'Boron', stock: 10.811, price_unit: 5, edit_button: 'Edit'},
+  {sku: 1, name: 'Hydrogen', stock: 1.0079, price_unit: 1,},
+  {sku: 2, name: 'Helium', stock: 4.0026, price_unit: 2,},
+  {sku: 3, name: 'Lithium', stock: 6.941, price_unit: 3,},
+  {sku: 4, name: 'Beryllium', stock: 9.0122, price_unit: 4,},
+  {sku: 5, name: 'Boron', stock: 10.811, price_unit: 5},
 ];
 
 @Component({
@@ -31,7 +31,7 @@ const ELEMENT_DATA: ProductList[] = [
 export class ProductsPageComponent implements AfterViewInit {
   // private _liveAnnouncer = inject(LiveAnnouncer);
   
-  displayedColumns: string[] = ['sku', 'name', 'stock', 'price_unit', 'edit_button','detail_button'];
+  displayedColumns: string[] = ['sku', 'name', 'stock', 'price_unit','detail_button', 'add_to_cart'];
   dataSource = new MatTableDataSource<ProductList>(ELEMENT_DATA);
 
   // @ViewChild(MatSort) sort!: MatSort;
@@ -48,6 +48,12 @@ export class ProductsPageComponent implements AfterViewInit {
       this.router.navigate(['/products', sku]);
     }
 
+    // Método para añadir al carrito
+  addToCart(product: ProductList): void {
+    console.log(`Producto añadido al carrito: ${product.name}`);
+    // Aquí podrías agregar lógica para añadir el producto al carrito, por ejemplo:
+    // this.cartService.addProduct(product);
+  }
   // announceSortChange(sortState: Sort) {
   //   // This example uses English messages. If your application supports
   //   // multiple language, you would internationalize these strings.
