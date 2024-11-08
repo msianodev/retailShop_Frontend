@@ -3,27 +3,27 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 
-import { ProductService, ProductList } from '../../../services/product.service';
-import { MatSort } from '@angular/material/sort';
-import {LiveAnnouncer} from '@angular/cdk/a11y';
+import { ProductService } from '../../../services//product/product.service';
 import { MatSort, Sort } from '@angular/material/sort';
+import { Product } from '../../../types/types';
 
-
-export interface ProductList {
+/*
+export interface Product {
   sku: number;
-  name: string;
+  description: string;
   brand: string;
   stock: number;
   price_unit: number;
 
 }
+*/
 
-const ELEMENT_DATA: ProductList[] = [
-  {sku: 1, name: 'Hydrogen', brand: 'Nike' ,stock: 1.0079, price_unit: 1,},
-  {sku: 2, name: 'Helium', brand: 'Adidas',stock: 4.0026, price_unit: 2,},
-  {sku: 3, name: 'Lithium', brand: 'Puma',stock: 6.941, price_unit: 3,},
-  {sku: 4, name: 'Beryllium', brand: 'Stella' ,stock: 9.0122, price_unit: 4,},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+const ELEMENT_DATA: Product[] = [
+  {sku: 1, description: 'Hydrogen', brand: 'Nike' ,stock: 1.0079, unitPrice: 1,},
+  {sku: 2, description: 'Helium', brand: 'Adidas',stock: 4.0026, unitPrice: 2,},
+  {sku: 3, description: 'Lithium', brand: 'Puma',stock: 6.941, unitPrice: 3,},
+  {sku: 4, description: 'Beryllium', brand: 'Stella' ,stock: 9.0122, unitPrice: 4,},
+  {sku: 5, description: 'Boron', brand: 'Tesse',stock: 10.811, unitPrice: 5},
 ];
 
 
@@ -33,8 +33,8 @@ const ELEMENT_DATA: ProductList[] = [
   styleUrls: ['./products-page.component.css']
 })
 export class ProductsPageComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['sku', 'name', 'stock', 'brand','price_unit', 'detail_button','add_to_cart'];
-  dataSource = new MatTableDataSource<ProductList>([]); // Inicializa con un array vacío
+  displayedColumns: string[] = ['sku', 'description', 'stock', 'brand','price_unit', 'detail_button','add_to_cart'];
+  dataSource = new MatTableDataSource<Product>([]); // Inicializa con un array vacío
   filterValue: string = ''; // Almacena el valor de búsqueda
   selectedColumn: string = 'name'; // Columna de búsqueda seleccionada, por defecto es 'name'
 
@@ -83,7 +83,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   }
 
   // Método para añadir un producto al carrito
-  add_to_cart(product: ProductList): void {
+  add_to_cart(product: Product): void {
     // Lógica para agregar el producto al carrito
     console.log('Producto añadido al carrito:', product);
     // Puedes añadir aquí lógica adicional, como enviar el producto a un servicio de carrito

@@ -1,10 +1,10 @@
 <div *ngIf="product" class="product-detail">
-  <h2>Product Details: {{ product.name }}</h2>
+  <h2>Product Details: {{ product.description }}</h2>
   <mat-card>
     <form [formGroup]="productForm" (ngSubmit)="saveChanges()">
       <mat-card-header>
         <mat-card-title>
-          <input matInput placeholder="Product Name" formControlName="name" />
+          <input matInput placeholder="Product Description" formControlName="description" />
         </mat-card-title>
         <mat-card-subtitle>SKU: {{ product.sku }}</mat-card-subtitle>
       </mat-card-header>

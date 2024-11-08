@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProductService, ProductList } from '../../../services/product.service';
+import { ProductService } from '../../../services/product/product.service';
 import { Observable } from 'rxjs';
+import { Product } from '../../../types/types';
 
 @Component({
   selector: 'app-product-detail',
@@ -11,7 +12,7 @@ import { Observable } from 'rxjs';
 })
 export class ProductDetailComponent implements OnInit {
   productForm!: FormGroup;
-  product: ProductList | null = null;
+  product: Product | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,7 +29,7 @@ export class ProductDetailComponent implements OnInit {
   // Inicializar el formulario reactivo
   initForm(): void {
     this.productForm = this.fb.group({
-      name: ['', Validators.required],
+      description: ['', Validators.required],
       brand: ['', Validators.required],
       stock: [0, [Validators.required, Validators.min(0)]],
       price_unit: [0, [Validators.required, Validators.min(0)]],

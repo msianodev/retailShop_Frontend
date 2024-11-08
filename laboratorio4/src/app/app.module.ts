@@ -30,6 +30,8 @@ import { SectionComponent } from './components/section/section.component';
 import { AsideComponent } from './components/aside/aside.component';
 import { ProductsPageComponent } from './components/pages/products-page/products-page.component';
 import { ProductDetailComponent } from './components/pages/product-detail/product-detail.component';
+import { SalesHistoryComponent } from './components/sales-history/sales-history.component';
+import { SaleDetailModalComponent } from './components/sale-detail-modal/sale-detail-modal.component';
 
 
 @NgModule({
@@ -42,6 +44,8 @@ import { ProductDetailComponent } from './components/pages/product-detail/produc
     AsideComponent,
     ProductsPageComponent,
     ProductDetailComponent,
+    SalesHistoryComponent,
+    SaleDetailModalComponent,
   ],
   imports: [
     BrowserModule,
