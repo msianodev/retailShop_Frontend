@@ -6,10 +6,11 @@
         <p><strong>SKU:</strong> {{ product.sku }}</p>
         <p><strong>Stock:</strong> {{ product.stock }}</p>
         <p><strong>Price:</strong> ${{ product.price_unit }}</p>
+        <div *ngIf="!product">
+          <p>Product not found.</p>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>
-  <div *ngIf="!product">
-    <p>Product not found.</p>
-  </div>
+
   

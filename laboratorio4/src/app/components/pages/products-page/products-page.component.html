@@ -1,17 +1,24 @@
 <div class="search">
-    <input type="text" placeholder="Buscar...">
-    <button>
-        <mat-icon class="lupe">search</mat-icon>
-    </button>
-    <select class="searchSelect">
-        <option value="1">SKU</option>
-        <option value="2">Name</option>
-        <option value="3">Stock</option>
-        <option value="4">Price</option>
-    </select>
-</div>
-
-
+    <form (ngSubmit)="onSearch()" #searchForm="ngForm">
+      <input 
+        type="text" 
+        placeholder="Buscar..." 
+        [(ngModel)]="filterValue" 
+        name="search" 
+        required
+        #searchInput="ngModel">
+      
+      <button type="submit" [disabled]="!searchForm.form.valid">
+        Buscar
+      </button>
+  
+      <select class="searchSelect" [(ngModel)]="selectedColumn" name="column">
+        <option value="sku">SKU</option>
+        <option value="name">Name</option>
+      </select>
+    </form>
+  </div>
+  
     <table mat-table [dataSource]="dataSource"
     class="mat-elevation-z8">
     
@@ -41,11 +48,11 @@
     
         <!-- Price Column -->
         <ng-container matColumnDef="price_unit">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> 
-            Price 
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.price_unit}} </td>
-        </ng-container>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> 
+              Price 
+            </th>
+            <td mat-cell *matCellDef="let element"> {{element.price_unit}} </td>
+          </ng-container>
     
         <!-- Actions Column -->
          <!-- Edit Column -->
