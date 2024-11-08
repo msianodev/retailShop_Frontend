@@ -4,13 +4,13 @@
     <div class="container-form">
       <form [formGroup]="ventaForm" (ngSubmit)="confirmSale()">
         <div class="form-grid">
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="nombreVenta">Nombre de la venta:</label>
             <input id="nombreVenta" type="text" formControlName="nombreVenta" placeholder="Ingrese el nombre de la venta" />
             <div *ngIf="ventaForm.get('nombreVenta')?.invalid && ventaForm.get('nombreVenta')?.touched" class="error-message">
               Este campo es obligatorio
             </div>
-          </div>
+          </div> -->
     
           <div class="form-group">
             <label for="fecha">Fecha:</label>
@@ -26,6 +26,7 @@
             <label for="cliente">Cliente:</label>
             <input id="cliente" type="text" formControlName="cliente" placeholder="Ingrese el nombre del cliente" />
             <button type="button" (click)="abrirModal()">Agregar cliente</button>
+            <br>
           </div>
     
           <div class="form-group">

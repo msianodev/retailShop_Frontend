@@ -25,11 +25,34 @@ export class CartService {
   clearCart(): void {
     this.cartSubject.next([]);
   }
+// Agregar un producto al carrito o actualizar su cantidad si ya existe
+addProductToCart(product: cartProduct): void {
+  const existingProductIndex = this.cartSubject.value.findIndex(item => item.sku === product.sku);
 
-  // Agregar un producto al carrito
-  addProductToCart(product: cartProduct): void {
-    this.cartSubject.next([...this.cartSubject.value, product]);
+  if (existingProductIndex !== -1) {
+    // Producto ya existe en el carrito; actualizar la cantidad y subtotal
+    const updatedCart = this.cartSubject.value.map((item, index) => {
+      if (index === existingProductIndex) {
+        const updatedQuantity = item.quantity + product.quantity;
+        return {
+          ...item,
+          quantity: updatedQuantity,
+          subTotal: updatedQuantity * item.unitPrice
+        };
+      }
+      return item;
+    });
+    this.cartSubject.next(updatedCart);
+  } else {
+    // Producto no existe en el carrito; agregarlo como nuevo producto
+    const newProduct = {
+      ...product,
+      subTotal: product.quantity * product.unitPrice
+    };
+    this.cartSubject.next([...this.cartSubject.value, newProduct]);
   }
+}
+
 
   // Actualizar la cantidad de un producto en el carrito
   updateProductQuantity(product: cartProduct, quantity: number): void {
