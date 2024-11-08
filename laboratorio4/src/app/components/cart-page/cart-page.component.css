@@ -1,0 +1,89 @@
+/* Estilos básicos */
+
+
+.cart{
+    background-color: #ddd;
+}
+
+.container-form {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ddd;
+  }
+  
+  /* Uso de CSS Grid para el formulario */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);  /* Dos columnas */
+    gap: 20px; /* Espacio entre los elementos */
+  }
+  
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  input, select {
+    width: 60%;
+    padding: 8px;
+    margin-top: 5px;
+    box-sizing: border-box;
+  }
+  
+  button {
+    padding: 10px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: lightgray;
+    cursor: not-allowed;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 12px;
+  }
+  
+  .container-list {
+    margin-top: 20px;
+    max-width: 80%;
+    margin: 0 auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .container-summary {
+    margin-top: 20px;
+    width: 60%;
+    margin: 0 auto;
+  }
+  
+  .summary-card {
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+  }
+  
+  .totals {
+    margin-bottom: 20px;
+  }
+  
+  .total-item {
+    margin: 5px 0;
+  }
+  
+  .actions button {
+    margin-right: 10px;
+  }
+  

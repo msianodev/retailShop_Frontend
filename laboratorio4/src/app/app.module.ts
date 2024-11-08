@@ -20,6 +20,11 @@ import { MatSort } from '@angular/material/sort';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';  // Si usas mat-select
+import { MatOptionModule } from '@angular/material/core';  // Si usas mat-select
+import { MatPaginator } from '@angular/material/paginator';
+
 
 
 
@@ -32,6 +37,7 @@ import { ProductsPageComponent } from './components/pages/products-page/products
 import { ProductDetailComponent } from './components/pages/product-detail/product-detail.component';
 import { SalesHistoryComponent } from './components/sales-history/sales-history.component';
 import { SaleDetailModalComponent } from './components/sale-detail-modal/sale-detail-modal.component';
+import { CartPageComponent } from './components/cart-page/cart-page.component';
 
 
 @NgModule({
@@ -46,6 +52,7 @@ import { SaleDetailModalComponent } from './components/sale-detail-modal/sale-de
     ProductDetailComponent,
     SalesHistoryComponent,
     SaleDetailModalComponent,
+    CartPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,6 +70,12 @@ import { SaleDetailModalComponent } from './components/sale-detail-modal/sale-de
     MatSort,
     MatFormFieldModule,
     MatCardModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatInputModule,
+    MatPaginator,
+
+    
     FormsModule,
     ReactiveFormsModule
   ],

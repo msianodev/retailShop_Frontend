@@ -28,9 +28,9 @@ export class SalesHistoryComponent implements OnInit {
       seller: 'julian',
       client: 'Cliente A',
       products: [
-        {sku: 1, description: 'Hydrogen', brand: 'Nike' ,stock: 1.0079, unitPrice: 1,quantity: 1, subTotal:1},
-        {sku: 2, description: 'Helium', brand: 'Adidas',stock: 4.0026, unitPrice: 2,quantity: 1, subTotal:2},
-        {sku: 3, description: 'Lithium', brand: 'Puma',stock: 6.941, unitPrice: 3,quantity: 1, subTotal:3}],
+        {sku: 1, description: 'Hydrogen', brand: 'Nike' , unitPrice: 1,quantity: 1, subTotal:1},
+        {sku: 2, description: 'Helium', brand: 'Adidas', unitPrice: 2,quantity: 1, subTotal:2},
+        {sku: 3, description: 'Lithium', brand: 'Puma', unitPrice: 3,quantity: 1, subTotal:3}],
       total: 150.75,
       date: new Date('2024-11-01'),
       paymentMethod: 'Credit Card',
@@ -65,13 +65,13 @@ export class SalesHistoryComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-    private salesHistoryService: SalesHistoryService, // Asegúrate de tener el servicio importado
+    private salesHistoryService: SalesHistoryService,
     private router: Router,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.loadSalesHistory(); // Cargar historial de ventas al iniciar el componente
+    this.loadSalesHistory();
   }
 
   ngAfterViewInit() {

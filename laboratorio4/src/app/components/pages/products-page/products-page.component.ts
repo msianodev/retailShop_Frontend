@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 
 import { ProductService } from '../../../services//product/product.service';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Product } from '../../../types/types';
+import { cartProduct, Product } from '../../../types/types';
+import { CartService } from '../../../services/cart.service';
 
 /*
 export interface Product {
@@ -41,7 +42,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private productService: ProductService, private router: Router) {}
+  constructor(private productService: ProductService, private router: Router, private cartService: CartService) {}
 
   ngOnInit(): void {
     this.loadProducts(); // Carga los productos inicialmente
@@ -82,10 +83,17 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Método para añadir un producto al carrito
   add_to_cart(product: Product): void {
-    // Lógica para agregar el producto al carrito
-    console.log('Producto añadido al carrito:', product);
-    // Puedes añadir aquí lógica adicional, como enviar el producto a un servicio de carrito
+    const cartProduct: cartProduct = {
+      sku: product.sku,
+      description: product.description,
+      brand: product.brand,
+      unitPrice: product.unitPrice,
+      quantity: 1, // Cantidad inicial
+      subTotal: product.unitPrice // Subtotal inicial
+    };
+    this.cartService.addProductToCart(cartProduct);
+    console.log('Producto añadido al carrito:', cartProduct);
   }
+  
 } 

@@ -10,12 +10,6 @@ export interface Product {
     unitPrice: number;
   }
 
-  export interface cartProduct extends Product{
-    quantity: number;
-    subTotal: number;
-  }
-
-
   export interface Sale{
     id: number;
     seller: string;
@@ -26,4 +20,13 @@ export interface Product {
     paymentMethod: string;
     status: string;
   }
+  export interface cartProduct {
+    sku: number;
+    description: string;
+    quantity: number;
+    brand: string;
+    unitPrice: number;
+    subTotal: number;
+  }
+  
 
