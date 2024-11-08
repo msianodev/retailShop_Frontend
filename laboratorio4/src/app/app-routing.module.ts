@@ -4,6 +4,8 @@ import { HomePageComponent } from './components/pages/home-page/home-page.compon
 import { ProductsPageComponent } from './components/pages/products-page/products-page.component';
 import { ProductDetailComponent } from './components/pages/product-detail/product-detail.component';
 import { CartPageComponent } from './components/pages/cart-page/cart-page.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },

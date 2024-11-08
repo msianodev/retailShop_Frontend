@@ -1,7 +1,10 @@
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+
+import { ProductService, ProductList } from '../../../services/product.service';
+import { MatSort } from '@angular/material/sort';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
 
@@ -34,52 +37,66 @@ const ELEMENT_DATA: ProductList[] = [
   
 ];
 
+
 @Component({
   selector: 'app-products-page',
   templateUrl: './products-page.component.html',
-  styleUrl: './products-page.component.css'
+  styleUrls: ['./products-page.component.css']
 })
+export class ProductsPageComponent implements OnInit, AfterViewInit {
+  displayedColumns: string[] = ['sku', 'name', 'stock', 'brand','price_unit', 'detail_button','add_to_cart'];
+  dataSource = new MatTableDataSource<ProductList>([]); // Inicializa con un array vacío
+  filterValue: string = ''; // Almacena el valor de búsqueda
+  selectedColumn: string = 'name'; // Columna de búsqueda seleccionada, por defecto es 'name'
 
-export class ProductsPageComponent implements AfterViewInit {
-  // private _liveAnnouncer = inject(LiveAnnouncer);
-  
-  displayedColumns: string[] = ['sku', 'name', 'stock', 'brand', 'price_unit','detail_button', 'add_to_cart'];
-  dataSource = new MatTableDataSource<ProductList>(ELEMENT_DATA);
-
-  // @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(private productService: ProductService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadProducts(); // Carga los productos inicialmente
+  }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
-    // Inyecta el servicio de Router
-    constructor(private router: Router) {}
+  goToDetail(sku: number): void {
+    this.router.navigate(['/products', sku]);
+  }
 
-    goToDetail(sku: number): void {
-      this.router.navigate(['/products', sku]);
+  // Método que se llama cuando el usuario hace clic en el botón de búsqueda
+  onSearch(): void {
+    this.applyFilter();
+  }
+
+  // Método para aplicar el filtro
+  applyFilter(): void {
+    if (this.filterValue.trim()) {
+      // Si hay un valor de filtro, realiza la búsqueda
+      this.productService.getFilteredProducts(this.filterValue.trim(), this.selectedColumn)
+        .subscribe(products => {
+          this.dataSource.data = products.length > 0 ? products : []; // Asigna productos filtrados o un array vacío
+        });
+    } else {
+      this.loadProducts(); // Si no hay filtro, carga todos los productos
     }
-
-    // Método para añadir al carrito
-  addToCart(product: ProductList): void {
-    console.log(`Producto añadido al carrito: ${product.name}`);
-    // Aquí podrías agregar lógica para añadir el producto al carrito, por ejemplo:
-    // this.cartService.addProduct(product);
   }
-  // announceSortChange(sortState: Sort) {
-  //   // This example uses English messages. If your application supports
-  //   // multiple language, you would internationalize these strings.
-  //   // Furthermore, you can customize the message to add additional
-  //   // details about the values being sorted.
-  //   if (sortState.direction) {
-  //     this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-  //   } else {
-  //     this._liveAnnouncer.announce('Sorting cleared');
-  //   }
-  // }
 
-  // edit(element: Elemento) {
-  //   this.router.navigate(['/editar', element.id]);
-  // }
-}
-  
+
+  // Método para cargar todos los productos
+  loadProducts(): void {
+    this.productService.getAllProducts().subscribe(products => {
+      this.dataSource.data = products;
+    });
+  }
+
+  // Método para añadir un producto al carrito
+  add_to_cart(product: ProductList): void {
+    // Lógica para agregar el producto al carrito
+    console.log('Producto añadido al carrito:', product);
+    // Puedes añadir aquí lógica adicional, como enviar el producto a un servicio de carrito
+  }
+} 

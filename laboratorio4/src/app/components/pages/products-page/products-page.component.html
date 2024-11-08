@@ -1,97 +1,65 @@
 <div class="search">
-    <input type="text" placeholder="Buscar...">
-    <button>
-        <mat-icon class="lupe">search</mat-icon>
-    </button>
-    <select class="searchSelect">
-        <option value="1">SKU</option>
-        <option value="2">Name</option>
-        <option value="3">Stock</option>
-        <option value="4">Price</option>
-    </select>
+  <input type="text" placeholder="Buscar..." [(ngModel)]="filterValue">
+  <button (click)="onSearch()">
+    <mat-icon class="lupe">search</mat-icon>
+  </button>
+  <select class="searchSelect" [(ngModel)]="selectedColumn">
+    <option value="sku">SKU</option>
+    <option value="name">Name</option>
+    <option value="brand">Brand</option>
+    <option value="stock">Stock</option>
+    <option value="price_unit">Price</option>
+  </select>
 </div>
 
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <!-- Define columnas según tus datos -->
+  <ng-container matColumnDef="sku">
+    <th mat-header-cell *matHeaderCellDef> SKU </th>
+    <td mat-cell *matCellDef="let element"> {{element.sku}} </td>
+  </ng-container>
 
-    <table mat-table [dataSource]="dataSource"
-    class="mat-elevation-z8">
-    
-        <!-- Sku Column -->
-        <ng-container matColumnDef="sku">
-        <th mat-header-cell *matHeaderCellDef > 
-            SKU 
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.sku}} </td>
-        </ng-container>
-    
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef > 
-            Name 
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-        <!-- Brand Column -->
-        <ng-container matColumnDef="brand">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> 
-                Brand
-            </th>
-            <td mat-cell *matCellDef="let element"> {{element.brand}} </td>
-            </ng-container>
-        
-        <!-- Stock Column -->
-        <ng-container matColumnDef="stock">
-        <th mat-header-cell *matHeaderCellDef> 
-            Stock 
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.stock}} </td>
-        </ng-container>
-    
-        <!-- Price Column -->
-        <ng-container matColumnDef="price_unit">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> 
-            Price 
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.price_unit}} </td>
-        </ng-container>
-    
-        <!-- Actions Column -->
-         <!-- Edit Column
-        <ng-container matColumnDef="edit_button">
-            <th mat-header-cell *matHeaderCellDef > 
-                Edit
-            </th>
-            <td mat-cell *matCellDef="let element"> 
-                 <button mat-icon-button color="primary" (click)="edit_button(element)">
-                    <mat-icon>edit</mat-icon>
-                </button> -->
-            <!-- </td>
-        </ng-container> --> 
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
 
-        <ng-container matColumnDef="detail_button">
-            <th mat-header-cell *matHeaderCellDef> Detail </th>
-            <td mat-cell *matCellDef="let element">
-                <button mat-icon-button color="accent" (click)="goToDetail(element.sku)">
-                    <mat-icon>info</mat-icon>
-                </button>
-            </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="add_to_cart">
-            <th mat-header-cell *matHeaderCellDef> Add to Cart </th>
-            <td mat-cell *matCellDef="let element">
-                <button mat-icon-button color="primary" (click)="addToCart(element)">
-                    <mat-icon>add</mat-icon>
-                </button>
-            </td>
-        </ng-container>
-        
+  <ng-container matColumnDef="brand">
+    <th mat-header-cell *matHeaderCellDef> Brand </th>
+    <td mat-cell *matCellDef="let element"> {{element.brand}} </td>
+  </ng-container>
 
-    
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-    
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                    showFirstLastButtons
-                    aria-label="Select page of products">
-    </mat-paginator>  
+  <ng-container matColumnDef="stock">
+    <th mat-header-cell *matHeaderCellDef> Stock </th>
+    <td mat-cell *matCellDef="let element"> {{element.stock}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="price_unit">
+    <th mat-header-cell *matHeaderCellDef> Price </th>
+    <td mat-cell *matCellDef="let element"> {{element.price_unit}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="detail_button">
+    <th mat-header-cell *matHeaderCellDef> Detail </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button color="accent" (click)="goToDetail(element.sku)">
+        <mat-icon>info</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="add_to_cart">
+    <th mat-header-cell *matHeaderCellDef> Add to Cart </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button color="primary" (click)="add_to_cart(element)">
+        <mat-icon>add</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of products">
+</mat-paginator>
