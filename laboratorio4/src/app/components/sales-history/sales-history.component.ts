@@ -33,8 +33,7 @@ export class SalesHistoryComponent implements OnInit {
         {sku: 3, description: 'Lithium', brand: 'Puma', unitPrice: 3,quantity: 1, subTotal:3}],
       total: 150.75,
       date: new Date('2024-11-01'),
-      paymentMethod: 'Credit Card',
-      status: 'Completed'
+      paymentMethod: 'Credit Card'
     },
     {
       id: 2,
@@ -43,8 +42,7 @@ export class SalesHistoryComponent implements OnInit {
       products: [],
       total: 250.00,
       date: new Date('2024-11-05'),
-      paymentMethod: 'Cash',
-      status: 'Pending'
+      paymentMethod: 'Cash'
     },
     {
       id: 3,
@@ -53,8 +51,7 @@ export class SalesHistoryComponent implements OnInit {
       products: [],
       total: 325.50,
       date: new Date('2024-11-07'),
-      paymentMethod: 'Debit Card',
-      status: 'Completed'
+      paymentMethod: 'Debit Card'
     }
   ];
 

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../../../services/product/product.service';
 import { Observable } from 'rxjs';
-import { Product } from '../../../types/types';
+import { CategoryDto, Product } from '../../../types/types';
 
 @Component({
   selector: 'app-product-detail',
@@ -13,6 +13,10 @@ import { Product } from '../../../types/types';
 export class ProductDetailComponent implements OnInit {
   productForm!: FormGroup;
   product: Product | null = null;
+  categories: CategoryDto[] = [];
+
+  newCategory: string = '';
+
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +27,7 @@ export class ProductDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProductDetail();
+    //this.loadCategories();
     this.initForm();
   }
 
@@ -31,6 +36,7 @@ export class ProductDetailComponent implements OnInit {
     this.productForm = this.fb.group({
       description: ['', Validators.required],
       brand: ['', Validators.required],
+      category: ['', Validators.required], // Campo para la categoría
       stock: [0, [Validators.required, Validators.min(0)]],
       price_unit: [0, [Validators.required, Validators.min(0)]],
       sku: [{ value: '', disabled: true }] // SKU deshabilitado para que no sea editable
@@ -49,6 +55,33 @@ export class ProductDetailComponent implements OnInit {
       });
     }
   }
+
+
+    
+  // Agregar una nueva categoría
+  addCategory(): void {
+    if (this.newCategory.trim()) {
+      this.productService.addCategory(this.newCategory).subscribe(
+        (response) => {
+          console.log('Categoría agregada:', response);
+          // Si la respuesta es exitosa, actualizamos las categorías
+          this.loadCategories();
+          this.newCategory = ''; // Limpiar el campo de la nueva categoría
+        },
+        (error) => {
+          console.error('Error al agregar categoría:', error);
+        }
+      );
+    }
+  }
+
+  // Cargar las categorías desde la API
+  loadCategories(): void {
+    this.productService.getCategories().subscribe(categories => {
+      this.categories = categories; // Asignar las categorías al arreglo
+    });
+  }
+
 
   // Guardar los cambios
   saveChanges(): void {

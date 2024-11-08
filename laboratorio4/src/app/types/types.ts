@@ -18,7 +18,6 @@ export interface Product {
     total: number;
     date: Date;
     paymentMethod: string;
-    status: string;
   }
   export interface cartProduct {
     sku: number;
@@ -29,4 +28,8 @@ export interface Product {
     subTotal: number;
   }
   
+export interface CategoryDto {
+  id: number;
+  name: string;
+}
 

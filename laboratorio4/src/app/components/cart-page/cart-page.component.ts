@@ -62,8 +62,7 @@ export class CartPageComponent implements OnInit {
       products: this.cartItems,
       total: this.total,
       date: new Date(fecha),
-      paymentMethod: pago,
-      status: 'Pendiente'
+      paymentMethod: pago
     };
 
     this.cartService.confirmSale(sale).subscribe({

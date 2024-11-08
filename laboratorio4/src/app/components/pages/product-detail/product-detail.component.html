@@ -14,6 +14,19 @@
           <input matInput placeholder="Brand" formControlName="brand" />
         </mat-form-field>
 
+        <p><strong>Category:</strong></p>
+        <mat-form-field style="width: 80%;">
+          <mat-select formControlName="category" placeholder="Select a Category">
+            <mat-option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field style="width: 15%; margin-left: 10px;">
+          <input matInput [(ngModel)]="newCategory" placeholder="New Category" />
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="addCategory()">Add Category</button>
+
         <p><strong>Stock:</strong></p>
         <mat-form-field>
           <input matInput type="number" placeholder="Stock" formControlName="stock" />
@@ -34,4 +47,3 @@
 <div *ngIf="!product">
   <p>Product not found.</p>
 </div>
-
