@@ -18,7 +18,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 
 
@@ -41,14 +41,14 @@ import { ProductDetailComponent } from './components/pages/product-detail/produc
     SectionComponent,
     AsideComponent,
     ProductsPageComponent,
-    ProductDetailComponent
+    ProductDetailComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-
+    
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
@@ -59,7 +59,8 @@ import { ProductDetailComponent } from './components/pages/product-detail/produc
     MatSort,
     MatFormFieldModule,
     MatCardModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     provideClientHydration(),

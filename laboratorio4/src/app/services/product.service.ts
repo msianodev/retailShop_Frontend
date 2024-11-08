@@ -9,7 +9,7 @@ export interface ProductList {
   price_unit: number;
 }
 
-const ELEMENT_DATA: ProductList[] = [
+let ELEMENT_DATA: ProductList[] = [
   { sku: 1, name: 'Hydrogen', brand: 'Nike', stock: 1.0079, price_unit: 1 },
   { sku: 2, name: 'Helium', brand: 'Adidas', stock: 4.0026, price_unit: 2 },
   { sku: 3, name: 'Lithium', brand: 'Puma', stock: 6.941, price_unit: 3 },
@@ -54,4 +54,18 @@ export class ProductService {
   getAllProducts(): Observable<ProductList[]> {
     return of(ELEMENT_DATA);
   }
+
+  getProductBySku(sku: number): Observable<ProductList | null> {
+    const product = ELEMENT_DATA.find((p) => p.sku === sku) || null;
+    return of(product); 
+  }
+
+  updateProduct(updatedProduct: ProductList): Observable<ProductList> {
+  // Encuentra el índice del producto en los datos de ejemplo
+  const index = ELEMENT_DATA.findIndex((product) => product.sku === updatedProduct.sku);
+  if (index !== -1) {
+    ELEMENT_DATA[index] = updatedProduct; // Actualiza el producto en los datos de ejemplo
+  }
+  return of(updatedProduct);
+}
 }
