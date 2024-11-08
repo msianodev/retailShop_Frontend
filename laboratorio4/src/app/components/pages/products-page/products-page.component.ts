@@ -2,8 +2,8 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { ProductService, ProductList } from '../../../service/product.service';  
-import { MatSort } from '@angular/material/sort';  
+import { ProductService, ProductList } from '../../../services/product.service';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-products-page',
@@ -11,23 +11,21 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./products-page.component.css']
 })
 export class ProductsPageComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['sku', 'name', 'stock', 'price_unit', 'edit_button', 'detail_button'];
-  dataSource = new MatTableDataSource<ProductList>([]);  // Inicializa con un array vacío
-  filterValue: string = '';  // Almacena el valor de búsqueda
-  selectedColumn: string = 'name';  // Columna de búsqueda seleccionada, por defecto es 'name'
+  displayedColumns: string[] = ['sku', 'name', 'stock', 'brand','price_unit', 'detail_button','add_to_cart'];
+  dataSource = new MatTableDataSource<ProductList>([]); // Inicializa con un array vacío
+  filterValue: string = ''; // Almacena el valor de búsqueda
+  selectedColumn: string = 'name'; // Columna de búsqueda seleccionada, por defecto es 'name'
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;  // Inyecta MatSort
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private productService: ProductService, private router: Router) {}
 
   ngOnInit(): void {
-    // Carga los productos inicialmente (sin filtro)
-    this.loadProducts();
+    this.loadProducts(); // Carga los productos inicialmente
   }
 
   ngAfterViewInit() {
-    // Asocia el paginator y el sort con la dataSource después de la vista
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -47,18 +45,24 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
       // Si hay un valor de filtro, realiza la búsqueda
       this.productService.getFilteredProducts(this.filterValue.trim(), this.selectedColumn)
         .subscribe(products => {
-          this.dataSource.data = products;  // Asigna los productos filtrados a la dataSource
+          this.dataSource.data = products.length > 0 ? products : []; // Asigna productos filtrados o un array vacío
         });
     } else {
-      // Si no hay filtro, obtén todos los productos
-      this.loadProducts();
+      this.loadProducts(); // Si no hay filtro, carga todos los productos
     }
   }
 
   // Método para cargar todos los productos
   loadProducts(): void {
     this.productService.getAllProducts().subscribe(products => {
-      this.dataSource.data = products;  // Asigna todos los productos a la dataSource
+      this.dataSource.data = products;
     });
   }
-}
+
+  // Método para añadir un producto al carrito
+  add_to_cart(product: ProductList): void {
+    // Lógica para agregar el producto al carrito
+    console.log('Producto añadido al carrito:', product);
+    // Puedes añadir aquí lógica adicional, como enviar el producto a un servicio de carrito
+  }
+} 
