@@ -21,6 +21,17 @@ const ELEMENT_DATA: ProductList[] = [
   {sku: 3, name: 'Lithium', brand: 'Puma',stock: 6.941, price_unit: 3,},
   {sku: 4, name: 'Beryllium', brand: 'Stella' ,stock: 9.0122, price_unit: 4,},
   {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
+  
 ];
 
 @Component({

@@ -17,6 +17,7 @@ import { MatSort } from '@angular/material/sort';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
 
 
 
@@ -27,6 +28,8 @@ import { SectionComponent } from './components/section/section.component';
 import { AsideComponent } from './components/aside/aside.component';
 import { ProductsPageComponent } from './components/pages/products-page/products-page.component';
 import { ProductDetailComponent } from './components/pages/product-detail/product-detail.component';
+import { CartPageComponent } from './components/pages/cart-page/cart-page.component';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -38,7 +41,8 @@ import { ProductDetailComponent } from './components/pages/product-detail/produc
     SectionComponent,
     AsideComponent,
     ProductsPageComponent,
-    ProductDetailComponent
+    ProductDetailComponent,
+    CartPageComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +59,10 @@ import { ProductDetailComponent } from './components/pages/product-detail/produc
     MatSort,
     MatFormFieldModule,
     MatCardModule,
-    FormsModule
+    FormsModule,
+    MatSelect,
+    MatInputModule,
+    MatSelectModule,
   ],
   providers: [
     provideClientHydration(),
