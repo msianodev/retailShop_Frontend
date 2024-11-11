@@ -13,7 +13,10 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
-
+.container-form button{ 
+  width: 90%;
+  margin: 5%;
+}
 /* Estilo de la cuadrícula en el formulario */
 .form-grid {
   display: grid;

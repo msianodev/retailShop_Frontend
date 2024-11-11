@@ -26,11 +26,11 @@ export class SalesHistoryComponent implements OnInit {
     {
       id: 1,
       seller: 'julian',
-      client: 'Cliente A',
+      client: 23333222,
       products: [
-        {sku: 1, description: 'Hydrogen', brand: 'Nike' , unitPrice: 1,quantity: 1, subTotal:1},
-        {sku: 2, description: 'Helium', brand: 'Adidas', unitPrice: 2,quantity: 1, subTotal:2},
-        {sku: 3, description: 'Lithium', brand: 'Puma', unitPrice: 3,quantity: 1, subTotal:3}],
+        {sku: 1, description: 'Hydrogen', unitPrice: 1,quantity: 1, subTotal:1},
+        {sku: 2, description: 'Helium', unitPrice: 2,quantity: 1, subTotal:2},
+        {sku: 3, description: 'Lithium', unitPrice: 3,quantity: 1, subTotal:3}],
       total: 150.75,
       date: new Date('2024-11-01'),
       paymentMethod: 'Credit Card'
@@ -38,7 +38,7 @@ export class SalesHistoryComponent implements OnInit {
     {
       id: 2,
       seller: 'julian',
-      client: 'Cliente B',
+      client: 40223332,
       products: [],
       total: 250.00,
       date: new Date('2024-11-05'),
@@ -47,7 +47,7 @@ export class SalesHistoryComponent implements OnInit {
     {
       id: 3,
       seller: 'julian',
-      client: 'Cliente C',
+      client: 39337917,
       products: [],
       total: 325.50,
       date: new Date('2024-11-07'),

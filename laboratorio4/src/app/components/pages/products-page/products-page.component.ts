@@ -87,7 +87,6 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     const cartProduct: cartProduct = {
       sku: product.sku,
       description: product.description,
-      brand: product.brand,
       unitPrice: product.unitPrice,
       quantity: 1, // Cantidad inicial
       subTotal: product.unitPrice // Subtotal inicial

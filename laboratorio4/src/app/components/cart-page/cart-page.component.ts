@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { cartProduct, Sale } from '../../types/types';
 import { CartService } from '../../services/cart.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { log } from 'console';
+import { MatDialog } from '@angular/material/dialog';
+import { SuccessDialogComponent } from '../success-dialog/success-dialog.component';
 
 @Component({
   selector: 'app-cart-page',
@@ -17,14 +18,15 @@ export class CartPageComponent implements OnInit {
   dataSource = new MatTableDataSource<cartProduct>(this.cartItems);
   total = 0;
   subTotal = 0;
+  dateNow = '';
+  userId = 0;
+  userName = '';
 
-  constructor(private fb: FormBuilder, private cartService: CartService) {}
+  constructor(private fb: FormBuilder, private cartService: CartService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.ventaForm = this.fb.group({
-      nombreVenta: ['', Validators.required],
       fecha: ['', Validators.required],
-      vendedor: ['', Validators.required],
       cliente: ['', Validators.required],
       pago: ['', Validators.required],
     });
@@ -34,6 +36,14 @@ export class CartPageComponent implements OnInit {
       this.dataSource.data = this.cartItems;
       this.calculateTotals();
     });
+    this.dateNow = new Date().toLocaleString();  // Formato de fecha y hora
+
+
+/*
+    //TODO, AUTH SERVICE
+    this.userId = authService.getUserId();
+    this.userName = authService.getuserName();
+    */
   }
 
   updateQuantity(product: cartProduct, event: Event): void {
@@ -54,7 +64,9 @@ export class CartPageComponent implements OnInit {
       return;
     }
 
-    const { nombreVenta, fecha, vendedor, cliente, pago } = this.ventaForm.value;
+
+    //TODO: PEDIR EL NUMERO DE VENDEDOR AL SERVICIO DE USUARIOS O AUTH SERVICE.
+    const { fecha, vendedor, cliente, pago } = this.ventaForm.value;
     const sale: Sale = {
       id: 0, // O un valor autogenerado en el backend
       seller: vendedor,
@@ -74,6 +86,10 @@ export class CartPageComponent implements OnInit {
         this.total = 0;
         this.subTotal = 0;
         this.ventaForm.reset();
+
+        
+        // Llamar al método para abrir el modal después de una venta exitosa
+        this.openSuccessDialog();
       },
       error: err => console.error('Error al confirmar la venta:', err)
     });
@@ -89,7 +105,12 @@ export class CartPageComponent implements OnInit {
     console.log('Carrito cancelado y limpiado');
   }
 
-  abrirModal(){
-    console.log('se abre modal');
+  // Método para abrir el modal de éxito
+  openSuccessDialog(): void {
+    const dialogRef = this.dialog.open(SuccessDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('El diálogo se cerró con el resultado: ', result);
+    });
   }
 }

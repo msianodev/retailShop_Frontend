@@ -38,6 +38,7 @@ import { ProductDetailComponent } from './components/pages/product-detail/produc
 import { SalesHistoryComponent } from './components/sales-history/sales-history.component';
 import { SaleDetailModalComponent } from './components/sale-detail-modal/sale-detail-modal.component';
 import { CartPageComponent } from './components/cart-page/cart-page.component';
+import { SuccessDialogComponent } from './components/success-dialog/success-dialog.component';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { CartPageComponent } from './components/cart-page/cart-page.component';
     SalesHistoryComponent,
     SaleDetailModalComponent,
     CartPageComponent,
+    SuccessDialogComponent,
   ],
   imports: [
     BrowserModule,

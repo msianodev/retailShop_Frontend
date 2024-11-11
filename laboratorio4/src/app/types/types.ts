@@ -13,7 +13,7 @@ export interface Product {
   export interface Sale{
     id: number;
     seller: string;
-    client: string;
+    client: number;
     products: cartProduct[];
     total: number;
     date: Date;
@@ -23,7 +23,6 @@ export interface Product {
     sku: number;
     description: string;
     quantity: number;
-    brand: string;
     unitPrice: number;
     subTotal: number;
   }

@@ -1,109 +1,96 @@
 <div class="cart">
 
-    <!-- Formulario de Venta -->
-    <div class="container-form">
-      <form [formGroup]="ventaForm" (ngSubmit)="confirmSale()">
-        <div class="form-grid">
-          <!-- <div class="form-group">
-            <label for="nombreVenta">Nombre de la venta:</label>
-            <input id="nombreVenta" type="text" formControlName="nombreVenta" placeholder="Ingrese el nombre de la venta" />
-            <div *ngIf="ventaForm.get('nombreVenta')?.invalid && ventaForm.get('nombreVenta')?.touched" class="error-message">
-              Este campo es obligatorio
-            </div>
-          </div> -->
-    
-          <div class="form-group">
-            <label for="fecha">Fecha:</label>
-            <input id="fecha" type="date" formControlName="fecha" placeholder="Seleccione la fecha" />
-          </div>
-    
-          <div class="form-group">
-            <label for="vendedor">Vendedor:</label>
-            <input id="vendedor" type="text" formControlName="vendedor" placeholder="Ingrese el nombre del vendedor" />
-          </div>
-    
-          <div class="form-group">
-            <label for="cliente">Cliente:</label>
-            <input id="cliente" type="text" formControlName="cliente" placeholder="Ingrese el nombre del cliente" />
-            <button type="button" (click)="abrirModal()">Agregar cliente</button>
-            <br>
-          </div>
-    
-          <div class="form-group">
-            <label for="pago">Método de pago:</label>
-            <select id="pago" formControlName="pago">
-              <option value="efectivo">Efectivo</option>
-              <option value="tarjeta">Tarjeta</option>
-              <option value="transferencia">Transferencia</option>
-            </select>
-          </div>
+  <!-- Formulario de Venta -->
+  <div class="container-form">
+    <form [formGroup]="ventaForm" #form="ngForm">
+      <div class="form-grid">
+        <div class="form-group" style="display: inline">
+          <label for="fecha">Date:</label>
+          <span style="margin: 15px">{{ dateNow | date:'dd/MM/yyyy' }}</span>
         </div>
     
-        <button type="submit" [disabled]="!ventaForm.valid">Confirmar</button>
-      </form>
-    </div>
+        <div class="form-group" [ngStyle]="{'display': 'inline'}">
+          <label for="vendedor">Seller:</label>
+          <span style="margin: 10px">{{ userName ? userName : 'Seller' }}</span>
+        </div>
     
-    <!-- Tabla de productos -->
-    <div class="container-list">
-      <div class="table-container">
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-          <ng-container matColumnDef="SKU">
-            <th mat-header-cell *matHeaderCellDef> SKU </th>
-            <td mat-cell *matCellDef="let element"> {{element.sku}} </td>
-          </ng-container>
-          
-          <ng-container matColumnDef="Description">
-            <th mat-header-cell *matHeaderCellDef> Description </th>
-            <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-          </ng-container>
-          
-          <ng-container matColumnDef="Quantity">
-            <th mat-header-cell *matHeaderCellDef> Quantity </th>
-            <td mat-cell *matCellDef="let element">
-              <input type="number" [(ngModel)]="element.quantity" (change)="updateQuantity(element, $event)">
-            </td>
-          </ng-container>
-          
-          <ng-container matColumnDef="Brand">
-            <th mat-header-cell *matHeaderCellDef> Brand </th>
-            <td mat-cell *matCellDef="let element"> {{element.brand}} </td>
-          </ng-container>
-          
-          <ng-container matColumnDef="Unit.Price">
-            <th mat-header-cell *matHeaderCellDef> Unit Price </th>
-            <td mat-cell *matCellDef="let element"> {{element.unitPrice | currency}} </td>
-          </ng-container>
-          
-          <ng-container matColumnDef="SubTotal">
-            <th mat-header-cell *matHeaderCellDef> SubTotal </th>
-            <td mat-cell *matCellDef="let element"> {{element.subTotal | currency}} </td>
-          </ng-container>
-          
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
+        <div class="form-group">
+          <label for="cliente">Client:</label>
+          <input id="cliente" type="text" formControlName="cliente" placeholder="Insert client ID" />
+        </div>
+    
+        <div class="form-group">
+          <label for="pago">Payment Method:</label>
+          <select id="pago" formControlName="pago">
+            <option value="efectivo">Cash</option>
+            <option value="tarjeta">Credit Card</option>
+            <option value="transferencia">Transference</option>
+          </select>
+        </div>
       </div>
-      <button (click)="confirmSale()">Confirmar Carrito</button>
+    </form>
+  </div>
+
+  <!-- Tabla de productos -->
+  <div class="container-list">
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="SKU">
+          <th mat-header-cell *matHeaderCellDef> SKU </th>
+          <td mat-cell *matCellDef="let element"> {{element.sku}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Quantity">
+          <th mat-header-cell *matHeaderCellDef> Quantity </th>
+          <td mat-cell *matCellDef="let element">
+            <input type="number" [(ngModel)]="element.quantity" (change)="updateQuantity(element, $event)">
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Brand">
+          <th mat-header-cell *matHeaderCellDef> Brand </th>
+          <td mat-cell *matCellDef="let element"> {{element.brand}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Unit.Price">
+          <th mat-header-cell *matHeaderCellDef> Unit Price </th>
+          <td mat-cell *matCellDef="let element"> {{element.unitPrice | currency}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="SubTotal">
+          <th mat-header-cell *matHeaderCellDef> SubTotal </th>
+          <td mat-cell *matCellDef="let element"> {{element.subTotal | currency}} </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
     </div>
-  
-    <!-- Resumen -->
-    <div class="container-summary">
-      <div class="summary-card">
-        <div class="totals">
-          <div class="total-item">
-            <span>Subtotal:</span>
-            <span>{{ subTotal | currency }}</span>
-          </div>
-          <div class="total-item">
-            <span>Total:</span>
-            <span>{{ total | currency }}</span>
-          </div>
+  </div>
+
+  <!-- Resumen -->
+  <div class="container-summary">
+    <div class="summary-card">
+      <div class="totals">
+        <div class="total-item">
+          <span>Subtotal:</span>
+          <span>{{ subTotal | currency }}</span>
         </div>
-        <div class="actions">
-          <button type="button" (click)="confirmSale()">Confirmar</button>
-          <button type="button" (click)="cancelSale()">Cancelar</button>
+        <div class="total-item">
+          <span>Total:</span>
+          <span>{{ total | currency }}</span>
         </div>
+      </div>
+      <div class="actions">
+        <button type="button" (click)="confirmSale()">Confirmar</button>
+        <button type="button" (click)="cancelSale()">Cancelar</button>
       </div>
     </div>
   </div>
-  
+
+</div>
