@@ -8,14 +8,15 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { cartProduct, Category, Product } from '../../../types/types';
 import { CartService } from '../../../services/cart.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ProductDetailComponent } from '../product-detail/product-detail.component';
 
 
-const ELEMENT_DATA: Product[] = [
-  { sku: 1, description: 'Hydrogen', category:{id: 1,name: 'automotor'}, stock: 1, unitPrice: 1, },
-  { sku: 2, description: 'Helium',  category:{id: 1,name: 'automotor'}, stock: 4, unitPrice: 2, },
-  { sku: 3, description: 'Lithium', category:{id: 1,name: 'automotor'}, stock: 6, unitPrice: 3, },
-  { sku: 4, description: 'Beryllium', category:{id: 1,name: 'automotor'}, stock: 9, unitPrice: 4, },
-  { sku: 5, description: 'Boron',  category:{id: 1,name: 'automotor'}, stock: 10, unitPrice: 5 },
+export const ELEMENT_DATA: Product[] = [
+  { sku: 1, description: 'Hydrogen', category:{id: 2,name: 'distribucion'}, stock: 1, unitPrice: 1, },
+  { sku: 2, description: 'Helium',  category:{id: 2,name: 'distribucion'}, stock: 4, unitPrice: 2, },
+  { sku: 3, description: 'Lithium', category:{id: 2,name: 'distribucion'}, stock: 6, unitPrice: 3, },
+  { sku: 4, description: 'Beryllium', category:{id: 2,name: 'distribucion'}, stock: 9, unitPrice: 4, },
+  { sku: 5, description: 'Boron',  category:{id: 2,name: 'distribucion'}, stock: 10, unitPrice: 5 },
 ];
 
 
@@ -38,7 +39,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   categories: Category[] = [
     {
       id: 1,
-      name: 'automotor'
+      name: 'caño'
     },
     {
       id: 2,

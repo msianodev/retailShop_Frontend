@@ -12,8 +12,10 @@ const routes: Routes = [
   { path: 'home', component: HomePageComponent },
   { path: 'products', component: ProductsPageComponent },
   { path: 'products/:sku', component: ProductDetailComponent}, // Ruta con parámetro `sku`
+  { path: 'products/new', component: ProductDetailComponent},
   { path: 'sales', component: SalesHistoryComponent},
-  { path: 'cart', component: CartPageComponent}
+  { path: 'cart', component: CartPageComponent},
+  { path: '', redirectTo: '/products', pathMatch: 'full' },
   ];
   
 
