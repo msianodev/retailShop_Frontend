@@ -152,18 +152,33 @@ export class ProductDetailComponent implements OnInit {
   
       if (this.isNewProduct) {
         this.productService.createProduct(productData).subscribe(() => {
-          console.log('Nuevo producto creado:', productData);
           this.goBack();
         });
       } else {
         const updatedProduct = { ...this.product, ...productData };
         this.productService.updateProduct(updatedProduct).subscribe(() => {
-          console.log('Producto actualizado:', updatedProduct);
           this.goBack();
         });
       }
     }
   }
+
+  confirmDelete(): void {
+    if (confirm('Are you sure you want to delete this product?')) {
+      this.deleteProduct();
+    }
+  }
+  
+
+  deleteProduct(): void {
+    if (this.product && this.product.sku) {
+      this.productService.deleteProduct(this.product.sku).subscribe(() => {
+        console.log('Product Deleted');
+        this.goBack(); // Redirige a la lista de productos después de eliminar
+      });
+    }
+  }
+  
 
   // Regresar a la lista de productos
   goBack(): void {

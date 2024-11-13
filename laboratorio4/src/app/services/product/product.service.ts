@@ -57,6 +57,9 @@ export class ProductService {
   //   return of(filteredProducts);
   // }
 ////////////////
+deleteProduct(sku: number): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${sku}`);
+}
 
 
 

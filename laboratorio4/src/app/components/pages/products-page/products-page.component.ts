@@ -11,14 +11,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductDetailComponent } from '../product-detail/product-detail.component';
 
 
-export const ELEMENT_DATA: Product[] = [
-  { sku: 1, description: 'Hydrogen', category:{id: 2,name: 'distribucion'}, stock: 1, unitPrice: 1, },
-  { sku: 2, description: 'Helium',  category:{id: 2,name: 'distribucion'}, stock: 4, unitPrice: 2, },
-  { sku: 3, description: 'Lithium', category:{id: 2,name: 'distribucion'}, stock: 6, unitPrice: 3, },
-  { sku: 4, description: 'Beryllium', category:{id: 2,name: 'distribucion'}, stock: 9, unitPrice: 4, },
-  { sku: 5, description: 'Boron',  category:{id: 2,name: 'distribucion'}, stock: 10, unitPrice: 5 },
-];
-
 
 @Component({
   selector: 'app-products-page',

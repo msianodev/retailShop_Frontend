@@ -23,20 +23,10 @@ export class AsideComponent {
       label: 'Sales', 
       route: '/sales' 
     },
-    { 
-      icon: 'inventory_2', 
-      label: 'Inventory', 
-      route: '/inventory' 
-    },
-    { 
+    {
       icon: 'people', 
-      label: 'Customers', 
-      route: '/customers' 
-    },
-    { 
-      icon: 'settings', 
-      label: 'Settings', 
-      route: '/settings' 
+      label: 'Employees', 
+      route: '/employees' 
     },
     { 
       icon: 'logout', 

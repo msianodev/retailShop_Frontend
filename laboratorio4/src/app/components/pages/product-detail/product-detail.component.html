@@ -1,10 +1,13 @@
-<div class="product-detail">
-  <h2 *ngIf="product">Product Details: {{ product.description }}</h2>
-  <h2 *ngIf="!product">New Product</h2>
+<div class="productDetailContainer">
+
+  <h1 *ngIf="product">Product Detail:  {{ product.description }}</h1>
+  <h1 *ngIf="!product">New Product</h1>
   
   <mat-card>
     <form [formGroup]="productForm" (ngSubmit)="saveChanges()">
       
+      <button mat-raised-button color="warn" (click)="goBack()">Back to Products</button>
+
       <mat-card-header>
         <mat-card-title *ngIf="product">
           <strong>SKU: {{ product.sku }}</strong>
@@ -20,14 +23,13 @@
 
         
         <p><strong>Category:</strong></p>
-        <mat-form-field style="width: 25%;">
+        <mat-form-field>
           <mat-select class="categoryInput" formControlName="category" placeholder="Select a Category">
             <mat-option *ngFor="let category of categories" [value]="category.id">
               {{ category.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        
         
 
         <p><strong>Stock:</strong></p>
@@ -43,8 +45,8 @@
       </mat-card-content>
       
       <mat-card-actions>
-        <button mat-raised-button color="primary" type="submit">Save Changes</button>
-        <button mat-raised-button color="warn" (click)="goBack()">Back to Products</button>
+        <button mat-raised-button color="primary" type="submit">Save changes</button>
+        <button mat-raised-button color="warn" (click)="confirmDelete()">Delete Product</button>
       </mat-card-actions>
       
     </form>
