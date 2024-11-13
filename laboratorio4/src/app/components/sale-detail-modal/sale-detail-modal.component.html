@@ -20,7 +20,7 @@
         
         <mat-card class="info-card">
           <mat-card-content>
-            <p><strong>Fecha:</strong> {{ sale.date | date: 'short' }}</p>
+            <p><strong>Fecha:</strong> {{ sale.date }}</p>
           </mat-card-content>
         </mat-card>
         
@@ -58,13 +58,13 @@
         <!-- Precio Unitario Column -->
         <ng-container matColumnDef="unitPrice">
           <th mat-header-cell *matHeaderCellDef> Precio Unitario </th>
-          <td mat-cell *matCellDef="let product"> {{ product.unitPrice | currency:'USD':'symbol':'1.2-2' }} </td>
+          <td mat-cell *matCellDef="let product"> {{ product.unitPrice }} </td>
         </ng-container>
   
         <!-- Subtotal Column -->
         <ng-container matColumnDef="subtotal">
           <th mat-header-cell *matHeaderCellDef> Subtotal </th>
-          <td mat-cell *matCellDef="let product"> {{ product.quantity * product.unitPrice | currency:'USD':'symbol':'1.2-2' }} </td>
+          <td mat-cell *matCellDef="let product"> {{ product.quantity * product.unitPrice }} </td>
         </ng-container>
   
         <!-- Header and Row Definitions -->
@@ -76,8 +76,8 @@
     <!-- Totales -->
     <mat-card-content>
       <div class="totals">
-        <p><strong>Subtotal (sin IVA):</strong> {{ getSubtotalWithoutVAT() | currency:'USD':'symbol':'1.2-2' }}</p>
-        <p><strong>Total (con IVA):</strong> {{ sale.total | currency:'USD':'symbol':'1.2-2' }}</p>
+        <p><strong>Subtotal (sin IVA):</strong> {{ getSubtotalWithoutVAT() }}</p>
+        <p><strong>Total (con IVA):</strong> {{ sale.total }}</p>
       </div>
     </mat-card-content>
   </mat-card>

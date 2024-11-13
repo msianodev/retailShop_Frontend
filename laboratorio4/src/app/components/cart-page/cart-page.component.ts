@@ -14,7 +14,7 @@ import { SuccessDialogComponent } from '../success-dialog/success-dialog.compone
 export class CartPageComponent implements OnInit {
   ventaForm!: FormGroup;
   cartItems: cartProduct[] = [];
-  displayedColumns: string[] = ['SKU', 'Description', 'Quantity', 'Brand', 'Unit.Price', 'SubTotal'];
+  displayedColumns: string[] = ['SKU', 'Description', 'Quantity', 'Unit.Price', 'SubTotal'];
   dataSource = new MatTableDataSource<cartProduct>(this.cartItems);
   total = 0;
   subTotal = 0;

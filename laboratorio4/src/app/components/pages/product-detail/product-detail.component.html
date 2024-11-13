@@ -1,31 +1,28 @@
 <div *ngIf="product" class="product-detail">
-  <h2>Product Details: {{ product.description }}</h2>
+  <h2>Product Details:  {{ product.description }}</h2>
   <mat-card>
     <form [formGroup]="productForm" (ngSubmit)="saveChanges()">
+
       <mat-card-header>
-        <mat-card-title>
-          <input matInput placeholder="Product Description" formControlName="description" />
-        </mat-card-title>
-        <mat-card-subtitle>SKU: {{ product.sku }}</mat-card-subtitle>
+        <mat-card-title><strong>SKU: {{ product.sku }}</strong></mat-card-title>
       </mat-card-header>
+      
       <mat-card-content>
-        <p><strong>Brand:</strong></p>
+
+        <p><strong>Description:</strong></p>
         <mat-form-field>
-          <input matInput placeholder="Brand" formControlName="brand" />
+          <input matInput placeholder={{product.description}} formControlName="description"><input/>
         </mat-form-field>
 
         <p><strong>Category:</strong></p>
-        <mat-form-field style="width: 80%;">
-          <mat-select formControlName="category" placeholder="Select a Category">
+        <mat-form-field style="width: 25%;">
+          <mat-select class="categoryInput" formControlName="category" placeholder="Select a Category">
             <mat-option *ngFor="let category of categories" [value]="category.id">
-              {{ category.name }}
+              {{product? category.name : '' }}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field style="width: 15%; margin-left: 10px;">
-          <input matInput [(ngModel)]="newCategory" placeholder="New Category" />
-        </mat-form-field>
-        <button mat-raised-button color="primary" (click)="addCategory()">Add Category</button>
+
 
         <p><strong>Stock:</strong></p>
         <mat-form-field>

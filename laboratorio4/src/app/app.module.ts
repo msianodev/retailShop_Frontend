@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+
 
 //MATERIAL
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -24,6 +26,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';  // Si usas mat-select
 import { MatOptionModule } from '@angular/material/core';  // Si usas mat-select
 import { MatPaginator } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -39,6 +42,7 @@ import { SalesHistoryComponent } from './components/sales-history/sales-history.
 import { SaleDetailModalComponent } from './components/sale-detail-modal/sale-detail-modal.component';
 import { CartPageComponent } from './components/cart-page/cart-page.component';
 import { SuccessDialogComponent } from './components/success-dialog/success-dialog.component';
+import { LoginComponent } from './components/login/login.component';
 
 
 @NgModule({
@@ -55,12 +59,14 @@ import { SuccessDialogComponent } from './components/success-dialog/success-dial
     SaleDetailModalComponent,
     CartPageComponent,
     SuccessDialogComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    RouterModule,
     
     MatToolbarModule,
     MatButtonModule,
@@ -76,6 +82,7 @@ import { SuccessDialogComponent } from './components/success-dialog/success-dial
     MatOptionModule,
     MatInputModule,
     MatPaginator,
+    MatDialogModule,
 
     
     FormsModule,

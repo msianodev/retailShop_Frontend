@@ -52,11 +52,6 @@
           </td>
         </ng-container>
         
-        <ng-container matColumnDef="Brand">
-          <th mat-header-cell *matHeaderCellDef> Brand </th>
-          <td mat-cell *matCellDef="let element"> {{element.brand}} </td>
-        </ng-container>
-        
         <ng-container matColumnDef="Unit.Price">
           <th mat-header-cell *matHeaderCellDef> Unit Price </th>
           <td mat-cell *matCellDef="let element"> {{element.unitPrice | currency}} </td>

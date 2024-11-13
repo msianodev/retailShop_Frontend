@@ -9,7 +9,7 @@
   <div class="search">
     <input 
       type="text" 
-      placeholder="Buscar por ID" 
+      placeholder="Search by client ID" 
       [(ngModel)]="searchTerm" 
       (keyup)="onSearch()" />
     <button (click)="onSearch()">
@@ -25,22 +25,22 @@
     </ng-container>
 
     <ng-container matColumnDef="userName">
-      <th mat-header-cell *matHeaderCellDef> Cliente </th>
-      <td mat-cell *matCellDef="let sale"> {{ sale.userName }} </td>
+      <th mat-header-cell *matHeaderCellDef> Client ID </th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.client }} </td>
     </ng-container>
 
     <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef> Fecha </th>
-      <td mat-cell *matCellDef="let sale"> {{ sale.date | date: 'short' }} </td>
+      <th mat-header-cell *matHeaderCellDef> DATE </th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.date | date: 'MM/dd/yyyy' }} </td>
     </ng-container>
 
     <ng-container matColumnDef="total">
-      <th mat-header-cell *matHeaderCellDef> Total </th>
-      <td mat-cell *matCellDef="let sale"> {{ sale.total | currency:'USD':'symbol':'1.2-2' }} </td>
+      <th mat-header-cell *matHeaderCellDef> TOTAL </th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.total }} </td>
     </ng-container>
 
     <ng-container matColumnDef="detail_button">
-      <th mat-header-cell *matHeaderCellDef> Detalle </th>
+      <th mat-header-cell *matHeaderCellDef> DETAIL </th>
       <td mat-cell *matCellDef="let sale">
         <button mat-icon-button color="accent" (click)="goToSaleDetail(sale.id)">
           <mat-icon>info</mat-icon>

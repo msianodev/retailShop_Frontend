@@ -1,33 +1,17 @@
-table {
-  width: 100%;
-}
-
-th.mat-sort-header-sorted {
-  color: black;
-}
-
-.example-form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
-}
-
-.example-full-width {
-  width: 100%;
-}
-
 .search {
   margin: 2vh;
   display: flex;
   align-items: center;
-  width: 35%;
+  gap: 20px; /* Espacio entre elementos */
+  flex-wrap: wrap; /* Para ajustar en móviles si es necesario */
+  width: 80%;
 }
 
 .search input {
   padding: 8px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px 0 0 4px;
+  border-radius: 4px;
   outline: none;
   flex: 1;
 }
@@ -37,7 +21,7 @@ th.mat-sort-header-sorted {
   border: none;
   padding: 8px;
   cursor: pointer;
-  border-radius: 0 4px 4px 0;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,8 +31,23 @@ th.mat-sort-header-sorted {
   background-color: #79aee7;
 }
 
-.searchSelect {
-  margin: 2vh;
-  width: 35%;
-  height: 5%;
+.search p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.mat-form-field {
+  min-width: 150px; /* Define un ancho mínimo para los selectores */
+  flex: 1;
+}
+
+.newProduct button {
+  background-color: #ffbb00;
+  color: black;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-left: 8vw;
+  height: 7vh;
+  width: 7vw;
 }

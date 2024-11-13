@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../../../services/product/product.service';
 import { Observable } from 'rxjs';
-import { CategoryDto, Product } from '../../../types/types';
+import { Category, Product } from '../../../types/types';
 
 @Component({
   selector: 'app-product-detail',
@@ -13,9 +13,11 @@ import { CategoryDto, Product } from '../../../types/types';
 export class ProductDetailComponent implements OnInit {
   productForm!: FormGroup;
   product: Product | null = null;
-  categories: CategoryDto[] = [];
 
+  categories: Category[] = [];
   newCategory: string = '';
+
+  isNewProduct: boolean = false;
 
 
   constructor(
@@ -25,17 +27,35 @@ export class ProductDetailComponent implements OnInit {
     private router: Router
   ) {}
 
+
+
   ngOnInit(): void {
-    this.loadProductDetail();
-    //this.loadCategories();
+    const sku = this.route.snapshot.paramMap.get('sku');
+    this.isNewProduct = !sku; // Si no hay SKU, entonces es un producto nuevo
     this.initForm();
+  
+    if (!this.isNewProduct) {
+      this.loadProductDetail(); // Cargar datos solo si no es un nuevo producto
+    }
   }
+  
+
+    // Verificar si estamos creando o editando un producto
+    // checkIfNewProduct(): void {
+    //   const sku = this.route.snapshot.paramMap.get('sku');
+    //   if (sku) {
+    //     // Editando un producto existente
+    //     this.loadProductDetail(Number(sku));
+    //   } else {
+    //     // Creando un nuevo producto
+    //     this.isNewProduct = true;
+    //   }
+    // }
 
   // Inicializar el formulario reactivo
   initForm(): void {
     this.productForm = this.fb.group({
       description: ['', Validators.required],
-      brand: ['', Validators.required],
       category: ['', Validators.required], // Campo para la categoría
       stock: [0, [Validators.required, Validators.min(0)]],
       price_unit: [0, [Validators.required, Validators.min(0)]],
@@ -57,24 +77,37 @@ export class ProductDetailComponent implements OnInit {
   }
 
 
-    
-  // Agregar una nueva categoría
-  addCategory(): void {
-    if (this.newCategory.trim()) {
-      this.productService.addCategory(this.newCategory).subscribe(
-        (response) => {
-          console.log('Categoría agregada:', response);
-          // Si la respuesta es exitosa, actualizamos las categorías
-          this.loadCategories();
-          this.newCategory = ''; // Limpiar el campo de la nueva categoría
-        },
-        (error) => {
-          console.error('Error al agregar categoría:', error);
-        }
-      );
-    }
-  }
+///////
+    // Cargar los detalles del producto y llenar el formulario si es edición
+  //   loadProductDetail(sku: number): void {
+  //     this.productService.getProductBySku(sku).subscribe((product) => {
+  //       this.product = product || null;
+  //       if (this.product) {
+  //         this.productForm.patchValue(this.product);
+  //       }
+  //     });
+  //   }
 
+  // // Guardar los cambios o crear un nuevo producto
+  // saveChanges(): void {
+  //   if (this.productForm.valid) {
+  //     const updatedProduct = { ...this.product, ...this.productForm.value };
+  //     if (this.isNewProduct) {
+  //       // Crear un nuevo producto
+  //       this.productService.createProduct(updatedProduct).subscribe(() => {
+  //         console.log('Nuevo producto creado:', updatedProduct);
+  //         this.goBack();
+  //       });
+  //     } else {  
+  //       // Actualizar producto existente
+  //       this.productService.updateProduct(updatedProduct).subscribe(() => {
+  //         console.log('Producto actualizado:', updatedProduct);
+  //         this.goBack();
+  //       });
+  //     }
+  //   }
+  // }
+    
   // Cargar las categorías desde la API
   loadCategories(): void {
     this.productService.getCategories().subscribe(categories => {

@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { CategoryDto, Product } from '../../types/types';
+import { Category, Product } from '../../types/types';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 
 
-let ELEMENT_DATA: Product[] = [
-  { sku: 1, description: 'Hydrogen', brand: 'Nike', stock: 1.0079, unitPrice: 1 },
-  { sku: 2, description: 'Helium', brand: 'Adidas', stock: 4.0026, unitPrice: 2 },
-  { sku: 3, description: 'Lithium', brand: 'Puma', stock: 6.941, unitPrice: 3 },
-  { sku: 4, description: 'Beryllium', brand: 'Stella', stock: 9.0122, unitPrice: 4 },
-  { sku: 5, description: 'Boron', brand: 'Tesse', stock: 10.811, unitPrice: 5 },
+const ELEMENT_DATA: Product[] = [
+  { sku: 1, description: 'Hydrogen', category:{id: 1,name: 'automotor'}, stock: 1, unitPrice: 1, },
+  { sku: 2, description: 'Helium',  category:{id: 1,name: 'automotor'}, stock: 4, unitPrice: 2, },
+  { sku: 3, description: 'Lithium', category:{id: 1,name: 'automotor'}, stock: 6, unitPrice: 3, },
+  { sku: 4, description: 'Beryllium', category:{id: 1,name: 'automotor'}, stock: 9, unitPrice: 4, },
+  { sku: 5, description: 'Boron',  category:{id: 1,name: 'automotor'}, stock: 10, unitPrice: 5 },
 ];
 
 @Injectable({
@@ -23,21 +23,33 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   // Obtener productos filtrados
-  getFilteredProducts(filter: string, column: string): Observable<Product[]> {
-   let params = new HttpParams();
-   if (column === 'name') {
-     params = params.set('name', filter); // Si la columna es nombre, filtra por nombre
-   } else if (column === 'sku') {
-     params = params.set('sku', filter); // Si la columna es SKU, filtra por SKU
-   }
-
-   return this.http.get<Product[]>(this.apiUrl, { params });
+  getFilteredProducts(column: string, filterValue: string, category: number | null): Observable<Product[]> {
+    let params = new HttpParams()
+      .set(column, filterValue);
+  
+    if (category !== null) {
+      params = params.set('category', category.toString());
+    }
+  
+    return this.http.get<Product[]>(this.apiUrl, { params });
   }
+  
+
+////////REQUESTS DE PRODUCTOS AL BACKEND
 
   // Obtener todos los productos
   // getAllProducts(): Observable<Product[]> {
   //  return this.http.get<Product[]>(this.apiUrl);
   // }
+
+  // createProduct(product: Product): Observable<Product> {
+  //   return this.http.post<Product>('/api/products', product);
+  // }
+  
+  // updateProduct(product: Product): Observable<void> {
+  //   return this.http.put<void>(`/api/products/${product.sku}`, product);
+  // }
+
   // Obtener productos filtrados
   // getFilteredProducts(filter: string, column: string): Observable<Product[]> {
   //   const filteredProducts = ELEMENT_DATA.filter((product) =>
@@ -45,6 +57,9 @@ export class ProductService {
   //   );
   //   return of(filteredProducts);
   // }
+////////////////
+
+
 
   // Obtener todos los productos
   getAllProducts(): Observable<Product[]> {
@@ -66,14 +81,15 @@ export class ProductService {
   }
 
   
+////////REQUEST CATEGORIAS AL BACKEND
     // Método para obtener las categorías
-  getCategories(): Observable<CategoryDto[]> {
-    return this.http.get<CategoryDto[]>(this.apiUrl); // La respuesta será una lista de CategoryDto
+  getCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.apiUrl); // La respuesta será una lista de Category
   }
 
       // Método para agregar una nueva categoría
-    addCategory(category: string): Observable<any> {
-      return this.http.post(`${this.apiUrl}/categories`, { name: category });
+    createCategory(category: { name: string }): Observable<Category> {
+      return this.http.post<Category>(`${this.apiUrl}/categories`, category);
     }
       
 }
