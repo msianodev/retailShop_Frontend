@@ -80,9 +80,10 @@
               "buildTarget": "laboratorio4:build:production"
             },
             "development": {
-              "buildTarget": "laboratorio4:build:development"
-            }
-          },
+            "buildTarget": "laboratorio4:build:development",
+            "proxyConfig": "proxy.conf.json"
+          }
+        },  
           "defaultConfiguration": "development"
         },
         "extract-i18n": {

@@ -28,15 +28,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   selectedColumn: string = 'name'; // Columna de búsqueda seleccionada, por defecto es 'name'
   selectedCategory: number | null = null; // Categoría seleccionada
 
-  categories: Category[] = [
-    {
-      id: 1,
-      name: 'caño'
-    },
-    {
-      id: 2,
-      name: 'distribucion'
-    }];
+  categories: Category[] = [];
 
 
 
@@ -47,8 +39,8 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadProducts();
-    console.log(this.productList);
-    // this.loadCategories();
+    // console.log(this.productList.data); 
+    this.loadCategories();
 
     // Definimos el formulario y sus controles
     this.searchForm = this.fb.group({
@@ -59,12 +51,15 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.productList.paginator = this.paginator;
-    this.productList.sort = this.sort;
+    if (this.productList.data.length > 0) {
+      this.productList.paginator = this.paginator;
+      this.productList.sort = this.sort;
+    }
   }
+  
 
   goToDetail(sku: number): void {
-    this.router.navigate(['/products', sku]);
+    this.router.navigate([`/products/${sku}`]);
   }
 
   // Método que se llama cuando el usuario hace clic en el botón de búsqueda
@@ -86,15 +81,17 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   // Método para cargar todos los productos
   loadProducts(): void {
     this.productService.getAllProducts().subscribe({
-      next: products => {
-        this.productList.data = products;
+      next: (products) => {
+        this.productList.data = products;  // Asignar correctamente los datos
+        console.log(this.productList.data);  // Verifica en la consola si los datos son correctos
       },
-      error: error => {
+      error: (error) => {
         console.error('Error al cargar productos en el componente:', error);
         alert('Error al cargar productos.');
       }
     });
   }
+  
 
   add_to_cart(product: Product): void {
     const cartProduct: cartProduct = {
@@ -112,9 +109,6 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     this.productService.getCategories().subscribe({
       next: categories => {
         this.categories = categories;
-        if (categories.length === 0) {
-          alert('No se encontraron categorías.');
-        }
       },
       error: error => {
         console.error('Error al cargar categorías en el componente:', error);

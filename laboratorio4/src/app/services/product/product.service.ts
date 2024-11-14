@@ -1,23 +1,24 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { Category, Product } from '../../types/types';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 
-const ELEMENT_DATA: Product[] = [
-  { sku: 1, description: 'Hydrogen', category:{id: 2,name: 'distribucion'}, stock: 1, unitPrice: 1, },
-  { sku: 2, description: 'Helium',  category:{id: 2,name: 'distribucion'}, stock: 4, unitPrice: 2, },
-  { sku: 3, description: 'Lithium', category:{id: 2,name: 'distribucion'}, stock: 6, unitPrice: 3, },
-  { sku: 4, description: 'Beryllium', category:{id: 2,name: 'distribucion'}, stock: 9, unitPrice: 4, },
-  { sku: 5, description: 'Boron',  category:{id: 2,name: 'distribucion'}, stock: 10, unitPrice: 5 },
-];
+// const ELEMENT_DATA: Product[] = [
+//   { sku: 1, description: 'Hydrogen', category:{id: 2,name: 'distribucion'}, stock: 1, unitPrice: 1, },
+//   { sku: 2, description: 'Helium',  category:{id: 2,name: 'distribucion'}, stock: 4, unitPrice: 2, },
+//   { sku: 3, description: 'Lithium', category:{id: 2,name: 'distribucion'}, stock: 6, unitPrice: 3, },
+//   { sku: 4, description: 'Beryllium', category:{id: 2,name: 'distribucion'}, stock: 9, unitPrice: 4, },
+//   { sku: 5, description: 'Boron',  category:{id: 2,name: 'distribucion'}, stock: 10, unitPrice: 5 },
+// ];
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
   // constructor() { }
-  private apiUrl = '//localhost:3306/retail_shop_backend/api/products'; // URL de tu API
+  private productsURL = 'http://localhost:8080/api/products'; // URL de tu API
+  private categoriesURL = 'http://localhost:8080/api/categories'
 
   constructor(private http: HttpClient) { }
 
@@ -30,26 +31,26 @@ export class ProductService {
       params = params.set('category', category.toString());
     }
   
-    return this.http.get<Product[]>(this.apiUrl, { params });
+    return this.http.get<Product[]>(this.productsURL, { params });
   }
   
 
 ////////REQUESTS DE PRODUCTOS AL BACKEND
 
   // Obtener todos los productos
-  // getAllProducts(): Observable<Product[]> {
-  //  return this.http.get<Product[]>(this.apiUrl);
-  // }
+  getAllProducts(): Observable<Product[]> {
+   return this.http.get<Product[]>(this.productsURL);
+  }
 
   createProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>('/api/products', product);
+    return this.http.post<Product>(this.productsURL, product);
   }
   
-  // updateProduct(product: Product): Observable<void> {
-  //   return this.http.put<void>(`/api/products/${product.sku}`, product);
-  // }
+  updateProduct(product: Product): Observable<void> {
+    return this.http.put<void>(`${this.productsURL}/${product.sku}`, product);
+  }
 
-  // Obtener productos filtrados
+  // // Obtener productos filtrados
   // getFilteredProducts(filter: string, column: string): Observable<Product[]> {
   //   const filteredProducts = ELEMENT_DATA.filter((product) =>
   //     product[column as keyof Product]?.toString().includes(filter)
@@ -58,40 +59,54 @@ export class ProductService {
   // }
 ////////////////
 deleteProduct(sku: number): Observable<void> {
-  return this.http.delete<void>(`${this.apiUrl}/${sku}`);
+  return this.http.delete<void>(`${this.productsURL}/${sku}`);
+}
+
+getProductBySku(sku: number): Observable<Product> {
+  return this.http.get<Product>(`${this.productsURL}/${sku}`).pipe(
+    catchError(error => {
+      console.error('Error al obtener el producto:', error);
+      return of({} as Product);  // Retornar un objeto vacío que es un Product vacío
+    })
+  );
 }
 
 
 
-  // Obtener todos los productos
-  getAllProducts(): Observable<Product[]> {
-    return of(ELEMENT_DATA);
-  }
-
-  getProductBySku(sku: number): Observable<Product | null> {
-    const product = ELEMENT_DATA.find((p) => p.sku === sku) || null;
-    return of(product);
-  }
-
-  updateProduct(updatedProduct: Product): Observable<Product> {
-    // Encuentra el índice del producto en los datos de ejemplo
-    const index = ELEMENT_DATA.findIndex((product) => product.sku === updatedProduct.sku);
-    if (index !== -1) {
-      ELEMENT_DATA[index] = updatedProduct; // Actualiza el producto en los datos de ejemplo
-    }
-    return of(updatedProduct);
-  }
-
   
 ////////REQUEST CATEGORIAS AL BACKEND
     // Método para obtener las categorías
-  getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(this.apiUrl); // La respuesta será una lista de Category
-  }
+    getCategories(): Observable<Category[]> {
+      return this.http.get<Category[]>(this.categoriesURL).pipe(
+        catchError(error => {
+          console.error('Error al obtener las categorías:', error);
+          return of([]); // Retorna un array vacío en caso de error
+        })
+      );
+    }
+    
 
       // Método para agregar una nueva categoría
     createCategory(category: { name: string }): Observable<Category> {
-      return this.http.post<Category>(`${this.apiUrl}/categories`, category);
+      return this.http.post<Category>(`${this.categoriesURL}`, category);
     }
+
+
+
+      // Obtener todos los productos
+  // getAllProducts(): Observable<Product[]> {
+  //   return of(ELEMENT_DATA);
+  // }
+
+
+  // updateProduct(updatedProduct: Product): Observable<Product> {
+  //   // Encuentra el índice del producto en los datos de ejemplo
+  //   const index = ELEMENT_DATA.findIndex((product) => product.sku === updatedProduct.sku);
+  //   if (index !== -1) {
+  //     ELEMENT_DATA[index] = updatedProduct; // Actualiza el producto en los datos de ejemplo
+  //   }
+  //   return of(updatedProduct);
+  // }
+
       
 }

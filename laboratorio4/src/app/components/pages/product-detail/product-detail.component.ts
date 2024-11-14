@@ -14,15 +14,7 @@ export class ProductDetailComponent implements OnInit {
   productForm!: FormGroup;
   product: Product | null = null;
 
-  categories: Category[] = [
-    {
-      id: 1,
-      name: 'automotor'
-    },
-    {
-      id: 2,
-      name: 'distribucion'
-    }];
+  categories: Category[] = [];
 
   newCategory: string = '';
 
@@ -40,27 +32,24 @@ export class ProductDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    const sku = Number(this.route.snapshot.paramMap.get('sku'));
-    if (sku) {
-      this.loadProductDetail();
-    } else {
-      this.isNewProduct = true;
-    }
+    this.checkIfNewProduct();
+    this.loadCategories();
   }
   
   
 
     // Verificar si estamos creando o editando un producto
-    // checkIfNewProduct(): void {
-    //   const sku = this.route.snapshot.paramMap.get('sku');
-    //   if (sku) {
-    //     // Editando un producto existente
-    //     this.loadProductDetail(Number(sku));
-    //   } else {
-    //     // Creando un nuevo producto
-    //     this.isNewProduct = true;
-    //   }
-    // }
+    checkIfNewProduct(): void {
+      const sku = Number(this.route.snapshot.paramMap.get('sku'));
+      console.log('EL SKU ES: ',sku)
+      if (sku) {
+        // Editando un producto existente
+        this.loadProductDetail(Number(sku));
+      } else {
+        // Creando un nuevo producto
+        this.isNewProduct = true;
+      }
+    }
 
   // Inicializar el formulario reactivo
   initForm(): void {
@@ -73,63 +62,48 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
-  
-  // Cargar los detalles del producto y llenar el formulario
-  loadProductDetail(): void {
-    const sku = Number(this.route.snapshot.paramMap.get('sku'));
-    if (sku) {
+
+
+
+/////
+    // Cargar los detalles del producto y llenar el formulario si es edición
+    loadProductDetail(sku: number): void {
       this.productService.getProductBySku(sku).subscribe((product) => {
+        console.log('Producto recibido:', product);
         this.product = product || null;
         if (this.product) {
-          // Asignar solo el ID de la categoría
-          this.productForm.patchValue({
-            description: this.product.description,
-            category: this.product.category?.id || '', // Asignar solo el ID
-            stock: this.product.stock,
-            price_unit: this.product.unitPrice
-          });
+          this.productForm.patchValue(this.product);
+        } else {
+          console.error('No se encontró el producto.');
         }
       });
     }
-  }
-  
-
-
-
-///////
-    // Cargar los detalles del producto y llenar el formulario si es edición
-  //   loadProductDetail(sku: number): void {
-  //     this.productService.getProductBySku(sku).subscribe((product) => {
-  //       this.product = product || null;
-  //       if (this.product) {
-  //         this.productForm.patchValue(this.product);
-  //       }
-  //     });
-  //   }
+    
 
   // // Guardar los cambios o crear un nuevo producto
-  // saveChanges(): void {
-  //   if (this.productForm.valid) {
-  //     const updatedProduct = { ...this.product, ...this.productForm.value };
-  //     if (this.isNewProduct) {
-  //       // Crear un nuevo producto
-  //       this.productService.createProduct(updatedProduct).subscribe(() => {
-  //         console.log('Nuevo producto creado:', updatedProduct);
-  //         this.goBack();
-  //       });
-  //     } else {  
-  //       // Actualizar producto existente
-  //       this.productService.updateProduct(updatedProduct).subscribe(() => {
-  //         console.log('Producto actualizado:', updatedProduct);
-  //         this.goBack();
-  //       });
-  //     }
-  //   }
-  // }
+  saveChanges(): void {
+    if (this.productForm.valid) {
+      const updatedProduct = { ...this.product, ...this.productForm.value };
+      if (this.isNewProduct) {
+        // Crear un nuevo producto
+        this.productService.createProduct(updatedProduct).subscribe(() => {
+          console.log('Nuevo producto creado:', updatedProduct);
+          this.goBack();
+        });
+      } else {  
+        // Actualizar producto existente
+        this.productService.updateProduct(updatedProduct).subscribe(() => {
+          console.log('Producto actualizado:', updatedProduct);
+          this.goBack();
+        });
+      }
+    }
+  }
     
   // Cargar las categorías desde la API
   loadCategories(): void {
     this.productService.getCategories().subscribe(categories => {
+      console.log("categoriasssssssssssssssssssssssss: "  ,categories)
       this.categories = categories; // Asignar las categorías al arreglo
     });
   }
@@ -146,22 +120,22 @@ export class ProductDetailComponent implements OnInit {
   //   }
   // }
 
-  saveChanges(): void {
-    if (this.productForm.valid) {
-      const productData = { ...this.productForm.value };
+  // saveChanges(): void {
+  //   if (this.productForm.valid) {
+  //     const productData = { ...this.productForm.value };
   
-      if (this.isNewProduct) {
-        this.productService.createProduct(productData).subscribe(() => {
-          this.goBack();
-        });
-      } else {
-        const updatedProduct = { ...this.product, ...productData };
-        this.productService.updateProduct(updatedProduct).subscribe(() => {
-          this.goBack();
-        });
-      }
-    }
-  }
+  //     if (this.isNewProduct) {
+  //       this.productService.createProduct(productData).subscribe(() => {
+  //         this.goBack();
+  //       });
+  //     } else {
+  //       const updatedProduct = { ...this.product, ...productData };
+  //       this.productService.updateProduct(updatedProduct).subscribe(() => {
+  //         this.goBack();
+  //       });
+  //     }
+  //   }
+  // }
 
   confirmDelete(): void {
     if (confirm('Are you sure you want to delete this product?')) {
