@@ -41,7 +41,6 @@ export class ProductDetailComponent implements OnInit {
     // Verificar si estamos creando o editando un producto
     checkIfNewProduct(): void {
       const sku = Number(this.route.snapshot.paramMap.get('sku'));
-      console.log('EL SKU ES: ',sku)
       if (sku) {
         // Editando un producto existente
         this.loadProductDetail(Number(sku));
@@ -57,7 +56,7 @@ export class ProductDetailComponent implements OnInit {
       description: ['', Validators.required],
       category: ['', Validators.required], // Campo para la categoría
       stock: [0, [Validators.required, Validators.min(0)]],
-      price_unit: [0, [Validators.required, Validators.min(0)]],
+      unitPrice: [0, [Validators.required, Validators.min(0)]],
       sku: [{ value: '', disabled: true }] // SKU deshabilitado para que no sea editable
     });
   }
@@ -69,7 +68,6 @@ export class ProductDetailComponent implements OnInit {
     // Cargar los detalles del producto y llenar el formulario si es edición
     loadProductDetail(sku: number): void {
       this.productService.getProductBySku(sku).subscribe((product) => {
-        console.log('Producto recibido:', product);
         this.product = product || null;
         if (this.product) {
           this.productForm.patchValue(this.product);
@@ -99,11 +97,11 @@ export class ProductDetailComponent implements OnInit {
       }
     }
   }
+  
     
   // Cargar las categorías desde la API
   loadCategories(): void {
     this.productService.getCategories().subscribe(categories => {
-      console.log("categoriasssssssssssssssssssssssss: "  ,categories)
       this.categories = categories; // Asignar las categorías al arreglo
     });
   }

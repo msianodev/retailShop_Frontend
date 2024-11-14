@@ -18,7 +18,7 @@ import { ProductDetailComponent } from '../product-detail/product-detail.compone
   styleUrls: ['./products-page.component.css']
 })
 export class ProductsPageComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['sku', 'description', 'stock', 'price_unit', 'detail_button', 'category', 'add_to_cart'];
+  displayedColumns: string[] = ['sku', 'description', 'stock', 'unitPrice', 'detail_button', 'category', 'add_to_cart'];
   productList = new MatTableDataSource<Product>([]); // Inicializa con un array vacío
 
   searchForm!: FormGroup; // Formulario reactivo
@@ -29,8 +29,6 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   selectedCategory: number | null = null; // Categoría seleccionada
 
   categories: Category[] = [];
-
-
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -66,17 +64,22 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   onSearch(): void {
     if (this.searchForm.valid) {
       const formData = this.searchForm.value;
-
-      this.productService.getFilteredProducts(this.filterValue, this.selectedColumn, this.selectedCategory)
-        .subscribe({
-          next: products => this.productList.data = products,
-          error: error => {
-            console.error('Error al cargar productos filtrados:', error);
-            alert('Error al cargar productos filtrados.');
-          }
-        });
+      
+      // Llama al servicio con los datos del formulario
+      this.productService.getFilteredProducts(
+        formData.filterValue,
+        formData.selectedColumn,
+        formData.category
+      ).subscribe({
+        next: products => this.productList.data = products,
+        error: error => {
+          console.error('Error al cargar productos filtrados:', error);
+          alert('Error al cargar productos filtrados.');
+        }
+      });
     }
   }
+  
 
   // Método para cargar todos los productos
   loadProducts(): void {

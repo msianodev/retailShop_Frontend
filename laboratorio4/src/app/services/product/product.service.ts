@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { Category, Product } from '../../types/types';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
@@ -23,16 +23,58 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   // Obtener productos filtrados
-  getFilteredProducts(column: string, filterValue: string, category: number | null): Observable<Product[]> {
-    let params = new HttpParams()
-      .set(column, filterValue);
+  // getFilteredProducts(column: string, filterValue: string, category: number | null): Observable<Product[]> {
+  //   let params = new HttpParams()
+  //     .set(column, filterValue);
   
-    if (category !== null) {
-      params = params.set('category', category.toString());
+  //   if (category !== null) {
+  //     params = params.set('category', category.toString());
+  //   }
+  
+  //   return this.http.get<Product[]>(this.productsURL, { params });
+  // }
+
+  // getFilteredProducts(filterValue: string, selectedColumn: string, category: number | null): Observable<Product[]> {
+  //   let params = new HttpParams();
+  
+  //   // Verifica que se hayan definido el filtro y columna
+  //   if (selectedColumn && filterValue) {
+  //     params = params.set(selectedColumn, filterValue); // Agrega el filtro según la columna seleccionada
+  //   }
+    
+  //   // Agrega la categoría, si está seleccionada
+  //   if (category !== null) {
+  //     params = params.set('category', category.toString());
+  //   }
+    
+  //   return this.http.get<Product[]>(this.productsURL, { params });
+  // }
+  getFilteredProducts(filterValue: string, selectedColumn: string, category: number | null): Observable<Product[]> {
+    let params = new HttpParams();
+  
+    // Si el filtro es 'sku', usamos el método getProductBySku, que retorna un solo producto.
+    if (selectedColumn == "sku") {
+      return this.getProductBySku(Number(filterValue)).pipe(
+        // Transformamos el resultado en un array, ya que necesitas que se retorne como un array de productos.
+        map(product => [product]) // El 'map' lo envuelve en un array
+      );
+    } else {
+      // Si no es 'sku', se procesan otros filtros.
+      if (category) {
+        params = params.set('category', category.toString());
+      }
+  
+      // Verifica que se hayan definido el filtro y columna
+      if (selectedColumn && filterValue) {
+        params = params.set(selectedColumn, filterValue); // Agrega el filtro según la columna seleccionada
+      }
+  
+      // Realizamos la consulta normal para obtener una lista de productos
+      return this.http.get<Product[]>(this.productsURL, { params });
     }
-  
-    return this.http.get<Product[]>(this.productsURL, { params });
   }
+  
+  
   
 
 ////////REQUESTS DE PRODUCTOS AL BACKEND
@@ -43,8 +85,10 @@ export class ProductService {
   }
 
   createProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(this.productsURL, product);
-  }
+    return this.http.post<Product>(this.productsURL, product, {
+      headers: { 'Content-Type': 'application/json' }
+  });
+}
   
   updateProduct(product: Product): Observable<void> {
     return this.http.put<void>(`${this.productsURL}/${product.sku}`, product);

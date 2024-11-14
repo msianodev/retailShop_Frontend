@@ -25,7 +25,7 @@
         <p><strong>Category:</strong></p>
         <mat-form-field>
           <mat-select class="categoryInput" formControlName="category" placeholder="Select a Category">
-            <mat-option *ngFor="let category of categories" [value]="category.id">
+            <mat-option *ngFor="let category of categories" [value]="category">
               {{ category.name }}
             </mat-option>
           </mat-select>
