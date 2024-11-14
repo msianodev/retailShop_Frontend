@@ -21,39 +21,6 @@ export class SalesHistoryComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'userName', 'date', 'total', 'detail_button'];
   
-  // Datos estáticos para pruebas
-  public staticSales: Sale[] = [
-    {
-      id: 1,
-      seller: 'julian',
-      client: 23333222,
-      products: [
-        {sku: 1, description: 'Hydrogen', unitPrice: 1,quantity: 1, subTotal:1},
-        {sku: 2, description: 'Helium', unitPrice: 2,quantity: 1, subTotal:2},
-        {sku: 3, description: 'Lithium', unitPrice: 3,quantity: 1, subTotal:3}],
-      total: 150.75,
-      date: new Date('2024-11-01'),
-      paymentMethod: 'Credit Card'
-    },
-    {
-      id: 2,
-      seller: 'julian',
-      client: 40223332,
-      products: [],
-      total: 250.00,
-      date: new Date('2024-11-05'),
-      paymentMethod: 'Cash'
-    },
-    {
-      id: 3,
-      seller: 'julian',
-      client: 39337917,
-      products: [],
-      total: 325.50,
-      date: new Date('2024-11-07'),
-      paymentMethod: 'Debit Card'
-    }
-  ];
 
   salesHistory = new MatTableDataSource<Sale>([]);
 
@@ -77,9 +44,9 @@ export class SalesHistoryComponent implements OnInit {
 
   loadSalesHistory(): void {
     // Usar datos estáticos mientras no haya backend
-    this.salesHistory.data = this.staticSales;
+   // this.salesHistory.data = this.staticSales;
 
-    /* 
+    
     // Comenta esta línea para usar datos estáticos y descomenta cuando conectes al backend
     if (this.searchTerm.trim()) {
       this.salesHistoryService.getSalesHistoryById(this.searchTerm).subscribe(sales => {
@@ -91,7 +58,7 @@ export class SalesHistoryComponent implements OnInit {
         this.salesHistory.data = sales;
       });
     }
-    */
+    
   }
 
   onSearch(): void {

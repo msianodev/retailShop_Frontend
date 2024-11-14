@@ -17,7 +17,7 @@
     <!-- Selección de categoría -->
     <mat-form-field>
       <mat-select formControlName="category" placeholder="Select a Category">
-        <mat-option *ngFor="let category of categories" [value]="category.id">
+        <mat-option *ngFor="let category of categories" [value]="category.name">
           {{ category.name }}
         </mat-option>
       </mat-select>
@@ -38,8 +38,11 @@
 
   </form>
 
+    <!-- Si no hay resultados, muestra el mensaje -->
+    <h3 *ngIf="noResultsFound">Product Not Found</h3>
 
-  <table mat-table [dataSource]="productList" class="mat-elevation-z8">
+<div *ngIf="!noResultsFound">
+  <table mat-table [dataSource]="productList" class="mat-elevation-z8" >
     <!-- Define columnas según tus datos -->
     <ng-container matColumnDef="sku">
       <th mat-header-cell *matHeaderCellDef> SKU </th>
@@ -90,4 +93,6 @@
 
   <mat-paginator class="paginator" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of products">
   </mat-paginator>
+</div>
+
 </div>

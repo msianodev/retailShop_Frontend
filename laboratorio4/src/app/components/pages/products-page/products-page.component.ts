@@ -6,9 +6,9 @@ import { Router } from '@angular/router';
 import { ProductService } from '../../../services//product/product.service';
 import { MatSort, Sort } from '@angular/material/sort';
 import { cartProduct, Category, Product } from '../../../types/types';
-import { CartService } from '../../../services/cart.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductDetailComponent } from '../product-detail/product-detail.component';
+import { CartService } from '../../../services/cart/cart.service';
 
 
 
@@ -27,6 +27,10 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   filterValue: string = ''; // Valor para el campo de búsqueda
   selectedColumn: string = 'name'; // Columna de búsqueda seleccionada, por defecto es 'name'
   selectedCategory: number | null = null; // Categoría seleccionada
+
+
+  noResultsFound: boolean = false;
+
 
   categories: Category[] = [];
 
@@ -71,10 +75,12 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
         formData.selectedColumn,
         formData.category
       ).subscribe({
-        next: products => this.productList.data = products,
+        next: products => {
+          this.productList.data = products;
+          this.noResultsFound = products.length === 0;  // Si no hay productos, activa la bandera
+        },
         error: error => {
-          console.error('Error al cargar productos filtrados:', error);
-          alert('Error al cargar productos filtrados.');
+          this.noResultsFound = true; // Si ocurre un error, también mostramos el mensaje
         }
       });
     }

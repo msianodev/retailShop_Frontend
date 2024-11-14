@@ -35,8 +35,6 @@ export class ProductDetailComponent implements OnInit {
     this.checkIfNewProduct();
     this.loadCategories();
   }
-  
-  
 
     // Verificar si estamos creando o editando un producto
     checkIfNewProduct(): void {
@@ -61,10 +59,6 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
-
-
-
-/////
     // Cargar los detalles del producto y llenar el formulario si es edición
     loadProductDetail(sku: number): void {
       this.productService.getProductBySku(sku).subscribe((product) => {

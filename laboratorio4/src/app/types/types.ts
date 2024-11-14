@@ -8,8 +8,8 @@ export interface Product {
 
 export interface Sale {
   id: number;
-  seller: string;
-  client: number;
+  userId: number;
+  clientId: number;
   products: cartProduct[];
   total: number;
   date: Date;

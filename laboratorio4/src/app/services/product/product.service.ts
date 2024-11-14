@@ -22,63 +22,22 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  // Obtener productos filtrados
-  // getFilteredProducts(column: string, filterValue: string, category: number | null): Observable<Product[]> {
-  //   let params = new HttpParams()
-  //     .set(column, filterValue);
-  
-  //   if (category !== null) {
-  //     params = params.set('category', category.toString());
-  //   }
-  
-  //   return this.http.get<Product[]>(this.productsURL, { params });
-  // }
-
-  // getFilteredProducts(filterValue: string, selectedColumn: string, category: number | null): Observable<Product[]> {
-  //   let params = new HttpParams();
-  
-  //   // Verifica que se hayan definido el filtro y columna
-  //   if (selectedColumn && filterValue) {
-  //     params = params.set(selectedColumn, filterValue); // Agrega el filtro según la columna seleccionada
-  //   }
-    
-  //   // Agrega la categoría, si está seleccionada
-  //   if (category !== null) {
-  //     params = params.set('category', category.toString());
-  //   }
-    
-  //   return this.http.get<Product[]>(this.productsURL, { params });
-  // }
-  getFilteredProducts(filterValue: string, selectedColumn: string, category: number | null): Observable<Product[]> {
+  getFilteredProducts(filterValue: string, selectedColumn: string, category: string | null): Observable<Product[]> {
     let params = new HttpParams();
   
-    // Si el filtro es 'sku', usamos el método getProductBySku, que retorna un solo producto.
-    if (selectedColumn == "sku") {
-      return this.getProductBySku(Number(filterValue)).pipe(
-        // Transformamos el resultado en un array, ya que necesitas que se retorne como un array de productos.
-        map(product => [product]) // El 'map' lo envuelve en un array
-      );
-    } else {
-      // Si no es 'sku', se procesan otros filtros.
-      if (category) {
-        params = params.set('category', category.toString());
-      }
-  
-      // Verifica que se hayan definido el filtro y columna
-      if (selectedColumn && filterValue) {
-        params = params.set(selectedColumn, filterValue); // Agrega el filtro según la columna seleccionada
-      }
-  
-      // Realizamos la consulta normal para obtener una lista de productos
-      return this.http.get<Product[]>(this.productsURL, { params });
+    // Verifica que se hayan definido el filtro y columna
+    if (selectedColumn && filterValue) {
+      params = params.set(selectedColumn, filterValue); // Agrega el filtro según la columna seleccionada
     }
-  }
+    
+    // Agrega la categoría, si está seleccionada
+    if (category !== null) {
+      params = params.set('category', category);
+    }
+    
+    return this.http.get<Product[]>(this.productsURL, { params });
+  }  
   
-  
-  
-
-////////REQUESTS DE PRODUCTOS AL BACKEND
-
   // Obtener todos los productos
   getAllProducts(): Observable<Product[]> {
    return this.http.get<Product[]>(this.productsURL);
@@ -94,14 +53,6 @@ export class ProductService {
     return this.http.put<void>(`${this.productsURL}/${product.sku}`, product);
   }
 
-  // // Obtener productos filtrados
-  // getFilteredProducts(filter: string, column: string): Observable<Product[]> {
-  //   const filteredProducts = ELEMENT_DATA.filter((product) =>
-  //     product[column as keyof Product]?.toString().includes(filter)
-  //   );
-  //   return of(filteredProducts);
-  // }
-////////////////
 deleteProduct(sku: number): Observable<void> {
   return this.http.delete<void>(`${this.productsURL}/${sku}`);
 }
@@ -115,9 +66,6 @@ getProductBySku(sku: number): Observable<Product> {
   );
 }
 
-
-
-  
 ////////REQUEST CATEGORIAS AL BACKEND
     // Método para obtener las categorías
     getCategories(): Observable<Category[]> {
@@ -133,24 +81,5 @@ getProductBySku(sku: number): Observable<Product> {
       // Método para agregar una nueva categoría
     createCategory(category: { name: string }): Observable<Category> {
       return this.http.post<Category>(`${this.categoriesURL}`, category);
-    }
-
-
-
-      // Obtener todos los productos
-  // getAllProducts(): Observable<Product[]> {
-  //   return of(ELEMENT_DATA);
-  // }
-
-
-  // updateProduct(updatedProduct: Product): Observable<Product> {
-  //   // Encuentra el índice del producto en los datos de ejemplo
-  //   const index = ELEMENT_DATA.findIndex((product) => product.sku === updatedProduct.sku);
-  //   if (index !== -1) {
-  //     ELEMENT_DATA[index] = updatedProduct; // Actualiza el producto en los datos de ejemplo
-  //   }
-  //   return of(updatedProduct);
-  // }
-
-      
+    }      
 }
