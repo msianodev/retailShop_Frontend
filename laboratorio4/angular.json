@@ -39,7 +39,7 @@
               }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/azure-blue.css",
+              "src/custom-theme.scss",
               "src/styles.css"
             ],
             "scripts": [],
@@ -80,9 +80,10 @@
               "buildTarget": "laboratorio4:build:production"
             },
             "development": {
-              "buildTarget": "laboratorio4:build:development"
-            }
-          },
+            "buildTarget": "laboratorio4:build:development",
+            "proxyConfig": "proxy.conf.json"
+          }
+        },  
           "defaultConfiguration": "development"
         },
         "extract-i18n": {

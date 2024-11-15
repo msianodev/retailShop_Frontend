@@ -1,0 +1,56 @@
+<div id="salesTableContainer">
+  <!-- Header con icono y título -->
+  <!-- <div class="header">
+    <mat-icon class="header-icon">{{ item.icon }}</mat-icon>
+    <h1 class="header-title">{{ item.label }}</h1>
+  </div> -->
+
+  <!-- Barra de búsqueda -->
+  <div class="search">
+    <input 
+      type="text" 
+      placeholder="Search by client ID" 
+      [(ngModel)]="searchTerm" 
+      (keyup)="onSearch()" />
+    <button (click)="onSearch()">
+      <mat-icon class="lupe">search</mat-icon>
+    </button>
+  </div>
+
+  <!-- Tabla de ventas -->
+  <table mat-table [dataSource]="salesHistory" class="mat-elevation-z8" id="salesTable">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.id }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="userName">
+      <th mat-header-cell *matHeaderCellDef> Client ID </th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.client }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> DATE </th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.date | date: 'MM/dd/yyyy' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="total">
+      <th mat-header-cell *matHeaderCellDef> TOTAL </th>
+      <td mat-cell *matCellDef="let sale"> {{ sale.total }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="detail_button">
+      <th mat-header-cell *matHeaderCellDef> DETAIL </th>
+      <td mat-cell *matCellDef="let sale">
+        <button mat-icon-button color="accent" (click)="goToSaleDetail(sale.id)">
+          <mat-icon>info</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of sales" id="paginator"/>
+</div>
