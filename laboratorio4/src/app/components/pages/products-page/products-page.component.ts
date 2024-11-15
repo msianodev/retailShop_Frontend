@@ -3,100 +3,153 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 
-import { ProductService, ProductList } from '../../../services/product.service';
-import { MatSort } from '@angular/material/sort';
-import {LiveAnnouncer} from '@angular/cdk/a11y';
+import { ProductService } from '../../../services//product/product.service';
 import { MatSort, Sort } from '@angular/material/sort';
-
-
-export interface ProductList {
-  sku: number;
-  name: string;
-  brand: string;
-  stock: number;
-  price_unit: number;
-
-}
-
-const ELEMENT_DATA: ProductList[] = [
-  {sku: 1, name: 'Hydrogen', brand: 'Nike' ,stock: 1.0079, price_unit: 1,},
-  {sku: 2, name: 'Helium', brand: 'Adidas',stock: 4.0026, price_unit: 2,},
-  {sku: 3, name: 'Lithium', brand: 'Puma',stock: 6.941, price_unit: 3,},
-  {sku: 4, name: 'Beryllium', brand: 'Stella' ,stock: 9.0122, price_unit: 4,},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
-  {sku: 5, name: 'Boron', brand: 'Tesse',stock: 10.811, price_unit: 5},
-  
-];
-
+import { cartProduct, Category, Product } from '../../../types/types';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ProductDetailComponent } from '../product-detail/product-detail.component';
+import { CartService } from '../../../services/cart/cart.service';
 
 @Component({
   selector: 'app-products-page',
   templateUrl: './products-page.component.html',
-  styleUrls: ['./products-page.component.css']
+  styleUrls: ['./products-page.component.css'],
 })
 export class ProductsPageComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['sku', 'name', 'stock', 'brand','price_unit', 'detail_button','add_to_cart'];
-  dataSource = new MatTableDataSource<ProductList>([]); // Inicializa con un array vacío
-  filterValue: string = ''; // Almacena el valor de búsqueda
+  displayedColumns: string[] = [
+    'sku',
+    'description',
+    'stock',
+    'unitPrice',
+    'detail_button',
+    'category',
+    'add_to_cart',
+  ];
+  productList = new MatTableDataSource<Product>([]); // Inicializa con un array vacío
+
+  searchForm!: FormGroup; // Formulario reactivo
+
+  ///Filtros y busqueda
+  filterValue: string = ''; // Valor para el campo de búsqueda
   selectedColumn: string = 'name'; // Columna de búsqueda seleccionada, por defecto es 'name'
+  selectedCategory: number | null = null; // Categoría seleccionada
+
+  noResultsFound: boolean = false;
+
+  categories: Category[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private productService: ProductService, private router: Router) {}
+  constructor(
+    private productService: ProductService,
+    private router: Router,
+    private cartService: CartService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
-    this.loadProducts(); // Carga los productos inicialmente
+    this.loadProducts();
+    // console.log(this.productList.data);
+    this.loadCategories();
+
+    // Definimos el formulario y sus controles
+    this.searchForm = this.fb.group({
+      filterValue: [''], // Control para el campo de búsqueda
+      selectedColumn: [''], // Filtro de búsqueda
+      category: [''], // Categoría seleccionada
+    });
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    if (this.productList.data.length > 0) {
+      this.productList.paginator = this.paginator;
+      this.productList.sort = this.sort;
+    }
   }
 
   goToDetail(sku: number): void {
-    this.router.navigate(['/products', sku]);
+    this.router.navigate([`/products/${sku}`]);
   }
 
   // Método que se llama cuando el usuario hace clic en el botón de búsqueda
   onSearch(): void {
-    this.applyFilter();
-  }
+    if (this.searchForm.valid) {
+      const formData = this.searchForm.value;
 
-  // Método para aplicar el filtro
-  applyFilter(): void {
-    if (this.filterValue.trim()) {
-      // Si hay un valor de filtro, realiza la búsqueda
-      this.productService.getFilteredProducts(this.filterValue.trim(), this.selectedColumn)
-        .subscribe(products => {
-          this.dataSource.data = products.length > 0 ? products : []; // Asigna productos filtrados o un array vacío
+      // Llama al servicio con los datos del formulario
+      this.productService
+        .getFilteredProducts(
+          formData.filterValue,
+          formData.selectedColumn,
+          formData.category
+        )
+        .subscribe({
+          next: (products) => {
+            this.productList.data = products;
+            this.noResultsFound = products.length === 0; // Si no hay productos, activa la bandera
+          },
+          error: (error) => {
+            this.noResultsFound = true; // Si ocurre un error, también mostramos el mensaje
+          },
         });
-    } else {
-      this.loadProducts(); // Si no hay filtro, carga todos los productos
     }
   }
 
-
   // Método para cargar todos los productos
   loadProducts(): void {
-    this.productService.getAllProducts().subscribe(products => {
-      this.dataSource.data = products;
+    this.productService.getAllProducts().subscribe({
+      next: (products) => {
+        this.productList.data = products; // Asignar correctamente los datos
+        console.log(this.productList.data); // Verifica en la consola si los datos son correctos
+      },
+      error: (error) => {
+        console.error('Error al cargar productos en el componente:', error);
+        alert('Error al cargar productos.');
+      },
     });
   }
 
-  // Método para añadir un producto al carrito
-  add_to_cart(product: ProductList): void {
-    // Lógica para agregar el producto al carrito
-    console.log('Producto añadido al carrito:', product);
-    // Puedes añadir aquí lógica adicional, como enviar el producto a un servicio de carrito
+  add_to_cart(product: Product): void {
+    const cartProduct: cartProduct = {
+      sku: product.sku,
+      description: product.description,
+      unitPrice: product.unitPrice,
+      quantity: 1, // Cantidad inicial
+      subTotal: product.unitPrice, // Subtotal inicial
+    };
+    this.cartService.addProductToCart(cartProduct);
+    console.log('Producto añadido al carrito:', cartProduct);
   }
-} 
+
+  loadCategories() {
+    this.productService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (error) => {
+        console.error('Error al cargar categorías en el componente:', error);
+        alert('Error al cargar categorías. Intenta más tarde.');
+      },
+    });
+  }
+
+  openAddCategoryDialog(): void {
+    const newCategoryName = prompt('Ingrese el nombre de la nueva categoría:');
+    if (newCategoryName) {
+      this.addCategory(newCategoryName);
+    }
+  }
+  addCategory(name: string): void {
+    this.productService.createCategory({ name }).subscribe({
+      next: () => {
+        this.loadCategories(); // Recargar las categorías para incluir la nueva
+        alert('Categoría agregada con éxito.');
+      },
+      error: (error) => {
+        console.error('Error al agregar categoría:', error);
+        alert('Hubo un error al agregar la categoría. Intenta nuevamente.');
+      },
+    });
+  }
+}

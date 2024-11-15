@@ -1,37 +1,54 @@
-<div *ngIf="product" class="product-detail">
-  <h2>Product Details: {{ product.name }}</h2>
+<div class="productDetailContainer">
+
+  <h1 *ngIf="product">Product Detail:  {{ product.description }}</h1>
+  <h1 *ngIf="!product">New Product</h1>
+  
   <mat-card>
     <form [formGroup]="productForm" (ngSubmit)="saveChanges()">
+      
+      <button mat-raised-button color="warn" (click)="goBack()">Back to Products</button>
+
       <mat-card-header>
-        <mat-card-title>
-          <input matInput placeholder="Product Name" formControlName="name" />
+        <mat-card-title *ngIf="product">
+          <strong>SKU: {{ product.sku }}</strong>
         </mat-card-title>
-        <mat-card-subtitle>SKU: {{ product.sku }}</mat-card-subtitle>
       </mat-card-header>
+      
       <mat-card-content>
-        <p><strong>Brand:</strong></p>
+
+        <p><strong>Description:</strong></p>
         <mat-form-field>
-          <input matInput placeholder="Brand" formControlName="brand" />
+          <input matInput placeholder="Enter description" formControlName="description" [value]="product?.description || ''">
         </mat-form-field>
+
+        
+        <p><strong>Category:</strong></p>
+        <mat-form-field>
+          <mat-select class="categoryInput" formControlName="category" placeholder="Select a Category">
+            <mat-option *ngFor="let category of categories" [value]="category">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        
 
         <p><strong>Stock:</strong></p>
         <mat-form-field>
-          <input matInput type="number" placeholder="Stock" formControlName="stock" />
+          <input matInput type="number" placeholder="Stock" formControlName="stock" [value]="product?.stock || ''">
         </mat-form-field>
 
         <p><strong>Price:</strong></p>
         <mat-form-field>
-          <input matInput type="number" placeholder="Price" formControlName="price_unit" />
+          <input matInput type="number" placeholder="Price" formControlName="unitPrice" [value]="product?.unitPrice || ''">
         </mat-form-field>
+        
       </mat-card-content>
+      
       <mat-card-actions>
-        <button mat-raised-button color="primary" type="submit">Save Changes</button>
-        <button mat-raised-button color="warn" (click)="goBack()">Back to Products</button>
+        <button mat-raised-button color="primary" type="submit">Save changes</button>
+        <button mat-raised-button color="warn" (click)="confirmDelete()">Delete Product</button>
       </mat-card-actions>
+      
     </form>
   </mat-card>
 </div>
-<div *ngIf="!product">
-  <p>Product not found.</p>
-</div>
-

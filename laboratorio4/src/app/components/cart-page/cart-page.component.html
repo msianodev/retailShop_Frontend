@@ -1,0 +1,91 @@
+<div class="cart">
+
+  <!-- Formulario de Venta -->
+  <div class="container-form">
+    <form [formGroup]="ventaForm" #form="ngForm">
+      <div class="form-grid">
+        <div style="display: inline">
+          <label>Date:</label>
+          <span style="margin: 15px">{{ dateNow | date:'dd/MM/yyyy' }}</span>
+        </div>
+    
+        <div [ngStyle]="{'display': 'inline'}">
+          <label>Seller:</label>
+          <span style="margin: 10px">{{ userName ? userName : 'Seller' }}</span>
+        </div>
+    
+        <div class="form-group">
+          <label for="client">Client:</label>
+          <input id="client" type="text" formControlName="client" placeholder="Insert client ID" />
+        </div>
+    
+        <div class="form-group">
+          <label for="payment">Payment Method:</label>
+          <select id="payment" formControlName="payment">
+            <option value="cash">Cash</option>
+            <option value="cad">Credit Card</option>
+            <option value="transference">Transference</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla de productos -->
+  <div class="container-list">
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="SKU">
+          <th mat-header-cell *matHeaderCellDef> SKU </th>
+          <td mat-cell *matCellDef="let element"> {{element.sku}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Quantity">
+          <th mat-header-cell *matHeaderCellDef> Quantity </th>
+          <td mat-cell *matCellDef="let element">
+            <input type="number" [(ngModel)]="element.quantity" (change)="updateQuantity(element, $event)">
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Unit.Price">
+          <th mat-header-cell *matHeaderCellDef> Unit Price </th>
+          <td mat-cell *matCellDef="let element"> {{element.unitPrice | currency}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="SubTotal">
+          <th mat-header-cell *matHeaderCellDef> SubTotal </th>
+          <td mat-cell *matCellDef="let element"> {{element.subTotal | currency}} </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Resumen -->
+  <div class="container-summary">
+    <div class="summary-card">
+      <div class="totals">
+        <div class="total-item">
+          <span>Subtotal:</span>
+          <span>{{ subTotal | currency }}</span>
+        </div>
+        <div class="total-item">
+          <span>Total:</span>
+          <span>{{ total | currency }}</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" (click)="confirmSale()">Confirmar</button>
+        <button type="button" (click)="cancelSale()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+</div>
