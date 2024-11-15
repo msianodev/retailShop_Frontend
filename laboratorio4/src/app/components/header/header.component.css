@@ -1,10 +1,27 @@
-.spacer {
-  flex: 1 1 auto;
-}
-
 mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  height: 80px;
   padding: 0 16px;
-  background-color: #000000;
+  background-color: #2b2b2b;
   position: relative;
   z-index: 5;
+}
+
+.homeButton{
+  font-size: large;
+  color: white;
+  transition: transform 0.3s ease;
+}
+.cartButton {
+  color: white;
+  transition: transform 0.3s ease; /* Agrega una transición para que el cambio sea suave */
+}
+
+.cartButton:hover {
+  transform: scale(1.3); /* Aumenta el tamaño al hacer hover */
+}
+
+.homeButton:hover{
+  transform: scale(1.3); /* Aumenta el tamaño al hacer hover */
 }

@@ -1,0 +1,140 @@
+/* Estilo principal del contenedor de la página del carrito */
+.cart {
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+/* Formulario de Venta */
+.container-form {
+  width: 60%;
+  margin: 0 auto 30px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+.container-form button{ 
+  width: 90%;
+  margin: 5%;
+}
+/* Estilo de la cuadrícula en el formulario */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+input, select, .form-group button {
+  width: 100%; /* Ocupa el ancho completo del grupo */
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Botón de Confirmar en el formulario */
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  font-weight: bold;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Deshabilitar el botón */
+button:disabled {
+  background-color: lightgray;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* Tabla de productos */
+.container-list {
+  width: 80%;
+  margin: 0 auto 20px;
+}
+
+.table-container {
+  overflow-x: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+/* Botón Confirmar Carrito */
+.container-list button {
+  width: 100%;
+  padding: 12px;
+  font-weight: bold;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+/* Resumen de compra */
+.container-summary {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.summary-card {
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.totals {
+  margin-bottom: 20px;
+}
+
+.total-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+
+.actions button {
+  width: 100%;
+  padding: 10px;
+  font-weight: bold;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.actions button:last-child {
+  background-color: #dc3545;
+}

@@ -17,3 +17,27 @@
   background-color: #e5e5e5;
   height: calc(100vh - 64px);
 }
+
+
+.navList {
+  padding: 0;
+}
+
+.navList a {
+  display: flex;
+  align-items: center; /* Alinea icono y texto verticalmente */
+  padding: 10px 16px; /* Ajusta el espacio alrededor de cada item */
+  text-decoration: none;
+  color: inherit;
+  margin: 10px;
+}
+
+.navList mat-icon {
+  font-size: 24px; /* Tamaño del ícono */
+  margin-right: 10px; /* Espacio entre el ícono y el texto */
+  vertical-align: middle;
+}
+
+.navList span {
+  font-size: 16px; /* Tamaño del texto */
+}

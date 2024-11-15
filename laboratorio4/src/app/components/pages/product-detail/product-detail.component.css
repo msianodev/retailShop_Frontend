@@ -1,0 +1,10 @@
+.productDetailContainer{
+    margin: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.productDetailContainer button{
+    margin: 7px;
+}
