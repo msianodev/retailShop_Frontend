@@ -9,30 +9,29 @@ interface MenuItem {
 @Component({
   selector: 'app-aside',
   templateUrl: './aside.component.html',
-  styleUrl: './aside.component.css'
+  styleUrl: './aside.component.css',
 })
 export class AsideComponent {
   menuItems: MenuItem[] = [
-    { 
-      icon: 'store', 
-      label: 'Products', 
-      route: '/products' 
-    },
-    { 
-      icon: 'bar_chart', 
-      label: 'Sales', 
-      route: '/sales' 
+    {
+      icon: 'store',
+      label: 'Products',
+      route: '/products',
     },
     {
-      icon: 'people', 
-      label: 'Employees', 
-      route: '/employees' 
+      icon: 'bar_chart',
+      label: 'Sales',
+      route: '/sales',
     },
-    { 
-      icon: 'logout', 
-      label: 'Logout', 
-      route: '/logout' 
+    {
+      icon: 'people',
+      label: 'Employees',
+      route: '/employees',
     },
-    
+    {
+      icon: 'logout',
+      label: 'Logout',
+      route: '/login',
+    },
   ];
 }
