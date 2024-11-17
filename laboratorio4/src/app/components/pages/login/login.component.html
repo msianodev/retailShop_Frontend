@@ -1,0 +1,50 @@
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+  <div class="login-container">
+    <div class="presentation-container">
+      <h1>Retail Shop Proyect</h1>
+      <div class="background-logo"></div>
+    </div>
+    <div class="form-container">
+      <h2>Acceso al Sistema</h2>
+      <mat-form-field>
+        <mat-label>Enter your DNI</mat-label>
+        <input matInput placeholder="8 characters" formControlName="dni" />
+        <mat-error *ngIf="dni?.invalid && (dni?.dirty || dni?.touched)">
+          <div *ngIf="dni?.errors?.['required']">DNI is required.</div>
+          <div *ngIf="dni?.errors?.['maxlength']">
+            DNI must be at most 8 characters long.
+          </div>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Enter your password</mat-label>
+        <input
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          placeholder="************"
+          formControlName="password"
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="togglePasswordVisibility()"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        <mat-error
+          *ngIf="password?.invalid && (password?.dirty || password?.touched)"
+        >
+          Password is required.
+        </mat-error>
+      </mat-form-field>
+
+      <div class="example-button-row">
+        <button type="submit" mat-flat-button color="primary">
+          Iniciar Sesión
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

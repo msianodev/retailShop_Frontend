@@ -28,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select'; // Si usas mat-selec
 import { MatOptionModule } from '@angular/material/core'; // Si usas mat-select
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 //COMPONENTS
 import { HomePageComponent } from './components/pages/home-page/home-page.component';
@@ -40,7 +41,7 @@ import { SalesHistoryComponent } from './components/sales-history/sales-history.
 import { SaleDetailModalComponent } from './components/sale-detail-modal/sale-detail-modal.component';
 import { CartPageComponent } from './components/cart-page/cart-page.component';
 import { SuccessDialogComponent } from './components/success-dialog/success-dialog.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './components/pages/login/login.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { LoginComponent } from './components/login/login.component';
     MatInputModule,
     MatPaginator,
     MatDialogModule,
+    MatGridListModule,
 
     FormsModule,
     ReactiveFormsModule,
