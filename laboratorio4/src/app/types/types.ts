@@ -28,3 +28,10 @@ export interface Category{
   name: string;
 }
 
+export interface User{
+  id: number;
+  password: string;
+  isAdmin: boolean;
+  name: string;
+  email: string;
+}
