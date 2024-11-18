@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatGridListModule } from '@angular/material/grid-list';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +13,11 @@ import { MatGridListModule } from '@angular/material/grid-list';
 export class LoginComponent {
   loginForm;
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.loginForm = this.formBuilder.group({
       dni: ['', [Validators.maxLength(8), Validators.required]],
       password: ['', Validators.required],
@@ -49,11 +53,29 @@ export class LoginComponent {
   // Acción al iniciar sesión
   login() {
     if (this.loginForm.valid) {
-      // Si el formulario es válido, redirige al home
-      this.router.navigate(['/home']);
-      this.loginForm.reset();
+      // Extraer los valores de DNI y contraseña, asegurándose de que no sean null o undefined
+      const { dni, password } = this.loginForm.value;
+  
+      // Verificar si el dni y password no son nulos ni indefinidos
+      if (dni && password) {
+        // Llamar al AuthService para autenticar al usuario
+        this.authService.login(dni, password).subscribe(
+          (user) => {
+            // Si la autenticación es exitosa, redirige al home
+            console.log('Usuario autenticado:', user);
+            this.router.navigate(['/home']); // Redirige al home
+            this.loginForm.reset(); // Resetea el formulario
+          },
+          (error) => {
+            // Si hay un error en la autenticación (ej. credenciales incorrectas)
+            this.showErrorSnackBar('DNI o contraseña incorrectos');
+          }
+        );
+      } else {
+        this.showErrorSnackBar('DNI y contraseña son obligatorios.');
+      }
     } else {
-      // Si hay errores, muestra el snackbar
+      // Si el formulario tiene errores, muestra el snackbar
       this.loginForm.markAllAsTouched();
       if (this.dni?.invalid) {
         this.showErrorSnackBar('Por favor, ingrese un DNI válido.');
