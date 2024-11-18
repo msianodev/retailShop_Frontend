@@ -7,7 +7,6 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:laboratorio4": "node dist/laboratorio4/server/server.mjs",
     "net": "ng serve --host 0.0.0.0 --port 4200"
   },
   "private": true,
@@ -21,9 +20,7 @@
     "@angular/material": "^18.2.10",
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
-    "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
-    "@angular/ssr": "^18.2.7",
     "express": "^4.18.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

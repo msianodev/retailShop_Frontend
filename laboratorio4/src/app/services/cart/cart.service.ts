@@ -8,7 +8,7 @@ import { cartProduct, Sale } from '../../types/types';
 })
 export class CartService {
   private cartSubject = new BehaviorSubject<cartProduct[]>([]);
-  private apiUrl = '//localhost:3306/retail_shop_backend/cart'; // Cambiar por tu URL del backend
+  private apiUrl = 'http://localhost:3306/retail_shop_backend/cart'; // Cambiar por tu URL del backend
   constructor(private http: HttpClient) {}
 
   // Obtener los productos del carrito

@@ -1,5 +1,7 @@
-<app-header></app-header>
-<div class="container">    
+<app-login *ngIf="!authService.isAuthenticated()"></app-login>
+
+<app-header *ngIf="authService.isAuthenticated()"></app-header>
+<div class="container" *ngIf="authService.isAuthenticated()">    
     <app-aside></app-aside>
     <div class="background-car">
         <div class="router-container">
