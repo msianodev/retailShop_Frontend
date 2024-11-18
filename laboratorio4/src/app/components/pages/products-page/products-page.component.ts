@@ -1,7 +1,9 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 import { ProductService } from '../../../services//product/product.service';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -26,6 +28,9 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     'add_to_cart',
   ];
   productList = new MatTableDataSource<Product>([]); // Inicializa con un array vacío
+
+  private _snackBar = inject(MatSnackBar);
+  hide = true;
 
   searchForm!: FormGroup; // Formulario reactivo
 
@@ -100,12 +105,11 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   loadProducts(): void {
     this.productService.getAllProducts().subscribe({
       next: (products) => {
-        this.productList.data = products; // Asignar correctamente los datos
-        console.log(this.productList.data); // Verifica en la consola si los datos son correctos
+        this.productList.data = products;
       },
       error: (error) => {
         console.error('Error al cargar productos en el componente:', error);
-        alert('Error al cargar productos.');
+        this.showErrorSnackBar('Error al cargar productos.');
       },
     });
   }
@@ -119,7 +123,6 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
       subTotal: product.unitPrice, // Subtotal inicial
     };
     this.cartService.addProductToCart(cartProduct);
-    console.log('Producto añadido al carrito:', cartProduct);
   }
 
   loadCategories() {
@@ -128,8 +131,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
         this.categories = categories;
       },
       error: (error) => {
-        console.error('Error al cargar categorías en el componente:', error);
-        alert('Error al cargar categorías. Intenta más tarde.');
+        this.showErrorSnackBar('Error al cargar categorías. Intenta más tarde.');
       },
     });
   }
@@ -144,12 +146,39 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     this.productService.createCategory({ name }).subscribe({
       next: () => {
         this.loadCategories(); // Recargar las categorías para incluir la nueva
-        alert('Categoría agregada con éxito.');
+        this.showErrorSnackBar('Categoría agregada con éxito.');
       },
       error: (error) => {
         console.error('Error al agregar categoría:', error);
-        alert('Hubo un error al agregar la categoría. Intenta nuevamente.');
+        this.showErrorSnackBar('Hubo un error al agregar la categoría. Intenta nuevamente.');
       },
     });
   }
+
+
+  showErrorSnackBar(message: string) {
+    this._snackBar.open(message, '', {
+      duration: 2000, // 2 segundos
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
+  }
+
+  deleteProduct(product: Product): void {
+    const confirmDelete = confirm(`¿Estás seguro de que quieres eliminar el producto ${product.description}?`);
+    if (confirmDelete) {
+      this.productService.deleteProduct(product.sku).subscribe({
+        next: () => {
+          this.loadProducts();
+          this.showErrorSnackBar('Producto eliminado con éxito');
+        },
+
+        error: (error) => {
+          console.error('Error al eliminar el producto:', error);
+          this.showErrorSnackBar('Hubo un error al eliminar el producto. Intenta nuevamente.');
+        }
+      });
+    }
+  }
+
 }

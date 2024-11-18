@@ -10,7 +10,7 @@ import { User } from '../../types/types';  // Tu modelo de usuario
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:3306/retail_shop_backend/users/login'; // URL de la API para autenticar al usuario
+  private apiUrl = 'http://localhost:8080/api/login'; // URL de la API para autenticar al usuario
 
   // Comportamiento de usuario autenticado (usamos BehaviorSubject para manejar el estado de forma reactiva)
   private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
@@ -19,8 +19,8 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
   // Método para realizar el login
-  login(id: string, password: string): Observable<User> {
-    const credentials = { id, password };
+  login(email: string, password: string): Observable<User> {
+    const credentials = { email, password };
 
     return this.http.post<User>(this.apiUrl, credentials).pipe(
       tap(user => {

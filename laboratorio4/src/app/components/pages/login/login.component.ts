@@ -19,7 +19,7 @@ export class LoginComponent {
     private authService: AuthService
   ) {
     this.loginForm = this.formBuilder.group({
-      dni: ['', [Validators.maxLength(8), Validators.required]],
+      dni: ['', [ Validators.required]],
       password: ['', Validators.required],
     });
   }

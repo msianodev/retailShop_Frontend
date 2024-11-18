@@ -35,3 +35,8 @@ export interface User{
   name: string;
   email: string;
 }
+
+export interface userLogin{
+  id: string;
+  password: string;
+}
