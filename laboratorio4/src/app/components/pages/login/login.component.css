@@ -17,7 +17,7 @@ html, body {
   padding: 20px;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   height: 100vh;
 }
