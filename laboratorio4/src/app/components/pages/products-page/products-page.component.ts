@@ -3,8 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 
-import { ProductService, ProductList } from '../../../services/product.service';
-import { MatSort } from '@angular/material/sort';
+import { ProductService} from '../../../services/product.service';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
 

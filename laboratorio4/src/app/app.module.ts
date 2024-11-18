@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,11 +17,13 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
+import { MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select';
+
 
 
 
@@ -32,7 +35,6 @@ import { AsideComponent } from './components/aside/aside.component';
 import { ProductsPageComponent } from './components/pages/products-page/products-page.component';
 import { ProductDetailComponent } from './components/pages/product-detail/product-detail.component';
 import { CartPageComponent } from './components/pages/cart-page/cart-page.component';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -48,10 +50,14 @@ import { MatSelect, MatSelectModule } from '@angular/material/select';
     CartPageComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    ReactiveFormsModule,
+
+
     
     MatToolbarModule,
     MatButtonModule,
@@ -60,14 +66,15 @@ import { MatSelect, MatSelectModule } from '@angular/material/select';
     MatListModule,
     MatPaginatorModule,
     MatTableModule,
-    MatSort,
     MatFormFieldModule,
     MatCardModule,
-    FormsModule
+    FormsModule,
+    MatSelectModule,
+    MatSortModule,
+    MatInputModule,
   ],
   providers: [
-    provideClientHydration(),
-    provideAnimationsAsync()
+
   ],
   bootstrap: [AppComponent]
 })
