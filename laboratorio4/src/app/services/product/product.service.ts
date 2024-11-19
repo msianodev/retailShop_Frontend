@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { Category, Product } from '../../types/types';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 
 // const ELEMENT_DATA: Product[] = [
@@ -16,8 +16,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
   providedIn: 'root',
 })
 export class ProductService {
-  // constructor() { }
-  private productsURL = 'http://localhost:8080/api/products'; // URL de tu API
+  private productsURL = 'http://localhost:8080/api/products';
   private categoriesURL = 'http://localhost:8080/api/categories'
 
   constructor(private http: HttpClient) { }
@@ -50,7 +49,10 @@ export class ProductService {
 }
   
   updateProduct(product: Product): Observable<void> {
-    return this.http.put<void>(`${this.productsURL}/${product.sku}`, product);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put<void>(`${this.productsURL}/${product.sku}`, product,
+      { headers }
+    );
   }
 
 deleteProduct(sku: number): Observable<void> {

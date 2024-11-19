@@ -30,6 +30,7 @@ export interface Category{
 
 export interface User{
   id: number;
+  dni: string;
   password: string;
   isAdmin: boolean;
   name: string;

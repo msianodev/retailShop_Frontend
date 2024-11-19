@@ -8,6 +8,8 @@ import { SalesHistoryComponent } from './components/sales-history/sales-history.
 import { CartPageComponent } from './components/cart-page/cart-page.component';
 import { LoginComponent } from './components/pages/login/login.component';
 import { AuthGuard } from './guards/auth-guard.guard';
+import { EmployeesComponent } from './components/employees/employees/employees.component';
+import { EmployeeDetailComponent } from './components/employees/employee-detail/employee-detail.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -19,6 +21,9 @@ const routes: Routes = [
   { path: 'sales', component: SalesHistoryComponent, canActivate: [AuthGuard] },
   { path: 'cart', component: CartPageComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '/login' },
+  {path: 'employees', component: EmployeesComponent},
+  {path: 'employees/:id', component: EmployeeDetailComponent},
   //TODO AGREGAR 404 NOT FOUND
 ];
 

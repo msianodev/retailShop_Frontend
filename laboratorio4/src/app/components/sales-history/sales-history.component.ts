@@ -43,11 +43,6 @@ export class SalesHistoryComponent implements OnInit {
   }
 
   loadSalesHistory(): void {
-    // Usar datos estáticos mientras no haya backend
-   // this.salesHistory.data = this.staticSales;
-
-    
-    // Comenta esta línea para usar datos estáticos y descomenta cuando conectes al backend
     if (this.searchTerm.trim()) {
       this.salesHistoryService.getSalesHistoryById(this.searchTerm).subscribe(sales => {
         this.salesHistory.data = sales;

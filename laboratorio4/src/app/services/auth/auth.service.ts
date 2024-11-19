@@ -54,4 +54,9 @@ export class AuthService {
       this.currentUserSubject.next(user);  // Si existe, actualiza el estado del usuario
     }
   }
+  isAdmin(): boolean {
+    const currentUser = this.currentUserValue;
+    return currentUser?.isAdmin || false;
+  }
+
 }

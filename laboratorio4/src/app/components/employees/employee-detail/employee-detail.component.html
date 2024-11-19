@@ -1,0 +1,49 @@
+<div class="employeeDetailContainer">
+
+    <h1 *ngIf="employee">Employee Detail: {{ employee.name }}</h1>
+    <h1 *ngIf="!employee">New Employee</h1>
+  
+    <mat-card>
+      <form [formGroup]="employeeForm" (ngSubmit)="saveChanges()">
+  
+        <button mat-raised-button color="warn" (click)="goBack()">Back to Employees</button>
+  
+        <mat-card-header>
+          <mat-card-title *ngIf="employee">
+            <strong>Employee ID: {{ employee.id }}</strong>
+          </mat-card-title>
+        </mat-card-header>
+  
+        <mat-card-content>
+  
+          <p><strong>Name:</strong></p>
+          <mat-form-field>
+            <input matInput placeholder="Enter name" formControlName="name" [value]="employee?.name || ''">
+          </mat-form-field>
+  
+          <p><strong>Email:</strong></p>
+          <mat-form-field>
+            <input matInput type="email" placeholder="Enter email" formControlName="email" [value]="employee?.email || ''">
+          </mat-form-field>
+  
+          <p><strong>DNI:</strong></p>
+          <mat-form-field>
+            <input matInput placeholder="Enter DNI" formControlName="dni" [value]="employee?.dni || ''">
+          </mat-form-field>
+  
+          <p><strong>Password:</strong></p>
+          <mat-form-field>
+            <input matInput type="password" placeholder="Enter password" formControlName="password" [value]="employee?.password || ''">
+          </mat-form-field>
+  
+        </mat-card-content>
+  
+        <mat-card-actions>
+          <button mat-raised-button color="primary" type="submit">Save Changes</button>
+          <button mat-raised-button color="warn" (click)="confirmDelete()">Delete Employee</button>
+        </mat-card-actions>
+  
+      </form>
+    </mat-card>
+  </div>
+  

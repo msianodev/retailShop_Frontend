@@ -42,6 +42,8 @@ import { SaleDetailModalComponent } from './components/sale-detail-modal/sale-de
 import { CartPageComponent } from './components/cart-page/cart-page.component';
 import { SuccessDialogComponent } from './components/success-dialog/success-dialog.component';
 import { LoginComponent } from './components/pages/login/login.component';
+import { EmployeesComponent } from './components/employees/employees/employees.component';
+import { EmployeeDetailComponent } from './components/employees/employee-detail/employee-detail.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +60,8 @@ import { LoginComponent } from './components/pages/login/login.component';
     CartPageComponent,
     SuccessDialogComponent,
     LoginComponent,
+    EmployeesComponent,
+    EmployeeDetailComponent,
   ],
   imports: [
     BrowserModule,

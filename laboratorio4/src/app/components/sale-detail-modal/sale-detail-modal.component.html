@@ -3,7 +3,6 @@
       <mat-card-title>Detalles de Venta</mat-card-title>
     </mat-card-header>
   
-    <!-- Información de la venta en bloques separados -->
     <mat-card-content>
       <div class="sale-info">
         <mat-card class="info-card">
@@ -34,46 +33,39 @@
   
 
   
-    <!-- Tabla de productos -->
     <mat-card-content>
       <table mat-table [dataSource]="sale.products" class="mat-elevation-z8" id="productsTable">
-        <!-- SKU Column -->
+
         <ng-container matColumnDef="sku">
           <th mat-header-cell *matHeaderCellDef> SKU </th>
           <td mat-cell *matCellDef="let product"> {{ product.sku }} </td>
         </ng-container>
   
-        <!-- Descripción Column -->
         <ng-container matColumnDef="description">
           <th mat-header-cell *matHeaderCellDef> Descripción </th>
           <td mat-cell *matCellDef="let product"> {{ product.description }} </td>
         </ng-container>
   
-        <!-- Cantidad Column -->
         <ng-container matColumnDef="quantity">
           <th mat-header-cell *matHeaderCellDef> Cantidad </th>
           <td mat-cell *matCellDef="let product"> {{ product.quantity }} </td>
         </ng-container>
   
-        <!-- Precio Unitario Column -->
         <ng-container matColumnDef="unitPrice">
           <th mat-header-cell *matHeaderCellDef> Precio Unitario </th>
           <td mat-cell *matCellDef="let product"> {{ product.unitPrice }} </td>
         </ng-container>
   
-        <!-- Subtotal Column -->
         <ng-container matColumnDef="subtotal">
           <th mat-header-cell *matHeaderCellDef> Subtotal </th>
           <td mat-cell *matCellDef="let product"> {{ product.quantity * product.unitPrice }} </td>
         </ng-container>
   
-        <!-- Header and Row Definitions -->
         <tr mat-header-row *matHeaderRowDef="['sku', 'description', 'quantity', 'unitPrice', 'subtotal']"></tr>
         <tr mat-row *matRowDef="let row; columns: ['sku', 'description', 'quantity', 'unitPrice', 'subtotal'];"></tr>
       </table>
     </mat-card-content>
   
-    <!-- Totales -->
     <mat-card-content>
       <div class="totals">
         <p><strong>Subtotal (sin IVA):</strong> {{ getSubtotalWithoutVAT() }}</p>
