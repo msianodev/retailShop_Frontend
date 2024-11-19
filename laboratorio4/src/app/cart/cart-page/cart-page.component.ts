@@ -3,34 +3,39 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { cartProduct, Sale } from '../../types/types';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { SuccessDialogComponent } from '../success-dialog/success-dialog.component';
+import { SuccessDialogComponent } from '../../shared/success-dialog/success-dialog.component';
 import { CartService } from '../../services/cart/cart.service';
 
 @Component({
   selector: 'app-cart-page',
   templateUrl: './cart-page.component.html',
-  styleUrls: ['./cart-page.component.css']
+  styleUrls: ['./cart-page.component.css'],
 })
 export class CartPageComponent implements OnInit {
-
   ventaForm!: FormGroup;
 
   cartItems: cartProduct[] = [];
 
-  displayedColumns: string[] = ['SKU', 'Description', 'Quantity', 'Unit.Price', 'SubTotal'];
+  displayedColumns: string[] = [
+    'SKU',
+    'Description',
+    'Quantity',
+    'Unit.Price',
+    'SubTotal',
+  ];
 
   dataSource = new MatTableDataSource<cartProduct>(this.cartItems);
-  
+
   total = 0;
   subTotal = 0;
-  dateNow = new Date;
+  dateNow = new Date();
   userId = 0;
   userName = '';
 
   constructor(
-    private fb: FormBuilder, 
-    private cartService: CartService, 
-    private dialog: MatDialog, 
+    private fb: FormBuilder,
+    private cartService: CartService,
+    private dialog: MatDialog,
     private cdRef: ChangeDetectorRef
   ) {}
 
@@ -40,21 +45,19 @@ export class CartPageComponent implements OnInit {
       paymentMethod: ['', Validators.required],
     });
 
-    this.cartService.getCart().subscribe(cart => {
+    this.cartService.getCart().subscribe((cart) => {
       console.log('Carrito recibido: ', cart); // Verifica que los productos se reciben correctamente
 
       this.cartItems = cart;
       this.dataSource.data = this.cartItems;
       this.calculateTotals();
       this.cdRef.detectChanges(); // Fuerza la detección de cambios después de actualizar el carrito
-
     });
 
-    this.dateNow = new Date();  // Formato de fecha y hora
+    this.dateNow = new Date(); // Formato de fecha y hora
     console.log('Fecha actual:', this.dateNow); // Verificar que la fecha se asigna correctamente
 
-
-/*
+    /*
     //TODO, AUTH SERVICE
     this.userId = authService.getUserId();
     this.userName = authService.getuserName();
@@ -70,17 +73,18 @@ export class CartPageComponent implements OnInit {
   }
 
   calculateTotals(): void {
-    this.subTotal = this.cartItems.reduce((acc, item) => acc + item.subTotal, 0);
+    this.subTotal = this.cartItems.reduce(
+      (acc, item) => acc + item.subTotal,
+      0
+    );
     this.total = this.subTotal * 1.21; // Total con IVA del 21%
   }
 
   confirmSale(): void {
-
     if (this.ventaForm.invalid) {
-      alert("Por favor complete todos los campos correctamente.");
+      alert('Por favor complete todos los campos correctamente.');
       return;
     }
-
 
     //TODO: PEDIR EL NUMERO DE VENDEDOR AL SERVICIO DE USUARIOS O AUTH SERVICE.
     const { client, paymentMethod } = this.ventaForm.value;
@@ -91,11 +95,11 @@ export class CartPageComponent implements OnInit {
       products: this.cartItems,
       total: this.total,
       date: this.dateNow,
-      paymentMethod: paymentMethod
+      paymentMethod: paymentMethod,
     };
 
     this.cartService.confirmSale(sale).subscribe({
-      next: response => {
+      next: (response) => {
         console.log('Venta confirmada:', response);
         this.cartService.clearCart();
         this.cartItems = [];
@@ -104,11 +108,10 @@ export class CartPageComponent implements OnInit {
         this.subTotal = 0;
         this.ventaForm.reset();
 
-        
         // Llamar al método para abrir el modal después de una venta exitosa
         this.openSuccessDialog();
       },
-      error: err => console.error('Error al confirmar la venta:', err)
+      error: (err) => console.error('Error al confirmar la venta:', err),
     });
   }
 
@@ -126,7 +129,7 @@ export class CartPageComponent implements OnInit {
   openSuccessDialog(): void {
     const dialogRef = this.dialog.open(SuccessDialogComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       console.log('El diálogo se cerró con el resultado: ', result);
     });
   }

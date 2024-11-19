@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
-import { HomePageComponent } from '../pages/home-page/home-page.component';
 import { Routes } from '@angular/router';
+import { HomePageComponent } from '../../shared/home-page/home-page.component';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-
-  routes: Routes = [      
+  routes: Routes = [
     { path: '/home', component: HomePageComponent },
     // { path: 'cart', component: SettingsComponent }
   ];

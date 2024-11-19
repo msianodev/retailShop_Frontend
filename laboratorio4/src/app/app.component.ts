@@ -5,9 +5,9 @@ import { AuthService } from './services/auth/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'laboratorio4';
 
   constructor(public authService: AuthService) {}
@@ -16,5 +16,4 @@ export class AppComponent implements OnInit{
     // Verifica si hay un usuario guardado en el localStorage
     this.authService.checkAuthentication();
   }
-
 }

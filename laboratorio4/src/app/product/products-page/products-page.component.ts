@@ -3,12 +3,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 
-import { ProductService } from '../../../services//product/product.service';
+import { ProductService } from '../../services/product/product.service';
 import { MatSort, Sort } from '@angular/material/sort';
-import { cartProduct, Category, Product } from '../../../types/types';
+import { cartProduct, Category, Product } from '../../types/types';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductDetailComponent } from '../product-detail/product-detail.component';
-import { CartService } from '../../../services/cart/cart.service';
+import { CartService } from '../../services/cart/cart.service';
 
 @Component({
   selector: 'app-products-page',

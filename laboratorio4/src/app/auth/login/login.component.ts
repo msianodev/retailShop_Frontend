@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../../services/auth/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -55,7 +55,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       // Extraer los valores de DNI y contraseña, asegurándose de que no sean null o undefined
       const { dni, password } = this.loginForm.value;
-  
+
       // Verificar si el dni y password no son nulos ni indefinidos
       if (dni && password) {
         // Llamar al AuthService para autenticar al usuario
