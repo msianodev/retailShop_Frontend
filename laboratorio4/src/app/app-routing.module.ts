@@ -22,8 +22,9 @@ const routes: Routes = [
   { path: 'cart', component: CartPageComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' },
-  {path: 'employees', component: EmployeesComponent},
-  {path: 'employees/:id', component: EmployeeDetailComponent},
+  {path: 'employees', component: EmployeesComponent, canActivate:[AuthGuard] },
+  {path: 'employees/:id', component: EmployeeDetailComponent, canActivate: [AuthGuard]},
+  {path: 'logout', component: LoginComponent},
   //TODO AGREGAR 404 NOT FOUND
 ];
 

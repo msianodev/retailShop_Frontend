@@ -1,9 +1,13 @@
 export interface Product {
+  id: number;
   sku: number;
-  description: string;
+  brandName: string;
+  name: string;
   category: Category;
-  stock: number;
-  unitPrice: number;
+  stockQuantity: number;
+  minimunStock: number;
+  price: number;
+  isActive: boolean;
 }
 
 export interface Sale {
@@ -16,10 +20,11 @@ export interface Sale {
   paymentMethod: string;
 }
 export interface cartProduct {
+  id: number;
   sku: number;
-  description: string;
+  name: string;
   quantity: number;
-  unitPrice: number;
+  price: number;
   subTotal: number;
 }
 
@@ -38,6 +43,6 @@ export interface User{
 }
 
 export interface userLogin{
-  id: string;
+  dni: string;
   password: string;
 }

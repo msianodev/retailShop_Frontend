@@ -43,7 +43,7 @@
 
   <div *ngIf="!noResultsFound">
     <table mat-table [dataSource]="productList" class="mat-elevation-z8">
-      <!-- Define columnas según tus datos -->
+       
       <ng-container matColumnDef="sku">
         <th mat-header-cell *matHeaderCellDef> SKU </th>
         <td mat-cell *matCellDef="let element"> {{element.sku}} </td>

@@ -20,9 +20,9 @@ import { CartService } from '../../../services/cart/cart.service';
 export class ProductsPageComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'sku',
-    'description',
+    'name',
     'stock',
-    'unitPrice',
+    'price',
     'detail_button',
     'category',
     'add_to_cart',
@@ -73,8 +73,8 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     }
   }
 
-  goToDetail(sku: number): void {
-    this.router.navigate([`/products/${sku}`]);
+  goToDetail(id: number): void {
+    this.router.navigate([`/products/${id}`]);
   }
 
   // Método que se llama cuando el usuario hace clic en el botón de búsqueda
@@ -116,11 +116,12 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
 
   add_to_cart(product: Product): void {
     const cartProduct: cartProduct = {
+      id: product.id,
       sku: product.sku,
-      description: product.description,
-      unitPrice: product.unitPrice,
-      quantity: 1, // Cantidad inicial
-      subTotal: product.unitPrice, // Subtotal inicial
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      subTotal: product.price,
     };
     this.cartService.addProductToCart(cartProduct);
   }
@@ -165,9 +166,9 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   }
 
   deleteProduct(product: Product): void {
-    const confirmDelete = confirm(`¿Estás seguro de que quieres eliminar el producto ${product.description}?`);
+    const confirmDelete = confirm(`¿Estás seguro de que quieres eliminar el producto ${product.name}?`);
     if (confirmDelete) {
-      this.productService.deleteProduct(product.sku).subscribe({
+      this.productService.deleteProduct(product.id).subscribe({
         next: () => {
           this.loadProducts();
           this.showErrorSnackBar('Producto eliminado con éxito');

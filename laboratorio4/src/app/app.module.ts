@@ -11,26 +11,25 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
-//MATERIAL
+// MÓDULOS DE ANGULAR MATERIAL
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableModule } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select'; // Si usas mat-select
-import { MatOptionModule } from '@angular/material/core'; // Si usas mat-select
-import { MatPaginator } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
 
-//COMPONENTS
+// COMPONENTES
 import { HomePageComponent } from './components/pages/home-page/home-page.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SectionComponent } from './components/section/section.component';
@@ -44,11 +43,11 @@ import { SuccessDialogComponent } from './components/success-dialog/success-dial
 import { LoginComponent } from './components/pages/login/login.component';
 import { EmployeesComponent } from './components/employees/employees/employees.component';
 import { EmployeeDetailComponent } from './components/employees/employee-detail/employee-detail.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
     AppComponent,
-
     HomePageComponent,
     HeaderComponent,
     SectionComponent,
@@ -69,28 +68,25 @@ import { EmployeeDetailComponent } from './components/employees/employee-detail/
     AppRoutingModule,
     HttpClientModule,
     RouterModule,
-
+    FormsModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
     MatListModule,
     MatPaginatorModule,
-    MatTableModule,
-    MatSort,
     MatFormFieldModule,
     MatCardModule,
+    MatInputModule,
     MatSelectModule,
     MatOptionModule,
-    MatInputModule,
-    MatPaginator,
     MatDialogModule,
     MatGridListModule,
-
-    FormsModule,
-    ReactiveFormsModule,
+    MatTableModule,
   ],
   providers: [provideClientHydration(), provideAnimationsAsync()],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

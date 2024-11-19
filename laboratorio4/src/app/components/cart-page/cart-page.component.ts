@@ -64,7 +64,7 @@ export class CartPageComponent implements OnInit {
   updateQuantity(product: cartProduct, event: Event): void {
     const newQuantity = +(event.target as HTMLInputElement).value;
     product.quantity = newQuantity;
-    product.subTotal = product.unitPrice * newQuantity;
+    product.subTotal = product.price * newQuantity;
     this.calculateTotals();
     this.dataSource.data = this.cartItems;
   }

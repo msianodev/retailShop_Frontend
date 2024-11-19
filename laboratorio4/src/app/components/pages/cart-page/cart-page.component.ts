@@ -1,74 +1,136 @@
-import { AfterViewInit, Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import {MatSelectModule} from '@angular/material/select';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-
-interface ProductList {
-  position: number;
-  name: string;
-  weight: number;
-  symbol: string;
-  price: number;
-}
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { cartProduct, Sale } from '../../../types/types';
+import { CartService } from '../../../services/cart/cart.service';
+import { SuccessDialogComponent } from '../../success-dialog/success-dialog.component';
 
 @Component({
   selector: 'app-cart-page',
   templateUrl: './cart-page.component.html',
   styleUrls: ['./cart-page.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
+export class CartPageComponent implements OnInit {
+  ventaForm!: FormGroup;
 
-export class CartPageComponent implements AfterViewInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'price'];
-  dataSource = new MatTableDataSource<ProductList>(ELEMENT_DATA);
-  subtotal: number = 0;
-  total: number = 0;
+  cartItems: cartProduct[] = [];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  displayedColumns: string[] = [
+    'SKU',
+    'Description',
+    'Quantity',
+    'Unit.Price',
+    'SubTotal',
+  ];
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+  dataSource = new MatTableDataSource<cartProduct>(this.cartItems);
+
+  total = 0;
+  subTotal = 0;
+  dateNow = new Date();
+  userId = 0;
+  userName = '';
+
+  constructor(
+    private fb: FormBuilder,
+    private cartService: CartService,
+    private dialog: MatDialog,
+    private cdRef: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.ventaForm = this.fb.group({
+      clientId: ['', Validators.required],
+      paymentMethod: ['', Validators.required],
+    });
+
+    this.cartService.getCart().subscribe((cart) => {
+      console.log('Carrito recibido: ', cart); // Verifica que los productos se reciben correctamente
+
+      this.cartItems = cart;
+      this.dataSource.data = this.cartItems;
+      this.calculateTotals();
+      this.cdRef.detectChanges(); // Fuerza la detección de cambios después de actualizar el carrito
+    });
+
+    this.dateNow = new Date(); // Formato de fecha y hora
+    console.log('Fecha actual:', this.dateNow); // Verificar que la fecha se asigna correctamente
+
+    /*
+    //TODO, AUTH SERVICE
+    this.userId = authService.getUserId();
+    this.userName = authService.getuserName();
+    */
+  }
+
+  updateQuantity(product: cartProduct, event: Event): void {
+    const newQuantity = +(event.target as HTMLInputElement).value;
+    product.quantity = newQuantity;
+    product.subTotal = product.price * newQuantity;
     this.calculateTotals();
+    this.dataSource.data = this.cartItems;
   }
 
-  calculateTotals() {
-    this.subtotal = this.dataSource.data.reduce((acc, product) => acc + product.price, 0);
-    this.total = this.subtotal; // Puedes agregar impuestos o descuentos si es necesario
+  calculateTotals(): void {
+    this.subTotal = this.cartItems.reduce(
+      (acc, item) => acc + item.subTotal,
+      0
+    );
+    this.total = this.subTotal * 1.21; // Total con IVA del 21%
   }
 
-  confirmar() {
-    // Lógica para confirmar la compra
-    console.log('Compra confirmada');
+  confirmSale(): void {
+    if (this.ventaForm.invalid) {
+      alert('Por favor complete todos los campos correctamente.');
+      return;
+    }
+
+    //TODO: PEDIR EL NUMERO DE VENDEDOR AL SERVICIO DE USUARIOS O AUTH SERVICE.
+    const { client, paymentMethod } = this.ventaForm.value;
+    const sale: Sale = {
+      id: 0, //  autogenerado en el backend
+      userId: 0,
+      clientId: client,
+      products: this.cartItems,
+      total: this.total,
+      date: this.dateNow,
+      paymentMethod: paymentMethod,
+    };
+
+    this.cartService.confirmSale(sale).subscribe({
+      next: (response) => {
+        console.log('Venta confirmada:', response);
+        this.cartService.clearCart();
+        this.cartItems = [];
+        this.dataSource.data = [];
+        this.total = 0;
+        this.subTotal = 0;
+        this.ventaForm.reset();
+
+        // Llamar al método para abrir el modal después de una venta exitosa
+        this.openSuccessDialog();
+      },
+      error: (err) => console.error('Error al confirmar la venta:', err),
+    });
   }
 
-  cancelar() {
-    // Lógica para cancelar la compra
-    console.log('Compra cancelada');
+  cancelSale(): void {
+    this.cartService.clearCart();
+    this.cartItems = [];
+    this.dataSource.data = [];
+    this.total = 0;
+    this.subTotal = 0;
+    this.ventaForm.reset();
+    console.log('Carrito cancelado y limpiado');
   }
 
+  // Método para abrir el modal de éxito
+  openSuccessDialog(): void {
+    const dialogRef = this.dialog.open(SuccessDialogComponent);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('El diálogo se cerró con el resultado: ', result);
+    });
+  }
 }
-
-const ELEMENT_DATA: ProductList[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H', price: 10},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He', price: 20},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li', price: 30},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be', price: 40},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B', price: 50},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C', price: 60},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N', price: 70},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O', price: 80},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F', price: 90},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne', price: 100},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na', price: 110},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg', price: 120},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al', price: 130},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si', price: 140},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P', price: 150},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S', price: 160},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl', price: 170},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar', price: 180},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K', price: 190},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca', price: 200},
-];

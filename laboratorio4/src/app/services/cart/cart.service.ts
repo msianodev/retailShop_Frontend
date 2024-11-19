@@ -27,7 +27,7 @@ export class CartService {
   }
 // Agregar un producto al carrito o actualizar su cantidad si ya existe
 addProductToCart(product: cartProduct): void {
-  const existingProductIndex = this.cartSubject.value.findIndex(item => item.sku === product.sku);
+  const existingProductIndex = this.cartSubject.value.findIndex(item => item.id === product.id);
 
   if (existingProductIndex !== -1) {
     // Producto ya existe en el carrito; actualizar la cantidad y subtotal
@@ -37,7 +37,7 @@ addProductToCart(product: cartProduct): void {
         return {
           ...item,
           quantity: updatedQuantity,
-          subTotal: updatedQuantity * item.unitPrice
+          subTotal: updatedQuantity * item.price
         };
       }
       return item;
@@ -47,7 +47,7 @@ addProductToCart(product: cartProduct): void {
     // Producto no existe en el carrito; agregarlo como nuevo producto
     const newProduct = {
       ...product,
-      subTotal: product.quantity * product.unitPrice
+      subTotal: product.quantity * product.price
     };
     this.cartSubject.next([...this.cartSubject.value, newProduct]);
   }
@@ -57,9 +57,9 @@ addProductToCart(product: cartProduct): void {
   // Actualizar la cantidad de un producto en el carrito
   updateProductQuantity(product: cartProduct, quantity: number): void {
     const updatedCart = this.cartSubject.value.map(item => {
-      if (item.sku === product.sku) {
+      if (item.id === product.id) {
         item.quantity = quantity;
-        item.subTotal = item.unitPrice * quantity;
+        item.subTotal = item.price * quantity;
       }
       return item;
     });
