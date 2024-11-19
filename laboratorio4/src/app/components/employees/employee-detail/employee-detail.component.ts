@@ -122,11 +122,6 @@ export class EmployeeDetailComponent implements OnInit {
   }
   
 
-/*************  ✨ Codeium Command ⭐  *************/
-  /**
-   * Navigates back to the employee list
-   */
-/******  f80c50a3-db6d-4d4e-a0d8-0eaccb5b9b70  *******/
   goBack(): void {
     this.router.navigate(['/employees']);
   }
