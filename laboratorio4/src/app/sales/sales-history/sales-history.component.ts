@@ -5,22 +5,26 @@ import { Sale } from '../../types/types';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { SalesHistoryService } from '../../services/salesHistory/sales-history.service'; // Asegúrate de importar el servicio
-import { SaleDetailModalComponent } from '../sale-detail-modal/sale-detail-modal.component';
+import { SaleDetailModalComponent } from '../../sales/sale-detail-modal/sale-detail-modal.component';
 
 @Component({
   selector: 'app-sales-history',
   templateUrl: './sales-history.component.html',
-  styleUrls: ['./sales-history.component.css']
+  styleUrls: ['./sales-history.component.css'],
 })
 export class SalesHistoryComponent implements OnInit {
-
-  item = { 
-    icon: 'bar_chart', 
+  item = {
+    icon: 'bar_chart',
     label: 'SALES HISTORY',
   };
 
-  displayedColumns: string[] = ['id', 'userName', 'date', 'total', 'detail_button'];
-  
+  displayedColumns: string[] = [
+    'id',
+    'userName',
+    'date',
+    'total',
+    'detail_button',
+  ];
 
   salesHistory = new MatTableDataSource<Sale>([]);
 
@@ -44,21 +48,21 @@ export class SalesHistoryComponent implements OnInit {
 
   loadSalesHistory(): void {
     // Usar datos estáticos mientras no haya backend
-   // this.salesHistory.data = this.staticSales;
+    // this.salesHistory.data = this.staticSales;
 
-    
     // Comenta esta línea para usar datos estáticos y descomenta cuando conectes al backend
     if (this.searchTerm.trim()) {
-      this.salesHistoryService.getSalesHistoryById(this.searchTerm).subscribe(sales => {
-        this.salesHistory.data = sales;
-      });
+      this.salesHistoryService
+        .getSalesHistoryById(this.searchTerm)
+        .subscribe((sales) => {
+          this.salesHistory.data = sales;
+        });
     } else {
       // Si no hay búsqueda, cargar todo el historial de ventas desde la API
-      this.salesHistoryService.getSalesHistory().subscribe(sales => {
+      this.salesHistoryService.getSalesHistory().subscribe((sales) => {
         this.salesHistory.data = sales;
       });
     }
-    
   }
 
   onSearch(): void {
@@ -66,11 +70,11 @@ export class SalesHistoryComponent implements OnInit {
   }
 
   goToSaleDetail(id: number): void {
-    const sale = this.salesHistory.data.find(s => s.id === id);
+    const sale = this.salesHistory.data.find((s) => s.id === id);
     if (sale) {
       this.dialog.open(SaleDetailModalComponent, {
         width: '600px',
-        data: sale
+        data: sale,
       });
     }
   }
