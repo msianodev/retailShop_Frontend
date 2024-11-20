@@ -18,9 +18,7 @@ export class CartService {
 
   // Confirmar la venta (envío al backend)
   confirmSale(sale: Sale): Observable<Sale> {
-    return this.http.post<Sale>(`${this.apiUrl}/sales`, sale, {
-      responseType: 'json',
-    });
+    return this.http.post<Sale>(`${this.apiUrl}/sales`, sale);
   }
 
   // Limpiar el carrito
@@ -67,5 +65,9 @@ export class CartService {
       return item;
     });
     this.cartSubject.next(updatedCart);
+  }
+  //Actualizar el carrito
+  updateCart(cartItems: CartProduct[]): void {
+    this.cartSubject.next(cartItems);
   }
 }

@@ -18,6 +18,9 @@
   height: calc(100vh - 64px);
 }
 
+.sidenav-container ::ng-deep .mat-drawer-inner-container {
+  overflow: hidden;
+}
 
 .navList {
   padding: 0;
