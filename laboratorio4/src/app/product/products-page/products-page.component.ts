@@ -1,14 +1,23 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { ProductService } from '../../services/product/product.service';
 import { MatSort, Sort } from '@angular/material/sort';
-import { cartProduct, Category, Product } from '../../types/types';
+
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductDetailComponent } from '../product-detail/product-detail.component';
+
+import { ProductService } from '../../services/product/product.service';
 import { CartService } from '../../services/cart/cart.service';
+import { Category, Product, CartProduct } from '../../types/types';
 
 @Component({
   selector: 'app-products-page',
@@ -18,14 +27,17 @@ import { CartService } from '../../services/cart/cart.service';
 export class ProductsPageComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'sku',
-    'description',
+    'name',
     'stock',
-    'unitPrice',
+    'price',
     'detail_button',
     'category',
     'add_to_cart',
   ];
   productList = new MatTableDataSource<Product>([]); // Inicializa con un array vacío
+
+  private _snackBar = inject(MatSnackBar);
+  hide = true;
 
   searchForm!: FormGroup; // Formulario reactivo
 
@@ -68,8 +80,8 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     }
   }
 
-  goToDetail(sku: number): void {
-    this.router.navigate([`/products/${sku}`]);
+  goToDetail(id: number): void {
+    this.router.navigate([`/products/${id}`]);
   }
 
   // Método que se llama cuando el usuario hace clic en el botón de búsqueda
@@ -100,26 +112,26 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   loadProducts(): void {
     this.productService.getAllProducts().subscribe({
       next: (products) => {
-        this.productList.data = products; // Asignar correctamente los datos
-        console.log(this.productList.data); // Verifica en la consola si los datos son correctos
+        this.productList.data = products;
       },
       error: (error) => {
         console.error('Error al cargar productos en el componente:', error);
-        alert('Error al cargar productos.');
+        this.showErrorSnackBar('Error al cargar productos.');
       },
     });
   }
 
   add_to_cart(product: Product): void {
-    const cartProduct: cartProduct = {
+    // const cartProduct: CartProduct = {
+    const cartProduct: CartProduct = {
+      id: product.id,
       sku: product.sku,
-      description: product.description,
-      unitPrice: product.unitPrice,
-      quantity: 1, // Cantidad inicial
-      subTotal: product.unitPrice, // Subtotal inicial
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      subTotal: product.price,
     };
     this.cartService.addProductToCart(cartProduct);
-    console.log('Producto añadido al carrito:', cartProduct);
   }
 
   loadCategories() {
@@ -128,8 +140,9 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
         this.categories = categories;
       },
       error: (error) => {
-        console.error('Error al cargar categorías en el componente:', error);
-        alert('Error al cargar categorías. Intenta más tarde.');
+        this.showErrorSnackBar(
+          'Error al cargar categorías. Intenta más tarde.'
+        );
       },
     });
   }
@@ -144,12 +157,43 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     this.productService.createCategory({ name }).subscribe({
       next: () => {
         this.loadCategories(); // Recargar las categorías para incluir la nueva
-        alert('Categoría agregada con éxito.');
+        this.showErrorSnackBar('Categoría agregada con éxito.');
       },
       error: (error) => {
         console.error('Error al agregar categoría:', error);
-        alert('Hubo un error al agregar la categoría. Intenta nuevamente.');
+        this.showErrorSnackBar(
+          'Hubo un error al agregar la categoría. Intenta nuevamente.'
+        );
       },
     });
+  }
+
+  showErrorSnackBar(message: string) {
+    this._snackBar.open(message, '', {
+      duration: 2000, // 2 segundos
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
+  }
+
+  deleteProduct(product: Product): void {
+    const confirmDelete = confirm(
+      `¿Estás seguro de que quieres eliminar el producto ${product.name}?`
+    );
+    if (confirmDelete) {
+      this.productService.deleteProduct(product.id).subscribe({
+        next: () => {
+          this.loadProducts();
+          this.showErrorSnackBar('Producto eliminado con éxito');
+        },
+
+        error: (error) => {
+          console.error('Error al eliminar el producto:', error);
+          this.showErrorSnackBar(
+            'Hubo un error al eliminar el producto. Intenta nuevamente.'
+          );
+        },
+      });
+    }
   }
 }
