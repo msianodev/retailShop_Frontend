@@ -22,12 +22,14 @@ export class CartPageComponent implements OnInit {
     'Quantity',
     'Unit.Price',
     'SubTotal',
+    'Actions',
   ];
 
   dataSource = new MatTableDataSource<CartProduct>(this.cartItems);
 
   total = 0;
   subTotal = 0;
+  iva = 0.21; // IVA del 21%
   dateNow = new Date();
   userId = 0;
   userName = '';
@@ -49,6 +51,11 @@ export class CartPageComponent implements OnInit {
       console.log('Carrito recibido: ', cart); // Verifica que los productos se reciben correctamente
 
       this.cartItems = cart;
+      //Inicializar el subtotal de cada producto
+      this.cartItems.forEach((item) => {
+        item.subTotal = item.price * item.quantity;
+      });
+
       this.dataSource.data = this.cartItems;
       this.calculateTotals();
       this.cdRef.detectChanges(); // Fuerza la detección de cambios después de actualizar el carrito
@@ -132,5 +139,20 @@ export class CartPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('El diálogo se cerró con el resultado: ', result);
     });
+  }
+
+  // Método para eliminar un producto del carrito
+  removeProduct(product: CartProduct): void {
+    // Remover el producto de la lista del carrito
+    this.cartItems = this.cartItems.filter((item) => item.sku !== product.sku);
+
+    // Actualizar la fuente de datos de la tabla
+    this.dataSource.data = this.cartItems;
+
+    // Recalcular los totales
+    this.calculateTotals();
+
+    // Actualizar el carrito en el servicio
+    this.cartService.updateCart(this.cartItems);
   }
 }

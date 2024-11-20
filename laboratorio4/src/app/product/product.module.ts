@@ -17,7 +17,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
@@ -44,7 +44,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatButtonModule,
     MatSidenavModule,
     MatListModule,
-    MatSort,
+    MatSortModule,
     MatCardModule,
     MatOptionModule,
     MatInputModule,

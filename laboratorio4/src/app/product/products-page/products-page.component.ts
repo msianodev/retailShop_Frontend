@@ -80,6 +80,16 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //Función de filtrado de la tabla de productos Material
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.productList.filter = filterValue.trim().toLowerCase();
+
+    if (this.productList.paginator) {
+      this.productList.paginator.firstPage();
+    }
+  }
+
   goToDetail(id: number): void {
     this.router.navigate([`/products/${id}`]);
   }
