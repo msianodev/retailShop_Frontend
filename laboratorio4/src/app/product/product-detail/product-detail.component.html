@@ -1,10 +1,9 @@
 <div class="productDetailContainer">
-  <h1 *ngIf="product">Product Detail: {{ product.description }}</h1>
+  <h1 *ngIf="product">Product Detail: {{ product.name }}</h1>
   <h1 *ngIf="!product">New Product</h1>
 
   <mat-card>
     <form [formGroup]="productForm" (ngSubmit)="saveChanges()">
-      <!-- <button mat-raised-button color="warn" (click)="goBack()">Back to Products</button> -->
       <button mat-raised-button color="warn" type="button" (click)="goBack()">
         Back to Products
       </button>
@@ -22,7 +21,7 @@
             matInput
             placeholder="Enter description"
             formControlName="description"
-            [value]="product?.description || ''"
+            [value]="product?.name || ''"
           />
         </mat-form-field>
 
@@ -46,7 +45,7 @@
             type="number"
             placeholder="Stock"
             formControlName="stock"
-            [value]="product?.stock || ''"
+            [value]="product?.stockQuantity || ''"
           />
         </mat-form-field>
 
@@ -57,7 +56,7 @@
             type="number"
             placeholder="Price"
             formControlName="unitPrice"
-            [value]="product?.unitPrice || ''"
+            [value]="product?.price || ''"
           />
         </mat-form-field>
       </mat-card-content>
@@ -66,7 +65,6 @@
         <button mat-raised-button color="primary" type="submit">
           Save changes
         </button>
-        <!-- <button mat-raised-button color="warn" (click)="confirmDelete()">Delete Product</button> -->
         <button
           mat-raised-button
           color="warn"

@@ -1,37 +1,48 @@
 export interface Product {
+  id: number;
   sku: number;
-  description: string;
+  brandName: string;
+  name: string;
   category: Category;
-  stock: number;
-  unitPrice: number;
+  stockQuantity: number;
+  minimunStock: number;
+  price: number;
+  isActive: boolean;
 }
 
 export interface Sale {
   id: number;
   userId: number;
   clientId: number;
-  products: cartProduct[];
+  products: CartProduct[];
   total: number;
   date: Date;
   paymentMethod: string;
 }
-export interface cartProduct {
+export interface CartProduct {
+  id: number;
   sku: number;
-  description: string;
+  name: string;
   quantity: number;
-  unitPrice: number;
+  price: number;
   subTotal: number;
 }
 
-export interface Category{
+export interface Category {
   id: number;
   name: string;
 }
 
-export interface User{
+export interface User {
   id: number;
+  dni: string;
   password: string;
   isAdmin: boolean;
   name: string;
   email: string;
+}
+
+export interface userLogin {
+  dni: string;
+  password: string;
 }

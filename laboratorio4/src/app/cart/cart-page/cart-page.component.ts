@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { cartProduct, Sale } from '../../types/types';
+import { CartProduct, Sale } from '../../types/types';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from '../../shared/success-dialog/success-dialog.component';
@@ -14,7 +14,7 @@ import { CartService } from '../../services/cart/cart.service';
 export class CartPageComponent implements OnInit {
   ventaForm!: FormGroup;
 
-  cartItems: cartProduct[] = [];
+  cartItems: CartProduct[] = [];
 
   displayedColumns: string[] = [
     'SKU',
@@ -24,7 +24,7 @@ export class CartPageComponent implements OnInit {
     'SubTotal',
   ];
 
-  dataSource = new MatTableDataSource<cartProduct>(this.cartItems);
+  dataSource = new MatTableDataSource<CartProduct>(this.cartItems);
 
   total = 0;
   subTotal = 0;
@@ -64,10 +64,10 @@ export class CartPageComponent implements OnInit {
     */
   }
 
-  updateQuantity(product: cartProduct, event: Event): void {
+  updateQuantity(product: CartProduct, event: Event): void {
     const newQuantity = +(event.target as HTMLInputElement).value;
     product.quantity = newQuantity;
-    product.subTotal = product.unitPrice * newQuantity;
+    product.subTotal = product.price * newQuantity;
     this.calculateTotals();
     this.dataSource.data = this.cartItems;
   }

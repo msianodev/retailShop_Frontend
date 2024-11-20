@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProductService } from '../../services/product/product.service';
+
 import { Observable } from 'rxjs';
 import { Category, Product } from '../../types/types';
-import { MatPaginator } from '@angular/material/paginator';
+import { ProductService } from '../../services/product/product.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -33,6 +33,16 @@ export class ProductDetailComponent implements OnInit {
     this.checkIfNewProduct();
     this.loadCategories();
   }
+  // Inicializar el formulario reactivo
+  initForm(): void {
+    this.productForm = this.fb.group({
+      description: ['', Validators.required],
+      category: ['', Validators.required], // Campo para la categoría
+      stock: [0, [Validators.required, Validators.min(0)]],
+      unitPrice: [0, [Validators.required, Validators.min(0)]],
+      sku: [{ value: '', disabled: true }], // SKU deshabilitado para que no sea editable
+    });
+  }
 
   // Verificar si estamos creando o editando un producto
   checkIfNewProduct(): void {
@@ -44,17 +54,6 @@ export class ProductDetailComponent implements OnInit {
       // Creando un nuevo producto
       this.isNewProduct = true;
     }
-  }
-
-  // Inicializar el formulario reactivo
-  initForm(): void {
-    this.productForm = this.fb.group({
-      description: ['', Validators.required],
-      category: ['', Validators.required], // Campo para la categoría
-      stock: [0, [Validators.required, Validators.min(0)]],
-      unitPrice: [0, [Validators.required, Validators.min(0)]],
-      sku: [{ value: '', disabled: true }], // SKU deshabilitado para que no sea editable
-    });
   }
 
   // Cargar los detalles del producto y llenar el formulario si es edición
@@ -96,34 +95,6 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
-  // Guardar los cambios
-  // saveChanges(): void {
-  //   if (this.productForm.valid && this.product) {
-  //     const updatedProduct = { ...this.product, ...this.productForm.value };
-  //     this.productService.updateProduct(updatedProduct).subscribe(() => {
-  //       console.log('Producto actualizado:', updatedProduct);
-  //       this.goBack();
-  //     });
-  //   }
-  // }
-
-  // saveChanges(): void {
-  //   if (this.productForm.valid) {
-  //     const productData = { ...this.productForm.value };
-
-  //     if (this.isNewProduct) {
-  //       this.productService.createProduct(productData).subscribe(() => {
-  //         this.goBack();
-  //       });
-  //     } else {
-  //       const updatedProduct = { ...this.product, ...productData };
-  //       this.productService.updateProduct(updatedProduct).subscribe(() => {
-  //         this.goBack();
-  //       });
-  //     }
-  //   }
-  // }
-
   confirmDelete(): void {
     if (confirm('Are you sure you want to delete this product?')) {
       this.deleteProduct();
@@ -134,7 +105,7 @@ export class ProductDetailComponent implements OnInit {
     if (this.product && this.product.sku) {
       this.productService.deleteProduct(this.product.sku).subscribe(() => {
         console.log('Product Deleted');
-        this.goBack(); // Redirige a la lista de productos después de eliminar
+        this.goBack();
       });
     }
   }
