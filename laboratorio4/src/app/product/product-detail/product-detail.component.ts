@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Category, Product } from '../../types/types';
 import { ProductService } from '../../services/product/product.service';
+import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-product-detail',
@@ -21,12 +23,19 @@ export class ProductDetailComponent implements OnInit {
 
   isNewProduct: boolean = false;
 
+
+  toastVisible = false;
+  toastMessage = '';
+  toastType: 'error' | 'success' = 'success';
+
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
     private fb: FormBuilder,
-    private router: Router
-  ) {}
+    private router: Router,
+    private dialog: MatDialog
+
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -40,7 +49,7 @@ export class ProductDetailComponent implements OnInit {
       category: ['', Validators.required], // Campo para la categoría
       stock: [0, [Validators.required, Validators.min(0)]],
       unitPrice: [0, [Validators.required, Validators.min(0)]],
-      sku: [{ value: '', disabled: true }], // SKU deshabilitado para que no sea editable
+      sku: ['', Validators.required],
     });
   }
 
@@ -63,55 +72,84 @@ export class ProductDetailComponent implements OnInit {
       if (this.product) {
         this.productForm.patchValue(this.product);
       } else {
-        console.error('No se encontró el producto.');
+        this.showToast('Producto no encontrado', 'error');
+        this.productForm.reset();
       }
     });
   }
 
   // // Guardar los cambios o crear un nuevo producto
   saveChanges(): void {
-    if (this.productForm.valid) {
-      const updatedProduct = { ...this.product, ...this.productForm.value };
-      if (this.isNewProduct) {
-        // Crear un nuevo producto
-        this.productService.createProduct(updatedProduct).subscribe(() => {
-          console.log('Nuevo producto creado:', updatedProduct);
-          this.goBack();
-        });
-      } else {
-        // Actualizar producto existente
-        this.productService.updateProduct(updatedProduct).subscribe(() => {
-          console.log('Producto actualizado:', updatedProduct);
-          this.goBack();
-        });
-      }
-    }
+    this.openDialog('Guardar cambios', '¿Estás seguro de que quieres guardar los cambios?', 'si', 'no')
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          if (this.productForm.valid) {
+            const updatedProduct = { ...this.product, ...this.productForm.value };
+            if (this.isNewProduct) {
+              // Crear un nuevo producto
+              this.productService.createProduct(updatedProduct).subscribe(() => {
+                this.showToast('Producto creado exitosamente', 'success');
+                this.goBack();
+              });
+            } else {
+              // Actualizar producto existente
+              this.productService.updateProduct(updatedProduct).subscribe(() => {
+                this.showToast('Producto actualizado exitosamente', 'success');
+                this.goBack();
+              });
+            }
+          }
+          else {
+            this.showToast('Por favor complete todos los campos correctamente', 'error');
+          }
+        }
+      })
   }
 
   // Cargar las categorías desde la API
   loadCategories(): void {
     this.productService.getCategories().subscribe((categories) => {
-      this.categories = categories; // Asignar las categorías al arreglo
+      this.categories = categories;
     });
   }
 
   confirmDelete(): void {
-    if (confirm('Are you sure you want to delete this product?')) {
-      this.deleteProduct();
-    }
-  }
-
-  deleteProduct(): void {
-    if (this.product && this.product.sku) {
-      this.productService.deleteProduct(this.product.sku).subscribe(() => {
-        console.log('Product Deleted');
-        this.goBack();
+    this.openDialog('Eliminar Producto', '¿Estás seguro de que quieres eliminar el producto?', 'si', 'no')
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          if (this.product && this.product.sku) {
+            this.productService.deleteProductBySku(this.product.sku).subscribe(() => {
+              this.showToast('Producto eliminado exitosamente', 'success');
+              this.goBack();
+            });
+          }
+        }
       });
-    }
   }
 
   // Regresar a la lista de productos
   goBack(): void {
     this.router.navigate(['/products']);
   }
+
+  private openDialog(title: string, message: string, confirmText: string, cancelText: string) {
+    return this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: { title, message, confirmText, cancelText }
+    });
+  }
+
+  showToast(message: string, type: 'error' | 'success') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.toastVisible = true;
+
+    // Ocultar el toast después de 3 segundos, por ejemplo.
+    setTimeout(() => {
+      this.toastVisible = false;
+    }, 3000);
+  }
+
 }

@@ -55,6 +55,10 @@ export class ProductService {
 
 deleteProduct(sku: number): Observable<void> {
   return this.http.delete<void>(`${this.productsURL}/${sku}`);
+
+}
+deleteProductBySku(sku: String): Observable<void> {
+  return this.http.delete<void>(`${this.productsURL}/${sku}`);
 }
 
 getProductBySku(sku: number): Observable<Product> {

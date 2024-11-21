@@ -1,4 +1,8 @@
+
+
 <div class="cart">
+  <app-toast *ngIf="toastVisible" [message]="toastMessage" [type]="toastType"></app-toast>
+
   <!-- Formulario de Venta -->
   <div class="container-form">
     <form [formGroup]="ventaForm" #form="ngForm">
@@ -18,22 +22,60 @@
           <input
             id="client"
             type="text"
-            formControlName="client"
+            formControlName="client"  
             placeholder="Insert client ID"
           />
         </div>
 
         <div class="form-group">
           <label for="payment">Payment Method:</label>
-          <select id="payment" formControlName="payment">
+          <select
+            id="paymentMethod"
+            formControlName="paymentMethod"
+            (change)="onPaymentMethodChange($event)"
+          >
             <option value="cash">Cash</option>
-            <option value="cad">Credit Card</option>
+            <option value="card">Credit Card</option>
             <option value="transference">Transference</option>
           </select>
         </div>
       </div>
+
+      <div *ngIf="ventaForm.get('paymentMethod')?.value === 'card'" formGroupName="cardData">
+        <div class="form-group">
+          <label for="cardNumber">Card Number:</label>
+          <input
+            id="cardNumber"
+            type="text"
+            formControlName="cardNumber"
+            placeholder="Card Number"
+          />
+        </div>
+        <div class="form-group">
+          <label for="cardExpiry">Card Expiry:</label>
+          <input
+            id="cardExpiry"
+            type="text"
+            formControlName="cardExpiry"
+            placeholder="MM/YY"
+          />
+        </div>
+        <div class="form-group">
+          <label for="cardCvv">Card CVV:</label>
+          <input
+            id="cardCvv"
+            type="text"
+            formControlName="cardCvv"
+            placeholder="CVV"
+          />
+        </div>
+        <div *ngIf="ventaForm.get('cardData')?.hasError('invalidCard')">
+          La información de la tarjeta no es válida.
+        </div>        
+      </div>
     </form>
   </div>
+
 
   <!-- Tabla de productos -->
   <div class="container-list">
@@ -65,7 +107,7 @@
         <ng-container matColumnDef="Unit.Price">
           <th mat-header-cell *matHeaderCellDef>Unit Price</th>
           <td mat-cell *matCellDef="let element">
-            {{ element.price | currency }}
+            {{ element.unitPrice | currency }}
           </td>
         </ng-container>
 
@@ -73,6 +115,20 @@
           <th mat-header-cell *matHeaderCellDef>SubTotal</th>
           <td mat-cell *matCellDef="let element">
             {{ element.subTotal | currency }}
+          </td>
+        </ng-container>
+
+        <!-- Botón para quitar el producto del carrito -->
+        <ng-container matColumnDef="Actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="removeProduct(element)"
+            >
+              <mat-icon>Delete</mat-icon>
+            </button>
           </td>
         </ng-container>
 
@@ -89,6 +145,10 @@
         <div class="total-item">
           <span>Subtotal:</span>
           <span>{{ subTotal | currency }}</span>
+        </div>
+        <div class="total-item">
+          <span>IVA 21%:</span>
+          <span>{{ iva | currency }}</span>
         </div>
         <div class="total-item">
           <span>Total:</span>

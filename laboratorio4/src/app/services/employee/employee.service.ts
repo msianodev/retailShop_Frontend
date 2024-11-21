@@ -7,7 +7,7 @@ import { User } from '../../types/types';
   providedIn: 'root',
 })
 export class EmployeeService {
-  private employeesURL = 'http://localhost:8080/api/user'; // URL de tu API
+  private employeesURL = 'http://localhost:8080/api/users'; // URL de tu API
   constructor(private http: HttpClient) {}
 
   getAllEmployees(): Observable<User[]> {

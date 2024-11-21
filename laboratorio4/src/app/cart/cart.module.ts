@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatOptionModule } from '@angular/material/core';
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
   declarations: [CartPageComponent],
@@ -28,7 +29,6 @@ import { MatOptionModule } from '@angular/material/core';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-
     MatToolbarModule,
     MatSortModule,
     MatPaginatorModule,
@@ -47,7 +47,8 @@ import { MatOptionModule } from '@angular/material/core';
     MatPaginator,
     MatDialogModule,
     MatGridListModule,
-  ],
+    SharedModule
+],
   exports: [CartPageComponent],
 })
 export class CartModule {}

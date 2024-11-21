@@ -17,7 +17,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
@@ -25,9 +25,10 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { AddCategoryModalComponent } from './add-category-modal/add-category-modal.component';
 
 @NgModule({
-  declarations: [ProductDetailComponent, ProductsPageComponent],
+  declarations: [ProductDetailComponent, ProductsPageComponent, AddCategoryModalComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -44,13 +45,13 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatButtonModule,
     MatSidenavModule,
     MatListModule,
-    MatSort,
+    MatSortModule,
     MatCardModule,
     MatOptionModule,
     MatInputModule,
     MatGridListModule,
   ],
-  exports: [ProductDetailComponent, ProductsPageComponent],
+  exports: [ProductDetailComponent, ProductsPageComponent, AddCategoryModalComponent],
   providers: [ProductService, CartService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

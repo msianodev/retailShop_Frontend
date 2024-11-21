@@ -1,30 +1,34 @@
 export interface Product {
   id: number;
-  sku: number;
-  brandName: string;
-  name: string;
+  sku: string;
+  description: string;
   category: Category;
-  stockQuantity: number;
-  minimunStock: number;
-  price: number;
-  isActive: boolean;
+  stock: number;
+  minimumStock: number;
+  unitPrice: number;
+  // isActive: boolean;
 }
 
 export interface Sale {
   id: number;
-  userId: number;
+  // employeeId: number;
+  employeeId: number;
+
   clientId: number;
   products: CartProduct[];
   total: number;
   date: Date;
   paymentMethod: string;
 }
+
 export interface CartProduct {
   id: number;
-  sku: number;
-  name: string;
+  sku: string;
+  description: string;
+  // name: string;
   quantity: number;
-  price: number;
+  // unitPrice: number;
+  unitPrice: number;
   subTotal: number;
 }
 
@@ -45,4 +49,10 @@ export interface User {
 export interface userLogin {
   dni: string;
   password: string;
+}
+
+export interface CardData {
+  cardNumber: string;
+  cardExpiry: string;
+  cardCvv: string;
 }

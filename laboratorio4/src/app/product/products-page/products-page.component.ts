@@ -18,6 +18,8 @@ import { ProductDetailComponent } from '../product-detail/product-detail.compone
 import { ProductService } from '../../services/product/product.service';
 import { CartService } from '../../services/cart/cart.service';
 import { Category, Product, CartProduct } from '../../types/types';
+import { MatDialog } from '@angular/material/dialog';
+import { AddCategoryModalComponent } from '../add-category-modal/add-category-modal.component';
 
 @Component({
   selector: 'app-products-page',
@@ -27,9 +29,9 @@ import { Category, Product, CartProduct } from '../../types/types';
 export class ProductsPageComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'sku',
-    'name',
+    'description',
     'stock',
-    'price',
+    'unitPrice',
     'detail_button',
     'category',
     'add_to_cart',
@@ -43,7 +45,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
 
   ///Filtros y busqueda
   filterValue: string = ''; // Valor para el campo de búsqueda
-  selectedColumn: string = 'name'; // Columna de búsqueda seleccionada, por defecto es 'name'
+  selectedColumn: string = 'description'; // Columna de búsqueda seleccionada, por defecto es 'name'
   selectedCategory: number | null = null; // Categoría seleccionada
 
   noResultsFound: boolean = false;
@@ -57,7 +59,8 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     private productService: ProductService,
     private router: Router,
     private cartService: CartService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -65,11 +68,10 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     // console.log(this.productList.data);
     this.loadCategories();
 
-    // Definimos el formulario y sus controles
     this.searchForm = this.fb.group({
-      filterValue: [''], // Control para el campo de búsqueda
-      selectedColumn: [''], // Filtro de búsqueda
-      category: [''], // Categoría seleccionada
+      filterValue: [''],
+      selectedColumn: [''],
+      category: [''],
     });
   }
 
@@ -77,6 +79,16 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     if (this.productList.data.length > 0) {
       this.productList.paginator = this.paginator;
       this.productList.sort = this.sort;
+    }
+  }
+
+  //Función de filtrado de la tabla de productos Material
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.productList.filter = filterValue.trim().toLowerCase();
+
+    if (this.productList.paginator) {
+      this.productList.paginator.firstPage();
     }
   }
 
@@ -113,6 +125,8 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     this.productService.getAllProducts().subscribe({
       next: (products) => {
         this.productList.data = products;
+        this.productList.paginator = this.paginator;
+        this.productList.sort = this.sort;
       },
       error: (error) => {
         console.error('Error al cargar productos en el componente:', error);
@@ -126,10 +140,10 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     const cartProduct: CartProduct = {
       id: product.id,
       sku: product.sku,
-      name: product.name,
-      price: product.price,
+      description: product.description,
+      unitPrice: product.unitPrice,
       quantity: 1,
-      subTotal: product.price,
+      subTotal: product.unitPrice,
     };
     this.cartService.addProductToCart(cartProduct);
   }
@@ -148,19 +162,25 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   }
 
   openAddCategoryDialog(): void {
-    const newCategoryName = prompt('Ingrese el nombre de la nueva categoría:');
-    if (newCategoryName) {
-      this.addCategory(newCategoryName);
-    }
+    const dialogRef = this.dialog.open(AddCategoryModalComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((newCategoryName) => {
+      if (newCategoryName) {
+        this.addCategory(newCategoryName);
+      }
+    });
   }
+
   addCategory(name: string): void {
     this.productService.createCategory({ name }).subscribe({
       next: () => {
-        this.loadCategories(); // Recargar las categorías para incluir la nueva
+        this.loadCategories();
+        /// TODO implementar TOASTS
         this.showErrorSnackBar('Categoría agregada con éxito.');
       },
-      error: (error) => {
-        console.error('Error al agregar categoría:', error);
+      error: () => {
         this.showErrorSnackBar(
           'Hubo un error al agregar la categoría. Intenta nuevamente.'
         );
@@ -177,10 +197,11 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   }
 
   deleteProduct(product: Product): void {
-    const confirmDelete = confirm(
-      `¿Estás seguro de que quieres eliminar el producto ${product.name}?`
-    );
-    if (confirmDelete) {
+    if (
+      confirm(
+        `¿Estás seguro de que quieres eliminar el producto ${product.description}?`
+      )
+    ) {
       this.productService.deleteProduct(product.id).subscribe({
         next: () => {
           this.loadProducts();
@@ -194,6 +215,17 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
           );
         },
       });
+    }
+  }
+
+  // Sombreado de filas según stock
+  getRowClass(row: Product): string {
+    if (row.stock < row.minimumStock) {
+      return 'stock-below-minimum';
+    } else if (row.stock === row.minimumStock) {
+      return 'stock-equals-minimum';
+    } else {
+      return '';
     }
   }
 }
