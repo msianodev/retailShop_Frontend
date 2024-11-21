@@ -1,0 +1,25 @@
+.dialog-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .dialog-container.error {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .dialog-container.success {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  mat-dialog-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  mat-dialog-content {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
