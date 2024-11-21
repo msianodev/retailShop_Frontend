@@ -40,8 +40,10 @@ export class EmployeesComponent implements OnInit {
       if (user && user.isAdmin) {
         this.displayedColumns.push('edit');
       }
+      this.loadEmployeeList();
+
     });
-    this.loadEmployeeList();
+    
   }
   
   
@@ -64,6 +66,7 @@ export class EmployeesComponent implements OnInit {
   loadEmployeeList(): void {
     this.employeeService.getAllEmployees().subscribe({
       next: (data) => {
+        console.log('Lista de empleados cargada:', data);
         this.employeeList.data = data;
       },
       error: (error) => {
@@ -74,6 +77,6 @@ export class EmployeesComponent implements OnInit {
   }
 
   goToDetail(id: number): void {
-    this.router.navigate([`/products/${id}`]);
+    this.router.navigate([`/employees/${id}`]);
   }
 }
