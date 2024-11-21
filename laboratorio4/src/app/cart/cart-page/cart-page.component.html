@@ -18,13 +18,8 @@
         </div>
 
         <div class="form-group">
-          <label for="client">Client:</label>
-          <input
-            id="client"
-            type="text"
-            formControlName="client"  
-            placeholder="Insert client ID"
-          />
+          <label for="ClientId">Client:</label>
+          <input id="clientId" type="text" formControlName="clientId" placeholder="Insert client ID" />
         </div>
 
         <div class="form-group">
@@ -127,7 +122,7 @@
               color="warn"
               (click)="removeProduct(element)"
             >
-              <mat-icon>Delete</mat-icon>
+              <mat-icon>Delete Icon</mat-icon>
             </button>
           </td>
         </ng-container>
