@@ -8,7 +8,7 @@ import { CartProduct, Sale } from '../../types/types';
 })
 export class CartService {
   private cartSubject = new BehaviorSubject<CartProduct[]>([]);
-  private apiUrl = 'http://localhost:3306/retail_shop_backend/cart'; // Cambiar por tu URL del backend
+  private apiUrl = 'http://localhost:8080/api/sales'; // Cambia el puerto al que corresponda tu backend
   constructor(private http: HttpClient) {}
 
   // Obtener los productos del carrito
@@ -25,6 +25,7 @@ export class CartService {
   clearCart(): void {
     this.cartSubject.next([]);
   }
+
   // Agregar un producto al carrito o actualizar su cantidad si ya existe
   addProductToCart(product: CartProduct): void {
     const existingProductIndex = this.cartSubject.value.findIndex(
@@ -66,7 +67,8 @@ export class CartService {
     });
     this.cartSubject.next(updatedCart);
   }
-  //Actualizar el carrito
+
+  // Actualizar el carrito
   updateCart(cartItems: CartProduct[]): void {
     this.cartSubject.next(cartItems);
   }

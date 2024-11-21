@@ -1,14 +1,10 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CartProduct, Sale } from '../../types/types';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { SuccessDialogComponent } from '../../shared/success-dialog/success-dialog.component';
 import { CartService } from '../../services/cart/cart.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { clear } from 'console';
 import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
-import { SnackbarDialogComponent } from '../../shared/snack-bar-dialog/snack-bar-dialog.component';
 import { cardAsyncValidator } from '../../services/validation/cardValidation';
 import { CardValidationService } from '../../services/validation/card-validation.service';
 
@@ -35,9 +31,8 @@ export class CartPageComponent implements OnInit {
   subTotal = 0;
   iva = 0.21; // IVA del 21%
   dateNow = new Date();
-  employeeId = 0;
+  employeeId = 0; // Asegúrate de asignar el ID del empleado correctamente
   userName = '';
-
 
   toastVisible = false;
   toastMessage = '';
@@ -49,31 +44,62 @@ export class CartPageComponent implements OnInit {
     private dialog: MatDialog,
     private cdRef: ChangeDetectorRef,
     private cardValidationService: CardValidationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.ventaForm = this.fb.group({
       clientId: ['', Validators.required],
       paymentMethod: ['', Validators.required],
-      cardData: this.fb.group({
-        cardNumber: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
-        cardExpiry: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
-        cardCvv: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]],
-      }, { asyncValidators: cardAsyncValidator(this.cardValidationService) }) // Agregamos aquí el validador
+      cardData: this.fb.group(
+        {
+          cardNumber: [
+            '',
+            [Validators.required, Validators.pattern(/^\d{16}$/)],
+          ],
+          cardExpiry: [
+            '',
+            [
+              Validators.required,
+              Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/),
+            ],
+          ],
+          cardCvv: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]],
+        },
+        { asyncValidators: cardAsyncValidator(this.cardValidationService) }
+      ),
     });
 
     // Validación dinámica de los datos de la tarjeta según el método de pago
     this.ventaForm.get('paymentMethod')?.valueChanges.subscribe((value) => {
-      const cardDataGroup = this.ventaForm.get('cardData');
+      const cardDataGroup = this.ventaForm.get('cardData') as FormGroup;
       if (value === 'card') {
-        cardDataGroup?.setValidators([
-          Validators.required,
-          cardAsyncValidator(this.cardValidationService) // Agregamos validación también aquí, si no está presente
-        ]);
+        // Establecer validadores cuando el método de pago es tarjeta
+        cardDataGroup
+          .get('cardNumber')
+          ?.setValidators([
+            Validators.required,
+            Validators.pattern(/^\d{16}$/),
+          ]);
+        cardDataGroup
+          .get('cardExpiry')
+          ?.setValidators([
+            Validators.required,
+            Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/),
+          ]);
+        cardDataGroup
+          .get('cardCvv')
+          ?.setValidators([Validators.required, Validators.pattern(/^\d{3}$/)]);
+        cardDataGroup.setAsyncValidators(
+          cardAsyncValidator(this.cardValidationService)
+        );
       } else {
-        cardDataGroup?.clearValidators();
+        // Limpiar validadores cuando el método de pago no es tarjeta
+        cardDataGroup.get('cardNumber')?.clearValidators();
+        cardDataGroup.get('cardExpiry')?.clearValidators();
+        cardDataGroup.get('cardCvv')?.clearValidators();
+        cardDataGroup.clearAsyncValidators();
       }
-      cardDataGroup?.updateValueAndValidity();
+      cardDataGroup.updateValueAndValidity();
     });
 
     this.cartService.getCart().subscribe((cart) => {
@@ -89,7 +115,7 @@ export class CartPageComponent implements OnInit {
       this.cdRef.detectChanges();
     });
 
-    this.dateNow = new Date();
+    console.log('Fecha actual:', this.dateNow);
   }
 
   showToast(message: string, type: 'error' | 'success') {
@@ -97,15 +123,20 @@ export class CartPageComponent implements OnInit {
     this.toastType = type;
     this.toastVisible = true;
 
-    // Ocultar el toast después de 3 segundos, por ejemplo.
     setTimeout(() => {
       this.toastVisible = false;
     }, 3000);
   }
-  private openDialog(title: string, message: string, confirmText: string, cancelText: string) {
+
+  private openDialog(
+    title: string,
+    message: string,
+    confirmText: string,
+    cancelText: string
+  ) {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      data: { title, message, confirmText, cancelText }
+      data: { title, message, confirmText, cancelText },
     });
   }
 
@@ -122,60 +153,73 @@ export class CartPageComponent implements OnInit {
       (acc, item) => acc + item.subTotal,
       0
     );
-    this.total = this.subTotal * 1.21;
+    this.total = this.subTotal * (1 + this.iva);
   }
 
   confirmSale(): void {
-    console.log(this.ventaForm.value);
+    console.log('Form Status:', this.ventaForm.status);
+    console.log('Form Errors:', this.ventaForm.errors);
+    console.log('Form Value:', this.ventaForm.value);
 
-    this.openDialog('Confirmar Carrito', '¿Estás seguro de que quieres confirmar el carrito?', 'Confirmar', 'Cancelar')
+    if (this.ventaForm.invalid) {
+      this.showToast(
+        'Por favor complete todos los campos correctamente.',
+        'error'
+      );
+      return;
+    }
+
+    this.openDialog(
+      'Confirmar Carrito',
+      '¿Estás seguro de que quieres confirmar el carrito?',
+      'Confirmar',
+      'Cancelar'
+    )
       .afterClosed()
       .subscribe((result) => {
-        console.log('Resultado del diálogo:', result);
         if (result) {
-          
-          if (this.ventaForm.invalid) {
-            this.showToast('Por favor complete todos los campos correctamente.', 'error');
-            return;
-          }
-
           const { clientId, paymentMethod, cardData } = this.ventaForm.value;
           const sale: Sale = {
             id: 0,
-            employeeId: 0,
+            employeeId: this.employeeId,
             clientId,
             products: this.cartItems,
             total: this.total,
-            date: this.dateNow,
+            date: this.dateNow.toISOString(),
             paymentMethod,
             // cardData: paymentMethod === 'card' ? cardData : null,
           };
-          console.log(' Venta', sale)
 
           this.cartService.confirmSale(sale).subscribe({
             next: (response) => {
-              this.showToast('Venta exitosa !.', 'success');
+              this.showToast('¡Venta exitosa!', 'success');
               this.clearCart();
             },
-
             error: (err) => {
               console.error('Error al confirmar la venta:', err);
-              this.showToast('Hubo un error al confirmar la venta. Intenta nuevamente.', 'error');
-            }
+              this.showToast(
+                'Hubo un error al confirmar la venta. Intenta nuevamente.',
+                'error'
+              );
+            },
           });
         }
-      })
+      });
   }
 
   cancelSale(): void {
-
-    this.openDialog('Cancelar la venta', '¿Estás seguro de que quieres cancelar la venta?', 'si', 'no')
-      .afterClosed().subscribe((result) => {
+    this.openDialog(
+      'Cancelar la venta',
+      '¿Estás seguro de que quieres cancelar la venta?',
+      'Sí',
+      'No'
+    )
+      .afterClosed()
+      .subscribe((result) => {
         if (result) {
           this.clearCart();
         }
-      })
-
+      });
   }
 
   clearCart() {
@@ -196,10 +240,8 @@ export class CartPageComponent implements OnInit {
     this.cartService.updateCart(this.cartItems);
   }
 
-
   onPaymentMethodChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     this.ventaForm.get('paymentMethod')?.setValue(target.value);
   }
-
 }

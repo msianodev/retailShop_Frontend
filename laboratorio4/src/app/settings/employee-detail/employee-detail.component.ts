@@ -63,6 +63,12 @@ export class EmployeeDetailComponent implements OnInit {
     this.employeeService.getEmployeeById(id).subscribe({
       next: (data) => {
         this.employee = data;
+        this.employeeForm.patchValue({
+          name: data.name,
+          email: data.email,
+          dni: data.dni,
+          password: data.password,
+        });
       },
       error: (error) => {
         console.error('Error al cargar el empleado:', error);
@@ -75,7 +81,6 @@ export class EmployeeDetailComponent implements OnInit {
 
   saveChanges(): void {
     if (this.employeeForm.valid) {
-
       const updatedEmployee = { ...this.employee, ...this.employeeForm.value };
       updatedEmployee.isAdmin = false;
       updatedEmployee.isActive = true;
@@ -91,7 +96,7 @@ export class EmployeeDetailComponent implements OnInit {
             this.showErrorSnackBar(
               'Hubo un error al crear el empleado. Intenta nuevamente.'
             );
-          },  
+          },
         });
       } else {
         this.employeeService.updateEmployee(updatedEmployee).subscribe({

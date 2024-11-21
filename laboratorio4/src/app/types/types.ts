@@ -17,7 +17,7 @@ export interface Sale {
   clientId: number;
   products: CartProduct[];
   total: number;
-  date: Date;
+  date: string;
   paymentMethod: string;
 }
 
