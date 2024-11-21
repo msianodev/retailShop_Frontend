@@ -55,7 +55,7 @@ export class ProductDetailComponent implements OnInit {
 
   // Verificar si estamos creando o editando un producto
   checkIfNewProduct(): void {
-    const sku = Number(this.route.snapshot.paramMap.get('sku'));
+    const sku = Number(this.route.snapshot.paramMap.get('id'));
     if (sku) {
       // Editando un producto existente
       this.loadProductDetail(Number(sku));
@@ -66,9 +66,10 @@ export class ProductDetailComponent implements OnInit {
   }
 
   // Cargar los detalles del producto y llenar el formulario si es edición
-  loadProductDetail(sku: number): void {
-    this.productService.getProductBySku(sku).subscribe((product) => {
+  loadProductDetail(id: number): void {
+    this.productService.getProductById(id).subscribe((product) => {
       this.product = product || null;
+      console.log('Producto cargado:', this.product);
       if (this.product) {
         this.productForm.patchValue(this.product);
       } else {
