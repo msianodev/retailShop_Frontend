@@ -7,7 +7,7 @@ import { CardData } from '../../types/types';
   providedIn: 'root',
 })
 export class CardValidationService {
-  private apiUrl = 'https://localhost:8080/api/card';
+  private apiUrl = 'https://localhost:8080/api/payment/verify';
 
   constructor(private http: HttpClient) {}
   validateCard(cardData: CardData): Observable<boolean> {

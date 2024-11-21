@@ -134,7 +134,8 @@
 
     <mat-paginator
       class="paginator"
-      [pageSizeOptions]="[5, 10, 20]"
+      [length]="productList.data.length"
+      [pageSizeOptions]="[5, 10]"
       showFirstLastButtons
       aria-label="Select page of products"
     >

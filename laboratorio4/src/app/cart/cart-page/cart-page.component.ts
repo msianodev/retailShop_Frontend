@@ -9,6 +9,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { clear } from 'console';
 import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 import { SnackbarDialogComponent } from '../../shared/snack-bar-dialog/snack-bar-dialog.component';
+import { cardAsyncValidator } from '../../services/validation/cardValidation';
+import { CardValidationService } from '../../services/validation/card-validation.service';
 
 @Component({
   selector: 'app-cart-page',
@@ -33,7 +35,7 @@ export class CartPageComponent implements OnInit {
   subTotal = 0;
   iva = 0.21; // IVA del 21%
   dateNow = new Date();
-  userId = 0;
+  employeeId = 0;
   userName = '';
 
 
@@ -46,8 +48,7 @@ export class CartPageComponent implements OnInit {
     private cartService: CartService,
     private dialog: MatDialog,
     private cdRef: ChangeDetectorRef,
-    
-
+    private cardValidationService: CardValidationService
   ) { }
 
   ngOnInit(): void {
@@ -58,20 +59,19 @@ export class CartPageComponent implements OnInit {
         cardNumber: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
         cardExpiry: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
         cardCvv: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]],
-      }),
+      }, { asyncValidators: cardAsyncValidator(this.cardValidationService) }) // Agregamos aquí el validador
     });
 
     // Validación dinámica de los datos de la tarjeta según el método de pago
     this.ventaForm.get('paymentMethod')?.valueChanges.subscribe((value) => {
       const cardDataGroup = this.ventaForm.get('cardData');
       if (value === 'card') {
-        cardDataGroup?.get('cardNumber')?.setValidators([Validators.required, Validators.pattern(/^\d{16}$/)]);
-        cardDataGroup?.get('cardExpiry')?.setValidators([Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]);
-        cardDataGroup?.get('cardCvv')?.setValidators([Validators.required, Validators.pattern(/^\d{3}$/)]);
+        cardDataGroup?.setValidators([
+          Validators.required,
+          cardAsyncValidator(this.cardValidationService) // Agregamos validación también aquí, si no está presente
+        ]);
       } else {
-        cardDataGroup?.get('cardNumber')?.clearValidators();
-        cardDataGroup?.get('cardExpiry')?.clearValidators();
-        cardDataGroup?.get('cardCvv')?.clearValidators();
+        cardDataGroup?.clearValidators();
       }
       cardDataGroup?.updateValueAndValidity();
     });
@@ -81,7 +81,7 @@ export class CartPageComponent implements OnInit {
 
       this.cartItems = cart;
       this.cartItems.forEach((item) => {
-        item.subTotal = item.price * item.quantity;
+        item.subTotal = item.unitPrice * item.quantity;
       });
 
       this.dataSource.data = this.cartItems;
@@ -113,7 +113,7 @@ export class CartPageComponent implements OnInit {
   updateQuantity(product: CartProduct, event: Event): void {
     const newQuantity = +(event.target as HTMLInputElement).value;
     product.quantity = newQuantity;
-    product.subTotal = product.price * newQuantity;
+    product.subTotal = product.unitPrice * newQuantity;
     this.calculateTotals();
     this.dataSource.data = this.cartItems;
   }
@@ -139,13 +139,13 @@ export class CartPageComponent implements OnInit {
           const { clientId, paymentMethod, cardData } = this.ventaForm.value;
           const sale: Sale = {
             id: 0,
-            userId: 0,
+            employeeId: 0,
             clientId,
             products: this.cartItems,
             total: this.total,
             date: this.dateNow,
             paymentMethod,
-            cardData: paymentMethod === 'card' ? cardData : null,
+            // cardData: paymentMethod === 'card' ? cardData : null,
           };
 
           this.cartService.confirmSale(sale).subscribe({

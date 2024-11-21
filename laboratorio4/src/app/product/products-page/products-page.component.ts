@@ -18,6 +18,8 @@ import { ProductDetailComponent } from '../product-detail/product-detail.compone
 import { ProductService } from '../../services/product/product.service';
 import { CartService } from '../../services/cart/cart.service';
 import { Category, Product, CartProduct } from '../../types/types';
+import { MatDialog } from '@angular/material/dialog';
+import { AddCategoryModalComponent } from '../add-category-modal/add-category-modal.component';
 
 @Component({
   selector: 'app-products-page',
@@ -29,7 +31,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     'sku',
     'description',
     'stock',
-    'price',
+    'unitPrice',
     'detail_button',
     'category',
     'add_to_cart',
@@ -57,8 +59,9 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     private productService: ProductService,
     private router: Router,
     private cartService: CartService,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -122,6 +125,8 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     this.productService.getAllProducts().subscribe({
       next: (products) => {
         this.productList.data = products;
+        this.productList.paginator = this.paginator;
+        this.productList.sort = this.sort;
       },
       error: (error) => {
         console.error('Error al cargar productos en el componente:', error);
@@ -157,19 +162,25 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   }
 
   openAddCategoryDialog(): void {
-    const newCategoryName = prompt('Ingrese el nombre de la nueva categoría:');
-    if (newCategoryName) {
-      this.addCategory(newCategoryName);
-    }
+    const dialogRef = this.dialog.open(AddCategoryModalComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((newCategoryName) => {
+      if (newCategoryName) {
+        this.addCategory(newCategoryName);
+      }
+    });
   }
+
   addCategory(name: string): void {
     this.productService.createCategory({ name }).subscribe({
       next: () => {
-        this.loadCategories(); // Recargar las categorías para incluir la nueva
+        this.loadCategories();
+        /// TODO implementar TOASTS
         this.showErrorSnackBar('Categoría agregada con éxito.');
       },
-      error: (error) => {
-        console.error('Error al agregar categoría:', error);
+      error: () => {
         this.showErrorSnackBar(
           'Hubo un error al agregar la categoría. Intenta nuevamente.'
         );
@@ -186,7 +197,11 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   }
 
   deleteProduct(product: Product): void {
-    if (confirm(`¿Estás seguro de que quieres eliminar el producto ${product.name}?`)) {
+    if (
+      confirm(
+        `¿Estás seguro de que quieres eliminar el producto ${product.description}?`
+      )
+    ) {
       this.productService.deleteProduct(product.id).subscribe({
         next: () => {
           this.loadProducts();
@@ -205,9 +220,9 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
 
   // Sombreado de filas según stock
   getRowClass(row: Product): string {
-    if (row.stock < row.minimunStock) {
+    if (row.stock < row.minimumStock) {
       return 'stock-below-minimum';
-    } else if (row.stock === row.minimunStock) {
+    } else if (row.stock === row.minimumStock) {
       return 'stock-equals-minimum';
     } else {
       return '';
