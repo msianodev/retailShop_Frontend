@@ -28,6 +28,7 @@ export class ProductDetailComponent implements OnInit {
     private router: Router
   ) {}
 
+
   ngOnInit(): void {
     this.initForm();
     this.checkIfNewProduct();
@@ -40,7 +41,7 @@ export class ProductDetailComponent implements OnInit {
       category: ['', Validators.required], // Campo para la categoría
       stock: [0, [Validators.required, Validators.min(0)]],
       unitPrice: [0, [Validators.required, Validators.min(0)]],
-      sku: [{ value: '', disabled: true }], // SKU deshabilitado para que no sea editable
+      sku: ['', Validators.required],
     });
   }
 

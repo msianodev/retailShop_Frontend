@@ -1,9 +1,11 @@
 export interface Product {
   id: number;
-  sku: number;
-  brandName: string;
+  sku: string;
+
+  // description: string;
   name: string;
   category: Category;
+  // stock: number;
   stockQuantity: number;
   minimunStock: number;
   price: number;
@@ -12,7 +14,9 @@ export interface Product {
 
 export interface Sale {
   id: number;
+  // employeeId: number;
   userId: number;
+
   clientId: number;
   products: CartProduct[];
   total: number;
@@ -21,9 +25,11 @@ export interface Sale {
 }
 export interface CartProduct {
   id: number;
-  sku: number;
+  sku: string;
+    // description: string;
   name: string;
   quantity: number;
+  // unitPrice: number;
   price: number;
   subTotal: number;
 }
@@ -45,4 +51,11 @@ export interface User {
 export interface userLogin {
   dni: string;
   password: string;
+}
+
+
+export interface CardData {
+  cardNumber: string;
+  cardExpiry: string;
+  cardCvv: string;
 }
