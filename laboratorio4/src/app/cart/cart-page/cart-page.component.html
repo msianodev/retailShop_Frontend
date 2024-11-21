@@ -1,4 +1,8 @@
+
+
 <div class="cart">
+  <app-toast *ngIf="toastVisible" [message]="toastMessage" [type]="toastType"></app-toast>
+
   <!-- Formulario de Venta -->
   <div class="container-form">
     <form [formGroup]="ventaForm" #form="ngForm">
@@ -31,13 +35,13 @@
             (change)="onPaymentMethodChange($event)"
           >
             <option value="cash">Cash</option>
-            <option value="cad">Credit Card</option>
+            <option value="card">Credit Card</option>
             <option value="transference">Transference</option>
           </select>
         </div>
       </div>
 
-      <div *ngIf="ventaForm.get('paymentMethod')?.value === 'cad'" formGroupName="cardData">
+      <div *ngIf="ventaForm.get('paymentMethod')?.value === 'card'" formGroupName="cardData">
         <div class="form-group">
           <label for="cardNumber">Card Number:</label>
           <input
@@ -68,6 +72,7 @@
       </div>
     </form>
   </div>
+
 
   <!-- Tabla de productos -->
   <div class="container-list">

@@ -19,9 +19,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatOptionModule } from '@angular/material/core';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { SnackbarDialogComponent } from './snack-bar-dialog/snack-bar-dialog.component';
+import { ToastComponent } from './toast/toast.component';
 
 @NgModule({
-  declarations: [HomePageComponent, SectionComponent, SuccessDialogComponent],
+  declarations: [HomePageComponent, SectionComponent, SuccessDialogComponent, ConfirmationDialogComponent, SnackbarDialogComponent, ToastComponent],
   imports: [
     CommonModule,
 
@@ -44,6 +47,6 @@ import { MatOptionModule } from '@angular/material/core';
     MatDialogModule,
     MatGridListModule,
   ],
-  exports: [HomePageComponent, SectionComponent, SuccessDialogComponent],
+  exports: [HomePageComponent, SectionComponent, SuccessDialogComponent, ConfirmationDialogComponent,ToastComponent],
 })
 export class SharedModule {}

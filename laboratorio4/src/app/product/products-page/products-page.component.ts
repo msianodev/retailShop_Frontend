@@ -58,18 +58,17 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     private router: Router,
     private cartService: CartService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadProducts();
     // console.log(this.productList.data);
     this.loadCategories();
 
-    // Definimos el formulario y sus controles
     this.searchForm = this.fb.group({
-      filterValue: [''], // Control para el campo de búsqueda
-      selectedColumn: [''], // Filtro de búsqueda
-      category: [''], // Categoría seleccionada
+      filterValue: [''],
+      selectedColumn: [''],
+      category: [''],
     });
   }
 
@@ -187,10 +186,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   }
 
   deleteProduct(product: Product): void {
-    const confirmDelete = confirm(
-      `¿Estás seguro de que quieres eliminar el producto ${product.name}?`
-    );
-    if (confirmDelete) {
+    if (confirm(`¿Estás seguro de que quieres eliminar el producto ${product.name}?`)) {
       this.productService.deleteProduct(product.id).subscribe({
         next: () => {
           this.loadProducts();
