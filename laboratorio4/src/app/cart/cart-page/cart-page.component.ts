@@ -15,7 +15,6 @@ export class CartPageComponent implements OnInit {
   ventaForm!: FormGroup;
 
   cartItems: CartProduct[] = [];
-
   displayedColumns: string[] = [
     'SKU',
     'Description',
@@ -26,7 +25,6 @@ export class CartPageComponent implements OnInit {
   ];
 
   dataSource = new MatTableDataSource<CartProduct>(this.cartItems);
-
   total = 0;
   subTotal = 0;
   iva = 0.21; // IVA del 21%
@@ -45,30 +43,43 @@ export class CartPageComponent implements OnInit {
     this.ventaForm = this.fb.group({
       clientId: ['', Validators.required],
       paymentMethod: ['', Validators.required],
+      cardData: this.fb.group({
+        cardNumber: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
+        cardExpiry: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
+        cardCvv: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]],
+      }),
+    });
+
+    // Validación dinámica de los datos de la tarjeta según el método de pago
+    this.ventaForm.get('paymentMethod')?.valueChanges.subscribe((value) => {
+      const cardDataGroup = this.ventaForm.get('cardData');
+      if (value === 'cad') {
+        cardDataGroup?.get('cardNumber')?.setValidators([Validators.required, Validators.pattern(/^\d{16}$/)]);
+        cardDataGroup?.get('cardExpiry')?.setValidators([Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]);
+        cardDataGroup?.get('cardCvv')?.setValidators([Validators.required, Validators.pattern(/^\d{3}$/)]);
+      } else {
+        cardDataGroup?.get('cardNumber')?.clearValidators();
+        cardDataGroup?.get('cardExpiry')?.clearValidators();
+        cardDataGroup?.get('cardCvv')?.clearValidators();
+      }
+      cardDataGroup?.updateValueAndValidity();
     });
 
     this.cartService.getCart().subscribe((cart) => {
-      console.log('Carrito recibido: ', cart); // Verifica que los productos se reciben correctamente
+      console.log('Carrito recibido: ', cart);
 
       this.cartItems = cart;
-      //Inicializar el subtotal de cada producto
       this.cartItems.forEach((item) => {
         item.subTotal = item.price * item.quantity;
       });
 
       this.dataSource.data = this.cartItems;
       this.calculateTotals();
-      this.cdRef.detectChanges(); // Fuerza la detección de cambios después de actualizar el carrito
+      this.cdRef.detectChanges();
     });
 
-    this.dateNow = new Date(); // Formato de fecha y hora
-    console.log('Fecha actual:', this.dateNow); // Verificar que la fecha se asigna correctamente
-
-    /*
-    //TODO, AUTH SERVICE
-    this.userId = authService.getUserId();
-    this.userName = authService.getuserName();
-    */
+    this.dateNow = new Date();
+    console.log('Fecha actual:', this.dateNow);
   }
 
   updateQuantity(product: CartProduct, event: Event): void {
@@ -84,7 +95,7 @@ export class CartPageComponent implements OnInit {
       (acc, item) => acc + item.subTotal,
       0
     );
-    this.total = this.subTotal * 1.21; // Total con IVA del 21%
+    this.total = this.subTotal * 1.21;
   }
 
   confirmSale(): void {
@@ -93,16 +104,16 @@ export class CartPageComponent implements OnInit {
       return;
     }
 
-    //TODO: PEDIR EL NUMERO DE VENDEDOR AL SERVICIO DE USUARIOS O AUTH SERVICE.
-    const { client, paymentMethod } = this.ventaForm.value;
+    const { clientId, paymentMethod, cardData } = this.ventaForm.value;
     const sale: Sale = {
-      id: 0, //  autogenerado en el backend
+      id: 0,
       userId: 0,
-      clientId: client,
+      clientId,
       products: this.cartItems,
       total: this.total,
       date: this.dateNow,
-      paymentMethod: paymentMethod,
+      paymentMethod,
+      cardData: paymentMethod === 'cad' ? cardData : null,
     };
 
     this.cartService.confirmSale(sale).subscribe({
@@ -114,8 +125,6 @@ export class CartPageComponent implements OnInit {
         this.total = 0;
         this.subTotal = 0;
         this.ventaForm.reset();
-
-        // Llamar al método para abrir el modal después de una venta exitosa
         this.openSuccessDialog();
       },
       error: (err) => console.error('Error al confirmar la venta:', err),
@@ -132,7 +141,6 @@ export class CartPageComponent implements OnInit {
     console.log('Carrito cancelado y limpiado');
   }
 
-  // Método para abrir el modal de éxito
   openSuccessDialog(): void {
     const dialogRef = this.dialog.open(SuccessDialogComponent);
 
@@ -141,18 +149,17 @@ export class CartPageComponent implements OnInit {
     });
   }
 
-  // Método para eliminar un producto del carrito
   removeProduct(product: CartProduct): void {
-    // Remover el producto de la lista del carrito
     this.cartItems = this.cartItems.filter((item) => item.sku !== product.sku);
-
-    // Actualizar la fuente de datos de la tabla
     this.dataSource.data = this.cartItems;
-
-    // Recalcular los totales
     this.calculateTotals();
-
-    // Actualizar el carrito en el servicio
     this.cartService.updateCart(this.cartItems);
   }
+
+
+  onPaymentMethodChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    this.ventaForm.get('paymentMethod')?.setValue(target.value);
+  }
+
 }

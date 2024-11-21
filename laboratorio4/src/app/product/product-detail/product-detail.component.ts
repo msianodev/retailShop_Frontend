@@ -104,7 +104,7 @@ export class ProductDetailComponent implements OnInit {
 
   deleteProduct(): void {
     if (this.product && this.product.sku) {
-      this.productService.deleteProduct(this.product.sku).subscribe(() => {
+      this.productService.deleteProductBySku(this.product.sku).subscribe(() => {
         console.log('Product Deleted');
         this.goBack();
       });

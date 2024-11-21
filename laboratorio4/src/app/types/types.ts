@@ -22,6 +22,7 @@ export interface Sale {
   total: number;
   date: Date;
   paymentMethod: string;
+  cardData?: CardData;
 }
 export interface CartProduct {
   id: number;
