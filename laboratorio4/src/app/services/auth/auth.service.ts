@@ -45,7 +45,7 @@ export class AuthService {
   logout(): void {
     this.currentUserSubject.next(null); // Limpia el estado actual del usuario
     localStorage.removeItem('currentUser'); // Limpia el localStorage
-    this.router.navigate(['/']); // Redirige al login
+    this.router.navigate(['/login']); // Redirige al login
   }
 
   // Comprobar si existe un usuario autenticado en el localStorage (revisión al cargar la aplicación)

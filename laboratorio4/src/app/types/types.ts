@@ -44,6 +44,7 @@ export interface User {
   isAdmin: boolean;
   name: string;
   email: string;
+  isActive: boolean;
 }
 
 export interface userLogin {

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../services/auth/auth.service';
 
 interface MenuItem {
   icon: string;
@@ -9,7 +10,7 @@ interface MenuItem {
 @Component({
   selector: 'app-aside',
   templateUrl: './aside.component.html',
-  styleUrl: './aside.component.css',
+  styleUrls: ['./aside.component.css'],
 })
 export class AsideComponent {
   menuItems: MenuItem[] = [
@@ -31,7 +32,13 @@ export class AsideComponent {
     {
       icon: 'logout',
       label: 'Logout',
-      route: '/login',
+      route: '',
     },
   ];
+
+  constructor(private authService: AuthService) {}
+
+  logout(): void {
+    this.authService.logout(); 
+  }
 }
