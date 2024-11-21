@@ -27,7 +27,7 @@ import { Category, Product, CartProduct } from '../../types/types';
 export class ProductsPageComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'sku',
-    'name',
+    'description',
     'stock',
     'price',
     'detail_button',
@@ -43,7 +43,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
 
   ///Filtros y busqueda
   filterValue: string = ''; // Valor para el campo de búsqueda
-  selectedColumn: string = 'name'; // Columna de búsqueda seleccionada, por defecto es 'name'
+  selectedColumn: string = 'description'; // Columna de búsqueda seleccionada, por defecto es 'name'
   selectedCategory: number | null = null; // Categoría seleccionada
 
   noResultsFound: boolean = false;
@@ -135,10 +135,10 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     const cartProduct: CartProduct = {
       id: product.id,
       sku: product.sku,
-      name: product.name,
-      price: product.price,
+      description: product.description,
+      unitPrice: product.unitPrice,
       quantity: 1,
-      subTotal: product.price,
+      subTotal: product.unitPrice,
     };
     this.cartService.addProductToCart(cartProduct);
   }
@@ -200,6 +200,17 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
           );
         },
       });
+    }
+  }
+
+  // Sombreado de filas según stock
+  getRowClass(row: Product): string {
+    if (row.stock < row.minimunStock) {
+      return 'stock-below-minimum';
+    } else if (row.stock === row.minimunStock) {
+      return 'stock-equals-minimum';
+    } else {
+      return '';
     }
   }
 }

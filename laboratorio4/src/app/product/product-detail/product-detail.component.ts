@@ -37,7 +37,6 @@ export class ProductDetailComponent implements OnInit {
 
   ) { }
 
-
   ngOnInit(): void {
     this.initForm();
     this.checkIfNewProduct();
