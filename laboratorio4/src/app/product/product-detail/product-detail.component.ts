@@ -28,7 +28,6 @@ export class ProductDetailComponent implements OnInit {
     private router: Router
   ) {}
 
-
   ngOnInit(): void {
     this.initForm();
     this.checkIfNewProduct();
@@ -104,10 +103,12 @@ export class ProductDetailComponent implements OnInit {
 
   deleteProduct(): void {
     if (this.product && this.product.sku) {
-      this.productService.deleteProduct(this.product.sku).subscribe(() => {
-        console.log('Product Deleted');
-        this.goBack();
-      });
+      this.productService
+        .deleteProduct(Number(this.product.sku))
+        .subscribe(() => {
+          console.log('Product Deleted');
+          this.goBack();
+        });
     }
   }
 

@@ -1,15 +1,14 @@
 export interface Product {
   id: number;
   sku: string;
-
-  // description: string;
-  name: string;
+  description: string;
+  // name: string;
   category: Category;
-  // stock: number;
+  stock: number;
   stockQuantity: number;
   minimunStock: number;
-  price: number;
-  isActive: boolean;
+  unitPrice: number;
+  // isActive: boolean;
 }
 
 export interface Sale {
@@ -26,11 +25,11 @@ export interface Sale {
 export interface CartProduct {
   id: number;
   sku: string;
-    // description: string;
-  name: string;
+  description: string;
+  // name: string;
   quantity: number;
   // unitPrice: number;
-  price: number;
+  unitPrice: number;
   subTotal: number;
 }
 
@@ -52,7 +51,6 @@ export interface userLogin {
   dni: string;
   password: string;
 }
-
 
 export interface CardData {
   cardNumber: string;
