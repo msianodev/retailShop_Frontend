@@ -55,28 +55,27 @@ export class ProductDetailComponent implements OnInit {
 
   // Verificar si estamos creando o editando un producto
   checkIfNewProduct(): void {
-    const sku = Number(this.route.snapshot.paramMap.get('id'));
-    if (sku) {
-      // Editando un producto existente
-      this.loadProductDetail(Number(sku));
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (id) {
+        this.loadProductDetail(id);
     } else {
-      // Creando un nuevo producto
-      this.isNewProduct = true;
+        this.isNewProduct = true;
     }
+    
   }
 
   // Cargar los detalles del producto y llenar el formulario si es edición
   loadProductDetail(id: number): void {
     this.productService.getProductById(id).subscribe((product) => {
       this.product = product || null;
-      console.log('Producto cargado:', this.product);
       if (this.product) {
-        this.productForm.patchValue(this.product);
+          this.productForm.patchValue(this.product);
       } else {
-        this.showToast('Producto no encontrado', 'error');
-        this.productForm.reset();
+          this.showToast('Producto no encontrado', 'error');
+          this.productForm.reset();
       }
-    });
+  });
+  
   }
 
   // // Guardar los cambios o crear un nuevo producto
@@ -120,14 +119,15 @@ export class ProductDetailComponent implements OnInit {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          if (this.product && this.product.sku) {
-            this.productService.deleteProductBySku(this.product.sku).subscribe(() => {
+          if (this.product && this.product.id) {
+            this.productService.deleteProductById(this.product.id).subscribe(() => {
               this.showToast('Producto eliminado exitosamente', 'success');
               this.goBack();
             });
           }
         }
       });
+      this.showToast('Producto eliminado exitosamente', 'success');
   }
 
   // Regresar a la lista de productos

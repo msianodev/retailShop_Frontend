@@ -57,9 +57,10 @@ deleteProduct(id: number): Observable<void> {
   return this.http.delete<void>(`${this.productsURL}/${id}`);
 
 }
-deleteProductBySku(id: String): Observable<void> {
+deleteProductById(id: number): Observable<void> {
   return this.http.delete<void>(`${this.productsURL}/${id}`);
 }
+
 
 getProductById(id: number): Observable<Product> {
   return this.http.get<Product>(`${this.productsURL}/${id}`).pipe(
