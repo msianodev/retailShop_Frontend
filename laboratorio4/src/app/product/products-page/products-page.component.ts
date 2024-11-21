@@ -52,7 +52,6 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
 
   categories: Category[] = [];
 
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -62,8 +61,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     private cartService: CartService,
     private fb: FormBuilder,
     private dialog: MatDialog
-
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -127,6 +125,8 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     this.productService.getAllProducts().subscribe({
       next: (products) => {
         this.productList.data = products;
+        this.productList.paginator = this.paginator;
+        this.productList.sort = this.sort;
       },
       error: (error) => {
         console.error('Error al cargar productos en el componente:', error);
@@ -173,7 +173,6 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   addCategory(name: string): void {
     this.productService.createCategory({ name }).subscribe({
       next: () => {
@@ -198,7 +197,11 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   }
 
   deleteProduct(product: Product): void {
-    if (confirm(`¿Estás seguro de que quieres eliminar el producto ${product.description}?`)) {
+    if (
+      confirm(
+        `¿Estás seguro de que quieres eliminar el producto ${product.description}?`
+      )
+    ) {
       this.productService.deleteProduct(product.id).subscribe({
         next: () => {
           this.loadProducts();
