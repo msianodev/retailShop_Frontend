@@ -50,13 +50,21 @@ export class AuthService {
 
   // Comprobar si existe un usuario autenticado en el localStorage (revisión al cargar la aplicación)
   checkAuthentication(): void {
-    const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    const userString = localStorage.getItem('currentUser');
+    const user = JSON.parse(userString || 'null');
     if (user) {
       this.currentUserSubject.next(user); // Si existe, actualiza el estado del usuario
     }
   }
+  
+  
   isAdmin(): boolean {
     const currentUser = this.currentUserValue;
-    return currentUser?.isAdmin || false;
+    if (currentUser) {
+      return Boolean(currentUser.isAdmin); // Asegura que es un valor booleano
+    }
+    return false;
   }
+  
+  
 }

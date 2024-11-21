@@ -31,7 +31,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     'sku',
     'description',
     'stock',
-    'price',
+    'unitPrice',
     'detail_button',
     'category',
     'add_to_cart',

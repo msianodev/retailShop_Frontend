@@ -35,13 +35,17 @@ export class EmployeesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.authService.isAdmin()) {
-      this.displayedColumns.push('edit', 'delete');
-    }
-
+    this.authService.checkAuthentication(); // Verifica si el usuario está en el localStorage
+    this.authService.currentUser.subscribe(user => {
+      if (user && user.isAdmin) {
+        this.displayedColumns.push('edit');
+      }
+    });
     this.loadEmployeeList();
   }
-
+  
+  
+  
   ngAfterViewInit() {
     if (this.employeeList.data.length > 0) {
       this.employeeList.paginator = this.paginator;
