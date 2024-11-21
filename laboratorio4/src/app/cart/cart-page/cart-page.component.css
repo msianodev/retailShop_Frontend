@@ -138,3 +138,39 @@ th, td {
 .actions button:last-child {
   background-color: #dc3545;
 }
+
+
+.search {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search input[type="text"] {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  
+}
+
+.search button {
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search button .lupe {
+  font-size: 24px;
+}
+
+.searchSelect {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-left: 3%;
+}

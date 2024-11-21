@@ -1,11 +1,41 @@
-.productDetailContainer{
-    margin: 5%;
+.productDetailContainer {
+    margin: 5%; /* Mantener un pequeño margen */
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column; /* Esto asegura que los elementos se apilen verticalmente */
+    width: 100%; /* Ocupar todo el ancho disponible */
+    height: 100vh; /* Ocupar toda la altura de la ventana */
+    align-items: flex-start; /* Alinear todo el contenido a la izquierda */
+    padding: 20px; /* Agregar un pequeño padding */
+  }
+  
+  .productDetailContainer mat-card {
+    display: flex;
     flex-direction: column;
-    width: 100%;
-}
-.productDetailContainer button{
+    align-items: center;
+    width: 50%; /* La tarjeta ocupará todo el ancho disponible */
+  }
+  
+  .productDetailContainer button {
     margin: 7px;
-}
+  }
+  
+  /* Asegúrate de que el formulario ocupe el 100% del ancho disponible */
+  .productDetailContainer form {
+    width: 70%;
+  }
+  
+  .productDetailContainer mat-form-field {
+    width: 100%; /* Los campos del formulario ocuparán todo el espacio disponible */
+  }
+  
+  /* Ajustar los botones para que no se solapen */
+  .productDetailContainer mat-card-actions {
+    display: flex;
+    justify-content: center; /* Alinear los botones a la izquierda */
+    width: 100%;
+  }
+  
+  .productDetailContainer mat-card-actions button {
+    margin-right: 10px; /* Un pequeño espacio entre los botones */
+  }
+  

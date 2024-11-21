@@ -1,12 +1,14 @@
 <div class="productDetailContainer">
-  <h1 *ngIf="product">Product Detail: {{ product.description }}</h1>
-  <h1 *ngIf="!product">New Product</h1>
-
   <mat-card>
+    
+    <h1 *ngIf="product">Product Detail: {{ product.description }}</h1>
+    <h1 *ngIf="!product">New Product</h1>
+    <button class="back" mat-raised-button color="warn" type="button" (click)="goBack()">
+      Back to Products
+    </button>
+
     <form [formGroup]="productForm" (ngSubmit)="saveChanges()">
-      <button mat-raised-button color="warn" type="button" (click)="goBack()">
-        Back to Products
-      </button>
+
 
       <mat-card-header>
         <mat-card-title *ngIf="product">
@@ -14,9 +16,6 @@
         </mat-card-title>
       </mat-card-header>
         
-
-
-
       <mat-card-content>
 
         <p *ngIf="!product"><strong>SKU:</strong></p>

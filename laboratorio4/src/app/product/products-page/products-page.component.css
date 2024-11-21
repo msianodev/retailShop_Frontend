@@ -48,6 +48,29 @@
   font-size: 18px;
 }
 
+.newProduct button {
+  background-color: #003366; /* Azul oscuro */
+  color: white; /* Texto blanco para contraste */
+  border: 2px solid #003366; /* Borde del mismo color para un efecto más sólido */
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 18px;
+  margin: 1%;
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Transiciones suaves */
+}
+
+.newProduct button:hover {
+  background-color: #002244; /* Un tono aún más oscuro para el hover */
+  border-color: #002244;
+}
+
+.newProduct button:active {
+  background-color: #001122; /* Un tono más oscuro al hacer clic */
+  border-color: #001122;
+}
+
+
 .paginator {
   margin-top: 20px;
 }
