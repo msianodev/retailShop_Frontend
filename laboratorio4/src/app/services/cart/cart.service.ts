@@ -39,7 +39,7 @@ export class CartService {
           return {
             ...item,
             quantity: updatedQuantity,
-            subTotal: updatedQuantity * item.price,
+            subTotal: updatedQuantity * item.unitPrice,
           };
         }
         return item;
@@ -49,7 +49,7 @@ export class CartService {
       // Producto no existe en el carrito; agregarlo como nuevo producto
       const newProduct = {
         ...product,
-        subTotal: product.quantity * product.price,
+        subTotal: product.quantity * product.unitPrice,
       };
       this.cartSubject.next([...this.cartSubject.value, newProduct]);
     }
@@ -60,7 +60,7 @@ export class CartService {
     const updatedCart = this.cartSubject.value.map((item) => {
       if (item.id === product.id) {
         item.quantity = quantity;
-        item.subTotal = item.price * quantity;
+        item.subTotal = item.unitPrice * quantity;
       }
       return item;
     });

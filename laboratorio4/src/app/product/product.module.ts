@@ -25,9 +25,10 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { AddCategoryModalComponent } from './add-category-modal/add-category-modal.component';
 
 @NgModule({
-  declarations: [ProductDetailComponent, ProductsPageComponent],
+  declarations: [ProductDetailComponent, ProductsPageComponent, AddCategoryModalComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -50,7 +51,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatInputModule,
     MatGridListModule,
   ],
-  exports: [ProductDetailComponent, ProductsPageComponent],
+  exports: [ProductDetailComponent, ProductsPageComponent, AddCategoryModalComponent],
   providers: [ProductService, CartService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

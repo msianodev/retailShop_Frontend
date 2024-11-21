@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Add Category</h1>
+<div mat-dialog-content>
+  <form [formGroup]="categoryForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Category Name</mat-label>
+      <input matInput formControlName="name" />
+      <mat-error *ngIf="categoryForm.get('name')?.invalid">
+        The category name is required and must be at least 3 characters.
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="categoryForm.invalid">
+    Save
+  </button>
+</div>

@@ -2,11 +2,9 @@ export interface Product {
   id: number;
   sku: string;
   description: string;
-  // name: string;
   category: Category;
   stock: number;
-  stockQuantity: number;
-  minimunStock: number;
+  minimumStock: number;
   unitPrice: number;
   // isActive: boolean;
 }
@@ -14,15 +12,15 @@ export interface Product {
 export interface Sale {
   id: number;
   // employeeId: number;
-  userId: number;
+  employeeId: number;
 
   clientId: number;
   products: CartProduct[];
   total: number;
   date: Date;
   paymentMethod: string;
-  cardData?: CardData;
 }
+
 export interface CartProduct {
   id: number;
   sku: string;
