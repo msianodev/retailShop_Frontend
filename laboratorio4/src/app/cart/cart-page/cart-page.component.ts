@@ -90,7 +90,6 @@ export class CartPageComponent implements OnInit {
     });
 
     this.dateNow = new Date();
-    console.log('Fecha actual:', this.dateNow);
   }
 
   showToast(message: string, type: 'error' | 'success') {
@@ -127,10 +126,14 @@ export class CartPageComponent implements OnInit {
   }
 
   confirmSale(): void {
+    console.log(this.ventaForm.value);
+
     this.openDialog('Confirmar Carrito', '¿Estás seguro de que quieres confirmar el carrito?', 'Confirmar', 'Cancelar')
       .afterClosed()
       .subscribe((result) => {
+        console.log('Resultado del diálogo:', result);
         if (result) {
+          
           if (this.ventaForm.invalid) {
             this.showToast('Por favor complete todos los campos correctamente.', 'error');
             return;
@@ -147,6 +150,7 @@ export class CartPageComponent implements OnInit {
             paymentMethod,
             // cardData: paymentMethod === 'card' ? cardData : null,
           };
+          console.log(' Venta', sale)
 
           this.cartService.confirmSale(sale).subscribe({
             next: (response) => {

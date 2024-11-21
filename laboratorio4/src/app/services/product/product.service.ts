@@ -53,16 +53,17 @@ export class ProductService {
     return this.http.put<void>(`${this.productsURL}/${product.sku}`, product);
   }
 
-deleteProduct(sku: number): Observable<void> {
-  return this.http.delete<void>(`${this.productsURL}/${sku}`);
+deleteProduct(id: number): Observable<void> {
+  return this.http.delete<void>(`${this.productsURL}/${id}`);
 
 }
-deleteProductBySku(sku: String): Observable<void> {
-  return this.http.delete<void>(`${this.productsURL}/${sku}`);
+deleteProductById(id: number): Observable<void> {
+  return this.http.delete<void>(`${this.productsURL}/${id}`);
 }
 
-getProductBySku(sku: number): Observable<Product> {
-  return this.http.get<Product>(`${this.productsURL}/${sku}`).pipe(
+
+getProductById(id: number): Observable<Product> {
+  return this.http.get<Product>(`${this.productsURL}/${id}`).pipe(
     catchError(error => {
       console.error('Error al obtener el producto:', error);
       return of({} as Product);  // Retornar un objeto vacío que es un Product vacío

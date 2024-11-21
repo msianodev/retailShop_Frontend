@@ -75,7 +75,11 @@ export class EmployeeDetailComponent implements OnInit {
 
   saveChanges(): void {
     if (this.employeeForm.valid) {
+
       const updatedEmployee = { ...this.employee, ...this.employeeForm.value };
+      updatedEmployee.isAdmin = false;
+      updatedEmployee.isActive = true;
+
       if (this.isNewEmployee) {
         this.employeeService.createEmployee(updatedEmployee).subscribe({
           next: () => {
@@ -87,7 +91,7 @@ export class EmployeeDetailComponent implements OnInit {
             this.showErrorSnackBar(
               'Hubo un error al crear el empleado. Intenta nuevamente.'
             );
-          },
+          },  
         });
       } else {
         this.employeeService.updateEmployee(updatedEmployee).subscribe({

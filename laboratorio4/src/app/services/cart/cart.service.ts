@@ -18,7 +18,7 @@ export class CartService {
 
   // Confirmar la venta (envío al backend)
   confirmSale(sale: Sale): Observable<Sale> {
-    return this.http.post<Sale>(`${this.apiUrl}/sales`, sale);
+    return this.http.post<Sale>(`${this.apiUrl}/confirm`, sale);
   }
 
   // Limpiar el carrito

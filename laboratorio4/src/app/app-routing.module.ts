@@ -21,7 +21,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'products/:sku',
+    path: 'products/:id',
     component: ProductDetailComponent,
     canActivate: [AuthGuard],
   }, // Ruta con parámetro `sku`
