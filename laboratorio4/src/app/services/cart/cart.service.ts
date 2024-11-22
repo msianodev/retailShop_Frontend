@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { CartProduct, Sale } from '../../types/types';
 
@@ -18,7 +18,11 @@ export class CartService {
 
   // Confirmar la venta (envío al backend)
   confirmSale(sale: Sale): Observable<Sale> {
-    return this.http.post<Sale>(`${this.apiUrl}/confirm`, sale);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json', // Si es necesario
+    });
+
+    return this.http.post<Sale>(`${this.apiUrl}/confirm`, sale, { headers });
   }
 
   // Limpiar el carrito

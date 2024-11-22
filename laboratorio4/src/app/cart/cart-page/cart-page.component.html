@@ -43,7 +43,7 @@
           </select>
         </div>
       </div>
-
+      <!-- 
       <div
         *ngIf="ventaForm.get('paymentMethod')?.value === 'card'"
         formGroupName="cardData"
@@ -77,8 +77,8 @@
         </div>
         <div *ngIf="ventaForm.get('cardData')?.hasError('invalidCard')">
           La información de la tarjeta no es válida.
-        </div>
-      </div>
+        </div> -->
+      <!-- </div> -->
     </form>
   </div>
 
@@ -167,6 +167,3 @@
     </div>
   </div>
 </div>
-{{ ventaForm.errors | json }}
-{{ ventaForm.valid | json }}
-{{ ventaForm.value | json }}

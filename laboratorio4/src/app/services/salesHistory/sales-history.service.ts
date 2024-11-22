@@ -4,20 +4,18 @@ import { Observable } from 'rxjs';
 import { Sale } from '../../types/types';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SalesHistoryService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http : HttpClient) { }
+  private apiUrl = 'http://localhost:8080/api/sales';
 
-    private apiUrl = 'http://localhost:8080/api/products';
+  getSalesHistory(): Observable<Sale[]> {
+    return this.http.get<Sale[]>(this.apiUrl);
+  }
 
-    getSalesHistory(): Observable<Sale[]>{
-      return this.http.get<Sale[]>(this.apiUrl);
-    }
-
-    getSalesHistoryById(id: string): Observable<Sale[]> {
-      // Realiza un GET con el ID para filtrar por cliente
-      return this.http.get<Sale[]>(`${this.apiUrl}?id=${id}`);
-    }
+  getSalesHistoryById(id: string): Observable<Sale[]> {
+    return this.http.get<Sale[]>(`${this.apiUrl}/${id}`);
+  }
 }

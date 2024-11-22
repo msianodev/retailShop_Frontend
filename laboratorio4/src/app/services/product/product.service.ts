@@ -16,7 +16,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 })
 export class ProductService {
   // constructor() { }
-  private productsURL = 'http://localhost:8080/api/products'; // URL de tu API
+  private productsURL = 'http://localhost:8080/api/products';
   private categoriesURL = 'http://localhost:8080/api/categories';
 
   constructor(private http: HttpClient) {}
@@ -28,12 +28,10 @@ export class ProductService {
   ): Observable<Product[]> {
     let params = new HttpParams();
 
-    // Verifica que se hayan definido el filtro y columna
     if (selectedColumn && filterValue) {
-      params = params.set(selectedColumn, filterValue); // Agrega el filtro según la columna seleccionada
+      params = params.set(selectedColumn, filterValue);
     }
 
-    // Agrega la categoría, si está seleccionada
     if (category !== null) {
       params = params.set('category', category);
     }
@@ -41,7 +39,6 @@ export class ProductService {
     return this.http.get<Product[]>(this.productsURL, { params });
   }
 
-  // Obtener todos los productos
   getAllProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.productsURL);
   }

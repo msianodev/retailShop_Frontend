@@ -28,7 +28,7 @@ export class SalesHistoryComponent implements OnInit {
 
   salesHistory = new MatTableDataSource<Sale>([]);
 
-  searchTerm: string = ''; // Campo para almacenar el término de búsqueda
+  searchTerm: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 

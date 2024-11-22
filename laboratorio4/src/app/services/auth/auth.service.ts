@@ -25,8 +25,9 @@ export class AuthService {
 
     return this.http.post<User>(this.apiUrl, credentials).pipe(
       tap((user) => {
-        this.currentUserSubject.next(user); // Actualiza el estado de usuario
-        localStorage.setItem('currentUser', JSON.stringify(user)); // Guarda el usuario en localStorage
+        this.currentUserSubject.next(user);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('userName', user.name);
       })
     );
   }
@@ -56,8 +57,7 @@ export class AuthService {
       this.currentUserSubject.next(user); // Si existe, actualiza el estado del usuario
     }
   }
-  
-  
+
   isAdmin(): boolean {
     const currentUser = this.currentUserValue;
     if (currentUser) {
@@ -65,6 +65,4 @@ export class AuthService {
     }
     return false;
   }
-  
-  
 }

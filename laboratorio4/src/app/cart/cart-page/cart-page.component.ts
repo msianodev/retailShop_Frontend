@@ -17,6 +17,7 @@ export class CartPageComponent implements OnInit {
   ventaForm!: FormGroup;
 
   cartItems: CartProduct[] = [];
+
   displayedColumns: string[] = [
     'SKU',
     'Description',
@@ -30,8 +31,8 @@ export class CartPageComponent implements OnInit {
   total = 0;
   subTotal = 0;
   iva = 0.21; // IVA del 21%
-  dateNow = new Date();
-  employeeId = 0; // Asegúrate de asignar el ID del empleado correctamente
+  dateNow = this.obtenerFechaHoy();
+  employeeId = 1; // Asegúrate de asignar el ID del empleado correctamente
   userName = '';
 
   toastVisible = false;
@@ -42,65 +43,65 @@ export class CartPageComponent implements OnInit {
     private fb: FormBuilder,
     private cartService: CartService,
     private dialog: MatDialog,
-    private cdRef: ChangeDetectorRef,
-    private cardValidationService: CardValidationService
+    private cdRef: ChangeDetectorRef // private cardValidationService: CardValidationService
   ) {}
 
   ngOnInit(): void {
+    this.userName = localStorage.getItem('userName') || '';
     this.ventaForm = this.fb.group({
       clientId: ['', Validators.required],
       paymentMethod: ['', Validators.required],
-      cardData: this.fb.group(
-        {
-          cardNumber: [
-            '',
-            [Validators.required, Validators.pattern(/^\d{16}$/)],
-          ],
-          cardExpiry: [
-            '',
-            [
-              Validators.required,
-              Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/),
-            ],
-          ],
-          cardCvv: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]],
-        },
-        { asyncValidators: cardAsyncValidator(this.cardValidationService) }
-      ),
+      // cardData: this.fb.group(
+      //   {
+      //     cardNumber: [
+      //       '',
+      //       [Validators.required, Validators.pattern(/^\d{16}$/)],
+      //     ],
+      //     cardExpiry: [
+      //       '',
+      //       [
+      //         Validators.required,
+      //         Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/),
+      //       ],
+      //     ],
+      //     cardCvv: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]],
+      //   },
+      //   { asyncValidators: cardAsyncValidator(this.cardValidationService) }
+      // ),
     });
 
     // Validación dinámica de los datos de la tarjeta según el método de pago
-    this.ventaForm.get('paymentMethod')?.valueChanges.subscribe((value) => {
-      const cardDataGroup = this.ventaForm.get('cardData') as FormGroup;
-      if (value === 'card') {
-        // Establecer validadores cuando el método de pago es tarjeta
-        cardDataGroup
-          .get('cardNumber')
-          ?.setValidators([
-            Validators.required,
-            Validators.pattern(/^\d{16}$/),
-          ]);
-        cardDataGroup
-          .get('cardExpiry')
-          ?.setValidators([
-            Validators.required,
-            Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/),
-          ]);
-        cardDataGroup
-          .get('cardCvv')
-          ?.setValidators([Validators.required, Validators.pattern(/^\d{3}$/)]);
-        cardDataGroup.setAsyncValidators(
-          cardAsyncValidator(this.cardValidationService)
-        );
-      } else {
-        // Limpiar validadores cuando el método de pago no es tarjeta
-        cardDataGroup.get('cardNumber')?.clearValidators();
-        cardDataGroup.get('cardExpiry')?.clearValidators();
-        cardDataGroup.get('cardCvv')?.clearValidators();
-        cardDataGroup.clearAsyncValidators();
-      }
-      cardDataGroup.updateValueAndValidity();
-    });
+    // this.ventaForm.get('paymentMethod')?.valueChanges.subscribe((value) => {
+    //   const cardDataGroup = this.ventaForm.get('cardData') as FormGroup;
+    //   if (value === 'card') {
+    //     // Establecer validadores cuando el método de pago es tarjeta
+    //     cardDataGroup
+    //       .get('cardNumber')
+    //       ?.setValidators([
+    //         Validators.required,
+    //         Validators.pattern(/^\d{16}$/),
+    //       ]);
+    //     cardDataGroup
+    //       .get('cardExpiry')
+    //       ?.setValidators([
+    //         Validators.required,
+    //         Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/),
+    //       ]);
+    //     cardDataGroup
+    //       .get('cardCvv')
+    //       ?.setValidators([Validators.required, Validators.pattern(/^\d{3}$/)]);
+    //     cardDataGroup.setAsyncValidators(
+    //       cardAsyncValidator(this.cardValidationService)
+    //     );
+    //   } else {
+    //     // Limpiar validadores cuando el método de pago no es tarjeta
+    //     cardDataGroup.get('cardNumber')?.clearValidators();
+    //     cardDataGroup.get('cardExpiry')?.clearValidators();
+    //     cardDataGroup.get('cardCvv')?.clearValidators();
+    //     cardDataGroup.clearAsyncValidators();
+    //   }
+    //   cardDataGroup.updateValueAndValidity();
+    // });
 
     this.cartService.getCart().subscribe((cart) => {
       console.log('Carrito recibido: ', cart);
@@ -114,8 +115,15 @@ export class CartPageComponent implements OnInit {
       this.calculateTotals();
       this.cdRef.detectChanges();
     });
+  }
 
-    console.log('Fecha actual:', this.dateNow);
+  obtenerFechaHoy() {
+    const hoy = new Date();
+    const año = hoy.getFullYear();
+    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+    const dia = hoy.getDate().toString().padStart(2, '0');
+
+    return `${año}-${mes}-${dia}`;
   }
 
   showToast(message: string, type: 'error' | 'success') {
@@ -157,10 +165,6 @@ export class CartPageComponent implements OnInit {
   }
 
   confirmSale(): void {
-    console.log('Form Status:', this.ventaForm.status);
-    console.log('Form Errors:', this.ventaForm.errors);
-    console.log('Form Value:', this.ventaForm.value);
-
     if (this.ventaForm.invalid) {
       this.showToast(
         'Por favor complete todos los campos correctamente.',
@@ -178,14 +182,14 @@ export class CartPageComponent implements OnInit {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          const { clientId, paymentMethod, cardData } = this.ventaForm.value;
+          const { clientId, paymentMethod } = this.ventaForm.value;
           const sale: Sale = {
             id: 0,
             employeeId: this.employeeId,
-            clientId,
+            clientId: clientId,
             products: this.cartItems,
             total: this.total,
-            date: this.dateNow.toISOString(),
+            date: this.dateNow,
             paymentMethod,
             // cardData: paymentMethod === 'card' ? cardData : null,
           };
