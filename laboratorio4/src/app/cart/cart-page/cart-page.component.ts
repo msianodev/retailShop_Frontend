@@ -32,7 +32,7 @@ export class CartPageComponent implements OnInit {
   subTotal = 0;
   iva = 0.21; // IVA del 21%
   dateNow = this.obtenerFechaHoy();
-  employeeId = 1; // Asegúrate de asignar el ID del empleado correctamente
+  employeeId = 0;
   userName = '';
 
   toastVisible = false;
@@ -103,9 +103,12 @@ export class CartPageComponent implements OnInit {
     //   cardDataGroup.updateValueAndValidity();
     // });
 
-    this.cartService.getCart().subscribe((cart) => {
-      console.log('Carrito recibido: ', cart);
+    const employee = localStorage.getItem('currentUser');
+    if (employee) {
+      this.employeeId = JSON.parse(employee).id;
+    }
 
+    this.cartService.getCart().subscribe((cart) => {
       this.cartItems = cart;
       this.cartItems.forEach((item) => {
         item.subTotal = item.unitPrice * item.quantity;

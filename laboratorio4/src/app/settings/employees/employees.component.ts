@@ -36,18 +36,14 @@ export class EmployeesComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.checkAuthentication(); // Verifica si el usuario está en el localStorage
-    this.authService.currentUser.subscribe(user => {
+    this.authService.currentUser.subscribe((user) => {
       if (user && user.isAdmin) {
         this.displayedColumns.push('edit');
       }
       this.loadEmployeeList();
-
     });
-    
   }
-  
-  
-  
+
   ngAfterViewInit() {
     if (this.employeeList.data.length > 0) {
       this.employeeList.paginator = this.paginator;
@@ -66,7 +62,6 @@ export class EmployeesComponent implements OnInit {
   loadEmployeeList(): void {
     this.employeeService.getAllEmployees().subscribe({
       next: (data) => {
-        console.log('Lista de empleados cargada:', data);
         this.employeeList.data = data;
       },
       error: (error) => {

@@ -28,7 +28,7 @@ export class SalesHistoryComponent implements OnInit {
 
   salesHistory = new MatTableDataSource<Sale>([]);
 
-  searchTerm: string = '';
+  searchTerm: number | null = null;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -47,18 +47,13 @@ export class SalesHistoryComponent implements OnInit {
   }
 
   loadSalesHistory(): void {
-    // Usar datos estáticos mientras no haya backend
-    // this.salesHistory.data = this.staticSales;
-
-    // Comenta esta línea para usar datos estáticos y descomenta cuando conectes al backend
-    if (this.searchTerm.trim()) {
+    if (this.searchTerm) {
       this.salesHistoryService
         .getSalesHistoryById(this.searchTerm)
         .subscribe((sales) => {
           this.salesHistory.data = sales;
         });
     } else {
-      // Si no hay búsqueda, cargar todo el historial de ventas desde la API
       this.salesHistoryService.getSalesHistory().subscribe((sales) => {
         this.salesHistory.data = sales;
       });
@@ -66,16 +61,21 @@ export class SalesHistoryComponent implements OnInit {
   }
 
   onSearch(): void {
-    this.loadSalesHistory(); // Ejecuta la búsqueda cuando cambia el término
+    this.loadSalesHistory();
   }
 
   goToSaleDetail(id: number): void {
-    const sale = this.salesHistory.data.find((s) => s.id === id);
-    if (sale) {
-      this.dialog.open(SaleDetailModalComponent, {
-        width: '600px',
-        data: sale,
-      });
-    }
+    this.salesHistoryService.getSalesBySaleId(id).subscribe({
+      next: (sale) => {
+        this.dialog.open(SaleDetailModalComponent, {
+          width: '600px',
+          data: sale,
+        });
+      },
+      error: (err) => {
+        console.error('Error al buscar la venta:', err);
+        alert('No se encontró la venta con el ID especificado.');
+      },
+    });
   }
 }

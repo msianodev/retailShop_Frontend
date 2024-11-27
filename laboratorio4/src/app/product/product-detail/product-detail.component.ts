@@ -99,8 +99,6 @@ export class ProductDetailComponent implements OnInit {
                   this.goBack();
                 });
             } else {
-              console.log('updatedProduct', updatedProduct);
-
               this.productService
                 .updateProduct(updatedProduct)
                 .subscribe(() => {

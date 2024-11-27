@@ -62,7 +62,6 @@ export class LoginComponent {
         this.authService.login(dni, password).subscribe(
           (user) => {
             // Si la autenticación es exitosa, redirige al home
-            console.log('Usuario autenticado:', user);
             this.router.navigate(['/home']); // Redirige al home
             this.loginForm.reset(); // Resetea el formulario
           },

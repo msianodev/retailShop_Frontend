@@ -88,11 +88,9 @@ export class EmployeeDetailComponent implements OnInit {
       if (this.isNewEmployee) {
         this.employeeService.createEmployee(updatedEmployee).subscribe({
           next: () => {
-            console.log('Nuevo empleado creado:', updatedEmployee);
             this.goBack();
           },
           error: (error) => {
-            console.error('Error al crear el empleado:', error);
             this.showErrorSnackBar(
               'Hubo un error al crear el empleado. Intenta nuevamente.'
             );
@@ -101,11 +99,9 @@ export class EmployeeDetailComponent implements OnInit {
       } else {
         this.employeeService.updateEmployee(updatedEmployee).subscribe({
           next: () => {
-            console.log('Empleado actualizado:', updatedEmployee);
             this.goBack();
           },
           error: (error) => {
-            console.error('Error al actualizar el empleado:', error);
             this.showErrorSnackBar(
               'Hubo un error al actualizar el empleado. Intenta nuevamente.'
             );

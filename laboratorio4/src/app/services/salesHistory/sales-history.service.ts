@@ -15,7 +15,11 @@ export class SalesHistoryService {
     return this.http.get<Sale[]>(this.apiUrl);
   }
 
-  getSalesHistoryById(id: string): Observable<Sale[]> {
+  getSalesHistoryById(id: number): Observable<Sale[]> {
     return this.http.get<Sale[]>(`${this.apiUrl}/${id}`);
+  }
+
+  getSalesBySaleId(id: number): Observable<Sale> {
+    return this.http.get<Sale>(`${this.apiUrl}/venta/${id}`);
   }
 }

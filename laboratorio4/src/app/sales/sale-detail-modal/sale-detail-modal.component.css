@@ -1,28 +1,35 @@
 .sale-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  
-  .info-card {
-    padding: 8px;
-  }
-  
-  #productsTable {
-    width: 100%;
-    margin-top: 16px;
-  }
-  
-  .totals {
-    margin-top: 16px;
-    text-align: right;
-  }
-  
-  .totals p {
-    margin: 4px 0;
-  }
-  
-  .card{
-    background-color: rgb(230, 230, 230);
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.info-card {
+  padding: 8px;
+}
+
+#productsTable {
+  width: 100%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+.totals {
+  margin-top: 16px;
+  text-align: right;
+}
+
+.totals p {
+  margin: 4px 0;
+}
+
+.card {
+  padding: 4%;
+  background-color: rgb(230, 230, 230);
+}
+
+.header {
+  align-items: center;
+  margin: 2%;
+}

@@ -1,84 +1,94 @@
 <mat-card class="card">
-    <mat-card-header>
-      <mat-card-title>Detalles de Venta</mat-card-title>
-    </mat-card-header>
-  
-    <!-- Información de la venta en bloques separados -->
-    <mat-card-content>
-      <div class="sale-info">
-        <mat-card class="info-card">
-          <mat-card-content>
-            <p><strong>ID de Compra:</strong> {{ sale.id }}</p>
-          </mat-card-content>
-        </mat-card>
-        
-        <mat-card class="info-card">
-          <mat-card-content>
-            <p><strong>ID Cliente:</strong> {{ sale.clientId }}</p>
-          </mat-card-content>
-        </mat-card>
-        
-        <mat-card class="info-card">
-          <mat-card-content>
-            <p><strong>Fecha:</strong> {{ sale.date }}</p>
-          </mat-card-content>
-        </mat-card>
-        
-        <mat-card class="info-card">
-          <mat-card-content>
-            <p><strong>Vendedor:</strong> {{ sale.employeeId }}</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </mat-card-content>
-  
+  <mat-card-header class="header">
+    <mat-card-title>Sale Detail</mat-card-title>
+  </mat-card-header>
 
-  
-    <!-- Tabla de productos -->
-    <mat-card-content>
-      <table mat-table [dataSource]="sale.products" class="mat-elevation-z8" id="productsTable">
-        <!-- SKU Column -->
-        <ng-container matColumnDef="sku">
-          <th mat-header-cell *matHeaderCellDef> SKU </th>
-          <td mat-cell *matCellDef="let product"> {{ product.sku }} </td>
-        </ng-container>
-  
-        <!-- Descripción Column -->
-        <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef> Descripción </th>
-          <td mat-cell *matCellDef="let product"> {{ product.description }} </td>
-        </ng-container>
-  
-        <!-- Cantidad Column -->
-        <ng-container matColumnDef="quantity">
-          <th mat-header-cell *matHeaderCellDef> Cantidad </th>
-          <td mat-cell *matCellDef="let product"> {{ product.quantity }} </td>
-        </ng-container>
-  
-        <!-- Precio Unitario Column -->
-        <ng-container matColumnDef="unitPrice">
-          <th mat-header-cell *matHeaderCellDef> Precio Unitario </th>
-          <td mat-cell *matCellDef="let product"> {{ product.unitPrice }} </td>
-        </ng-container>
-  
-        <!-- Subtotal Column -->
-        <ng-container matColumnDef="subtotal">
-          <th mat-header-cell *matHeaderCellDef> Subtotal </th>
-          <td mat-cell *matCellDef="let product"> {{ product.quantity * product.unitPrice }} </td>
-        </ng-container>
-  
-        <!-- Header and Row Definitions -->
-        <tr mat-header-row *matHeaderRowDef="['sku', 'description', 'quantity', 'unitPrice', 'subtotal']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['sku', 'description', 'quantity', 'unitPrice', 'subtotal'];"></tr>
-      </table>
-    </mat-card-content>
-  
-    <!-- Totales -->
-    <mat-card-content>
-      <div class="totals">
-        <p><strong>Subtotal (sin IVA):</strong> {{ getSubtotalWithoutVAT() }}</p>
-        <p><strong>Total (con IVA):</strong> {{ sale.total }}</p>
-      </div>
-    </mat-card-content>
-  </mat-card>
-  
+  <mat-card-content>
+    <div class="sale-info">
+      <mat-card class="info-card">
+        <mat-card-content>
+          <p><strong>Sale ID:</strong> {{ sale.id }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="info-card">
+        <mat-card-content>
+          <p><strong>Client ID:</strong> {{ sale.clientId }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="info-card">
+        <mat-card-content>
+          <p><strong>Date:</strong> {{ sale.date }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="info-card">
+        <mat-card-content>
+          <p><strong>Seller:</strong> {{ sale.employeeId }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card-content>
+
+  <mat-card-content>
+    <table
+      mat-table
+      [dataSource]="sale.products"
+      class="mat-elevation-z8"
+      id="productsTable"
+    >
+      <ng-container matColumnDef="sku">
+        <th mat-header-cell *matHeaderCellDef>SKU</th>
+        <td mat-cell *matCellDef="let product">{{ product.sku }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Descripction</th>
+        <td mat-cell *matCellDef="let product">{{ product.description }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef>Quantity</th>
+        <td mat-cell *matCellDef="let product">{{ product.quantity }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="unitPrice">
+        <th mat-header-cell *matHeaderCellDef>Unitary Price</th>
+        <td mat-cell *matCellDef="let product">{{ product.unitPrice }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="subtotal">
+        <th mat-header-cell *matHeaderCellDef>Subtotal</th>
+        <td mat-cell *matCellDef="let product">
+          {{ product.quantity * product.unitPrice }}
+        </td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="[
+          'sku',
+          'description',
+          'quantity',
+          'unitPrice',
+          'subtotal'
+        ]"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="
+          let row;
+          columns: ['sku', 'description', 'quantity', 'unitPrice', 'subtotal']
+        "
+      ></tr>
+    </table>
+  </mat-card-content>
+
+  <mat-card-content>
+    <div class="totals">
+      <p><strong>Subtotal (sin IVA):</strong> {{ getSubtotalWithoutVAT() }}</p>
+      <p><strong>Total (con IVA):</strong> {{ sale.total }}</p>
+    </div>
+  </mat-card-content>
+</mat-card>
