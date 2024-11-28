@@ -17,6 +17,7 @@
             <div *ngIf="dni?.errors?.['maxlength']">
               DNI must be at most 8 characters long.
             </div>
+            <div *ngIf="dni?.errors?.['numbersOnly']">Only numbers are allowed.</div>
           </mat-error>
         </mat-form-field>
 

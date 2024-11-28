@@ -35,6 +35,7 @@ export class ProductDetailComponent implements OnInit {
     private dialog: MatDialog
   ) {}
 
+
   ngOnInit(): void {
     this.initForm();
     this.checkIfNewProduct();
@@ -44,7 +45,7 @@ export class ProductDetailComponent implements OnInit {
   initForm(): void {
     this.productForm = this.fb.group({
       description: ['', Validators.required],
-      category: ['', Validators.required], // Campo para la categoría
+      category: ['', Validators.required],
       stock: [0, [Validators.required, Validators.min(0)]],
       unitPrice: [0, [Validators.required, Validators.min(0)]],
       sku: ['', Validators.required],
@@ -67,13 +68,22 @@ export class ProductDetailComponent implements OnInit {
     this.productService.getProductById(id).subscribe((product) => {
       this.product = product || null;
       if (this.product) {
-        this.productForm.patchValue(this.product);
+        // Buscar la categoría en la lista de categorías cargadas
+        const selectedCategory = this.categories.find(
+          (cat) => cat.id === this.product?.category?.id
+        );
+        // Parchar el formulario con la categoría seleccionada
+        this.productForm.patchValue({
+          ...this.product,
+          category: selectedCategory || null, // Asegúrate de asignar la categoría
+        });
       } else {
         this.showToast('Producto no encontrado', 'error');
         this.productForm.reset();
       }
     });
   }
+  
 
   // // Guardar los cambios o crear un nuevo producto
   saveChanges(): void {

@@ -100,14 +100,13 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   onSearch(): void {
     if (this.searchForm.valid) {
       const formData = this.searchForm.value;
-
-      // Llama al servicio con los datos del formulario
+  
+      const filterValue = formData.filterValue || ''; // Si el campo de texto está vacío, usa una cadena vacía
+      const selectedColumn = formData.selectedColumn; // Puede ser null
+      const selectedCategory = formData.category; // Puede ser null
+  
       this.productService
-        .getFilteredProducts(
-          formData.filterValue,
-          formData.selectedColumn,
-          formData.category
-        )
+        .getFilteredProducts(filterValue, selectedColumn, selectedCategory)
         .subscribe({
           next: (products) => {
             this.productList.data = products;
@@ -119,6 +118,8 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
         });
     }
   }
+    
+
 
   // Método para cargar todos los productos
   loadProducts(): void {

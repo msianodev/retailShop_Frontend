@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators'; // Asegúrate de importar tap
 import { User } from '../../types/types'; // Tu modelo de usuario
+import { C } from '@angular/cdk/keycodes';
+import { Console } from 'console';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +29,6 @@ export class AuthService {
       tap((user) => {
         this.currentUserSubject.next(user);
         localStorage.setItem('currentUser', JSON.stringify(user));
-        localStorage.setItem('userName', user.name);
       })
     );
   }
@@ -44,8 +45,9 @@ export class AuthService {
 
   // Logout y limpiar el almacenamiento
   logout(): void {
-    this.currentUserSubject.next(null); // Limpia el estado actual del usuario
-    localStorage.removeItem('currentUser'); // Limpia el localStorage
+    this.currentUserSubject.next(null);
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('userName');
     this.router.navigate(['/login']); // Redirige al login
   }
 
@@ -54,15 +56,17 @@ export class AuthService {
     const userString = localStorage.getItem('currentUser');
     const user = JSON.parse(userString || 'null');
     if (user) {
-      this.currentUserSubject.next(user); // Si existe, actualiza el estado del usuario
+      this.currentUserSubject.next(user);
     }
   }
 
   isAdmin(): boolean {
     const currentUser = this.currentUserValue;
     if (currentUser) {
-      return Boolean(currentUser.isAdmin); // Asegura que es un valor booleano
+      console.log('currentUser.isAdmin:', currentUser);
+      return Boolean(currentUser.isAdmin);
     }
+    console.log('No hay un usuario autenticado');
     return false;
   }
 }

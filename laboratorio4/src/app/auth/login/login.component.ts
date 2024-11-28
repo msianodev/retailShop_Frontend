@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth/auth.service';
+import { numbersOnly } from '../../../utils/CustomValidators';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent {
     private authService: AuthService
   ) {
     this.loginForm = this.formBuilder.group({
-      dni: ['', [Validators.required]],
+      dni: ['', [Validators.required,numbersOnly()]],
       password: ['', Validators.required],
     });
   }

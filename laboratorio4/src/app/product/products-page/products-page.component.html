@@ -22,6 +22,7 @@
         formControlName="selectedColumn"
         placeholder="Select a search filter"
       >
+        <mat-option [value]="null">No Filter</mat-option>
         <mat-option value="sku">SKU</mat-option>
         <mat-option value="description">Description</mat-option>
       </mat-select>
@@ -30,6 +31,7 @@
     <!-- Selección de categoría -->
     <mat-form-field>
       <mat-select formControlName="category" placeholder="Select a Category">
+        <mat-option [value]="null">No Category</mat-option>
         <mat-option *ngFor="let category of categories" [value]="category.name">
           {{ category.name }}
         </mat-option>

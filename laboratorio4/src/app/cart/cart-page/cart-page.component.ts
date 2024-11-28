@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CartProduct, Sale } from '../../types/types';
+import { CartProduct, Sale, User } from '../../types/types';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { CartService } from '../../services/cart/cart.service';
@@ -47,7 +47,10 @@ export class CartPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userName = localStorage.getItem('userName') || '';
+
+    const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    this.userName = user.name;
+
     this.ventaForm = this.fb.group({
       clientId: ['', Validators.required],
       paymentMethod: ['', Validators.required],

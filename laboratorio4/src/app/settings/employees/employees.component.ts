@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
   styleUrl: './employees.component.css',
 })
 export class EmployeesComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'dni', 'name', 'email', 'edit'];
+  displayedColumns: string[] = ['id', 'dni', 'name', 'email'];
 
   employeeList = new MatTableDataSource<User>([]);
 
@@ -35,7 +35,7 @@ export class EmployeesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.checkAuthentication(); // Verifica si el usuario está en el localStorage
+    this.authService.checkAuthentication();
     this.authService.currentUser.subscribe((user) => {
       if (user && user.isAdmin) {
         this.displayedColumns.push('edit');
