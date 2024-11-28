@@ -75,10 +75,7 @@
   margin-top: 20px;
 }
 
+/* Aplica un fondo rojo claro para filas con stock bajo */
 .stock-below-minimum {
-  background-color: rgba(255, 0, 0, 0.2); /* Fondo rojo suave */
-}
-
-.stock-equals-minimum {
-  background-color: rgba(255, 255, 0, 0.2); /* Fondo amarillo suave */
+  background-color: rgb(255, 136, 136); /* Rojo claro */
 }

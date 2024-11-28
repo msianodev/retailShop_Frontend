@@ -48,6 +48,7 @@ export class ProductDetailComponent implements OnInit {
       stock: [0, [Validators.required, Validators.min(0)]],
       unitPrice: [0, [Validators.required, Validators.min(0)]],
       sku: ['', Validators.required],
+      minimumStock: [0, [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -90,8 +91,8 @@ export class ProductDetailComponent implements OnInit {
               ...this.product,
               ...this.productForm.value,
             };
-            updatedProduct.minimumStock = 0;
             if (this.isNewProduct) {
+              console.log(updatedProduct);
               this.productService
                 .createProduct(updatedProduct)
                 .subscribe(() => {
@@ -99,6 +100,7 @@ export class ProductDetailComponent implements OnInit {
                   this.goBack();
                 });
             } else {
+              console.log(updatedProduct);
               this.productService
                 .updateProduct(updatedProduct)
                 .subscribe(() => {

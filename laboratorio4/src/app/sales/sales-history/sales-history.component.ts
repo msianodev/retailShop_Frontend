@@ -55,6 +55,7 @@ export class SalesHistoryComponent implements OnInit {
         });
     } else {
       this.salesHistoryService.getSalesHistory().subscribe((sales) => {
+        console.log('ventas:', sales);
         this.salesHistory.data = sales;
       });
     }
@@ -67,6 +68,7 @@ export class SalesHistoryComponent implements OnInit {
   goToSaleDetail(id: number): void {
     this.salesHistoryService.getSalesBySaleId(id).subscribe({
       next: (sale) => {
+        console.log('venta:', sale);
         this.dialog.open(SaleDetailModalComponent, {
           width: '600px',
           data: sale,

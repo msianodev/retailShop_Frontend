@@ -22,4 +22,9 @@ export class SalesHistoryService {
   getSalesBySaleId(id: number): Observable<Sale> {
     return this.http.get<Sale>(`${this.apiUrl}/venta/${id}`);
   }
+
+  downloadInvoice(saleId: number): Observable<Blob> {
+    const url = `${this.apiUrl}/download/${saleId}`;
+    return this.http.get(url, { responseType: 'blob' });
+  }
 }

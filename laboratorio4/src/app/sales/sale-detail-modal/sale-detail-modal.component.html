@@ -91,4 +91,9 @@
       <p><strong>Total (con IVA):</strong> {{ sale.total }}</p>
     </div>
   </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button (click)="downloadInvoice(sale.id)">Download Invoice</button>
+  </mat-card-actions>
+
 </mat-card>

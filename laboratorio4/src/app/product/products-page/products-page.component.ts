@@ -124,6 +124,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   loadProducts(): void {
     this.productService.getAllProducts().subscribe({
       next: (products) => {
+        console.log('productos:', products);
         this.productList.data = products;
         this.productList.paginator = this.paginator;
         this.productList.sort = this.sort;
@@ -220,11 +221,10 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
 
   // Sombreado de filas según stock
   getRowClass(row: Product): string {
-    if (row.stock < row.minimumStock) {
+    if (row.stock < row.minimumStock || row.stock === 0) {
       return 'stock-below-minimum';
-    } else if (row.stock === row.minimumStock) {
-      return 'stock-equals-minimum';
-    } else {
+    }
+    else {
       return '';
     }
   }
