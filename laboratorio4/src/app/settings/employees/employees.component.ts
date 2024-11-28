@@ -62,6 +62,7 @@ export class EmployeesComponent implements OnInit {
   loadEmployeeList(): void {
     this.employeeService.getAllEmployees().subscribe({
       next: (data) => {
+        console.log('empleados:', data);
         this.employeeList.data = data;
       },
       error: (error) => {

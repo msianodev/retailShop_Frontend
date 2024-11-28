@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { User } from '../../types/types';
 import { EmployeeService } from '../../services/employee/employee.service';
+import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-employee-detail',
@@ -21,8 +23,10 @@ export class EmployeeDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private employeeService: EmployeeService,
     private fb: FormBuilder,
-    private router: Router
-  ) {}
+    private router: Router,
+    private dialog: MatDialog,
+
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -81,55 +85,87 @@ export class EmployeeDetailComponent implements OnInit {
 
   saveChanges(): void {
     if (this.employeeForm.valid) {
-      const updatedEmployee = { ...this.employee, ...this.employeeForm.value };
-      updatedEmployee.isAdmin = false;
-      updatedEmployee.isActive = true;
 
-      if (this.isNewEmployee) {
-        this.employeeService.createEmployee(updatedEmployee).subscribe({
-          next: () => {
-            this.goBack();
-          },
-          error: (error) => {
-            this.showErrorSnackBar(
-              'Hubo un error al crear el empleado. Intenta nuevamente.'
-            );
-          },
+      this.openDialog(
+        'Confirmar Carrito',
+        '¿Estás seguro de que quieres confirmar los cambios?',
+        'Confirmar',
+        'Cancelar'
+      )
+        .afterClosed()
+        .subscribe((result) => {
+          if (result) {
+            const updatedEmployee = { ...this.employee, ...this.employeeForm.value };
+            updatedEmployee.isAdmin = false;
+            updatedEmployee.isActive = true;
+
+            if (this.isNewEmployee) {
+              this.employeeService.createEmployee(updatedEmployee).subscribe({
+                next: () => {
+                  this.goBack();
+                },
+                error: (error) => {
+                  this.showErrorSnackBar(
+                    'Hubo un error al crear el empleado. Intenta nuevamente.'
+                  );
+                },
+              });
+            } else {
+              this.employeeService.updateEmployee(updatedEmployee).subscribe({
+                next: () => {
+                  this.goBack();
+                },
+                error: (error) => {
+                  this.showErrorSnackBar(
+                    'Hubo un error al actualizar el empleado. Intenta nuevamente.'
+                  );
+                },
+              });
+            }
+          }
         });
-      } else {
-        this.employeeService.updateEmployee(updatedEmployee).subscribe({
-          next: () => {
-            this.goBack();
-          },
-          error: (error) => {
-            this.showErrorSnackBar(
-              'Hubo un error al actualizar el empleado. Intenta nuevamente.'
-            );
-          },
-        });
-      }
     }
   }
 
   confirmDelete(): void {
-    const confirmDelete = confirm(
-      `Are you sure you want to delete employee ${this.employee?.name}?`
-    );
-    if (confirmDelete && this.employee) {
-      this.employeeService.deleteEmployee(this.employee.id).subscribe({
-        next: () => {
-          this.showErrorSnackBar('Empleado eliminado con exito.');
-          this.goBack();
-        },
-        error: (err) => {
-          console.error('Error deleting employee:', err);
-          this.showErrorSnackBar('Error deleting employee. Please try again.');
-        },
-      });
-    }
+    this.openDialog(
+      'Eliminar Empleado',
+      '¿Estas seguro de que quieres eliminar el empleado?',
+      'Si',
+      'No'
+    ).afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Empleado eliminado', this.employee);
+        this.employeeService.deleteEmployee(this.employee!.id).subscribe({
+          next: () => {
+            this.showErrorSnackBar('Empleado eliminado con exito.');
+            this.goBack();
+          },
+          error: (err) => {
+            console.error('Error deleting employee:', err);
+            this.showErrorSnackBar('Error deleting employee. Please try again.');
+          },
+        });
+      }
+    })
   }
+
+
 
   goBack(): void {
     this.router.navigate(['/employees']);
+  }
+
+
+  private openDialog(
+    title: string,
+    message: string,
+    confirmText: string,
+    cancelText: string
+  ) {
+    return this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: { title, message, confirmText, cancelText },
+    });
   }
 }

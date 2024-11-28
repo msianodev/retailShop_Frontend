@@ -63,10 +63,8 @@ export class AuthService {
   isAdmin(): boolean {
     const currentUser = this.currentUserValue;
     if (currentUser) {
-      console.log('currentUser.isAdmin:', currentUser);
       return Boolean(currentUser.isAdmin);
     }
-    console.log('No hay un usuario autenticado');
     return false;
   }
 }

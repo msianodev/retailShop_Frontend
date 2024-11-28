@@ -43,7 +43,7 @@ export class CartPageComponent implements OnInit {
     private fb: FormBuilder,
     private cartService: CartService,
     private dialog: MatDialog,
-    private cdRef: ChangeDetectorRef // private cardValidationService: CardValidationService
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -54,57 +54,7 @@ export class CartPageComponent implements OnInit {
     this.ventaForm = this.fb.group({
       clientId: ['', Validators.required],
       paymentMethod: ['', Validators.required],
-      // cardData: this.fb.group(
-      //   {
-      //     cardNumber: [
-      //       '',
-      //       [Validators.required, Validators.pattern(/^\d{16}$/)],
-      //     ],
-      //     cardExpiry: [
-      //       '',
-      //       [
-      //         Validators.required,
-      //         Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/),
-      //       ],
-      //     ],
-      //     cardCvv: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]],
-      //   },
-      //   { asyncValidators: cardAsyncValidator(this.cardValidationService) }
-      // ),
     });
-
-    // Validación dinámica de los datos de la tarjeta según el método de pago
-    // this.ventaForm.get('paymentMethod')?.valueChanges.subscribe((value) => {
-    //   const cardDataGroup = this.ventaForm.get('cardData') as FormGroup;
-    //   if (value === 'card') {
-    //     // Establecer validadores cuando el método de pago es tarjeta
-    //     cardDataGroup
-    //       .get('cardNumber')
-    //       ?.setValidators([
-    //         Validators.required,
-    //         Validators.pattern(/^\d{16}$/),
-    //       ]);
-    //     cardDataGroup
-    //       .get('cardExpiry')
-    //       ?.setValidators([
-    //         Validators.required,
-    //         Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/),
-    //       ]);
-    //     cardDataGroup
-    //       .get('cardCvv')
-    //       ?.setValidators([Validators.required, Validators.pattern(/^\d{3}$/)]);
-    //     cardDataGroup.setAsyncValidators(
-    //       cardAsyncValidator(this.cardValidationService)
-    //     );
-    //   } else {
-    //     // Limpiar validadores cuando el método de pago no es tarjeta
-    //     cardDataGroup.get('cardNumber')?.clearValidators();
-    //     cardDataGroup.get('cardExpiry')?.clearValidators();
-    //     cardDataGroup.get('cardCvv')?.clearValidators();
-    //     cardDataGroup.clearAsyncValidators();
-    //   }
-    //   cardDataGroup.updateValueAndValidity();
-    // });
 
     const employee = localStorage.getItem('currentUser');
     if (employee) {
