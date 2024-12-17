@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, filter, map, Observable, of } from 'rxjs';
 import { Category, Product } from '../../types/types';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
@@ -38,6 +38,27 @@ export class ProductService {
 
     return this.http.get<Product[]>(this.productsURL, { params });
   }
+
+  getPaginatedProducts(page: number, size: number, searchTerm: string, filterName: string | null, category: string | null) {
+    let params = new HttpParams()
+      .set('pageSize', size)
+      .set('pageNumber', page);
+  
+
+    if (filterName == 'description') {
+      params = params.set('description', searchTerm);
+    }
+    if(filterName == 'sku') {
+      params = params.set('sku', searchTerm);
+    }
+    if (category) {
+      params = params.set('category', category);
+    }
+  
+    return this.http.get<{ content: Product[]; totalElements: number }>('/api/products', { params });
+  }
+  
+  
 
   getAllProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.productsURL);

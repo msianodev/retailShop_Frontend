@@ -44,9 +44,14 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   searchForm!: FormGroup; // Formulario reactivo
 
   ///Filtros y busqueda
-  filterValue: string = ''; // Valor para el campo de búsqueda
-  selectedColumn: string = 'description'; // Columna de búsqueda seleccionada, por defecto es 'name'
+  searchTerm: string = ''; // Valor para el campo de búsqueda
+  selectedFilterName: string = 'description'; // Columna de búsqueda seleccionada, por defecto es 'name'
   selectedCategory: number | null = null; // Categoría seleccionada
+
+  currentPage: number = 0;
+  pageSize: number = 5; // Cambia según el tamaño que desees
+  totalProducts: number = 0; // Para almacenar el total de productos
+
 
   noResultsFound: boolean = false;
 
@@ -61,7 +66,13 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     private cartService: CartService,
     private fb: FormBuilder,
     private dialog: MatDialog
-  ) {}
+  ) {
+
+    this.searchForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]]
+    });
+  }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -69,8 +80,8 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     this.loadCategories();
 
     this.searchForm = this.fb.group({
-      filterValue: [''],
-      selectedColumn: [''],
+      searchTerm: [''],
+      selectedFilterName: [''],
       category: [''],
     });
   }
@@ -79,13 +90,15 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     if (this.productList.data.length > 0) {
       this.productList.paginator = this.paginator;
       this.productList.sort = this.sort;
+
+      
     }
   }
 
   //Función de filtrado de la tabla de productos Material
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.productList.filter = filterValue.trim().toLowerCase();
+    const searchTerm = (event.target as HTMLInputElement).value;
+    this.productList.filter = searchTerm.trim().toLowerCase();
 
     if (this.productList.paginator) {
       this.productList.paginator.firstPage();
@@ -96,46 +109,54 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     this.router.navigate([`/products/${id}`]);
   }
 
-  // Método que se llama cuando el usuario hace clic en el botón de búsqueda
   onSearch(): void {
     if (this.searchForm.valid) {
-      const formData = this.searchForm.value;
-  
-      const filterValue = formData.filterValue || ''; // Si el campo de texto está vacío, usa una cadena vacía
-      const selectedColumn = formData.selectedColumn; // Puede ser null
-      const selectedCategory = formData.category; // Puede ser null
-  
-      this.productService
-        .getFilteredProducts(filterValue, selectedColumn, selectedCategory)
-        .subscribe({
-          next: (products) => {
-            this.productList.data = products;
-            this.noResultsFound = products.length === 0; // Si no hay productos, activa la bandera
-          },
-          error: (error) => {
-            this.noResultsFound = true; // Si ocurre un error, también mostramos el mensaje
-          },
-        });
+      this.currentPage = 0; // Reinicia a la primera página cuando se hace una búsqueda
+      this.loadProducts();
     }
   }
     
 
-
-  // Método para cargar todos los productos
   loadProducts(): void {
-    this.productService.getAllProducts().subscribe({
-      next: (products) => {
-        console.log('productos:', products);
-        this.productList.data = products;
-        this.productList.paginator = this.paginator;
-        this.productList.sort = this.sort;
-      },
-      error: (error) => {
-        console.error('Error al cargar productos en el componente:', error);
-        this.showErrorSnackBar('Error al cargar productos.');
-      },
-    });
+    const formData = this.searchForm.value;
+    const searchTerm = formData.searchTerm || '';
+    const selectedFilterName = formData.selectedFilterName;
+    const selectedCategory = formData.category;
+  
+    this.productService
+      .getPaginatedProducts(
+        this.currentPage,
+        this.pageSize,
+        searchTerm,
+        selectedFilterName,
+        selectedCategory
+      )
+      .subscribe({
+        next: (response) => {
+          this.productList.data = response.content;
+          console.log('cantidad de elementos', response.totalElements)
+          this.totalProducts = response.totalElements;
+          this.noResultsFound = response.content.length === 0;
+  
+          // Inicializa el paginador y el ordenamiento
+          if (this.paginator && this.sort) {
+            this.productList.paginator = this.paginator;
+            this.productList.sort = this.sort;
+          }
+        },
+        error: (error) => {
+          this.noResultsFound = true;
+        },
+      });
   }
+  
+
+  onPageChange(event: any): void {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.loadProducts();
+  }
+  
 
   add_to_cart(product: Product): void {
     // const cartProduct: CartProduct = {

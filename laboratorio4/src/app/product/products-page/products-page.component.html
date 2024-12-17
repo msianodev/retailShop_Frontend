@@ -1,25 +1,16 @@
 <div class="productsContainer">
   <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search">
     <!-- Campo de búsqueda -->
-    <!-- <input type="text" placeholder="Search..." formControlName="filterValue" />
+     <input type="text" placeholder="Search..." formControlName="searchTerm" />
     <button type="submit">
       <mat-icon class="lupe">search</mat-icon>
-    </button> -->
-    <!-- Filtro nativo de Material -->
-    <mat-form-field>
-      <mat-label>Search</mat-label>
-      <input
-        matInput
-        (keyup)="applyFilter($event)"
-        placeholder="Search Header"
-        #input
-      />
-    </mat-form-field>
+    </button>
+
 
     <!-- Filtro de columna -->
     <mat-form-field class="filterContainer">
       <mat-select
-        formControlName="selectedColumn"
+        formControlName="selectedFilterName"
         placeholder="Select a search filter"
       >
         <mat-option [value]="null">No Filter</mat-option>
@@ -135,13 +126,12 @@
     </table>
 
     <mat-paginator
-      class="paginator"
-      [length]="productList.data.length"
-      [pageSizeOptions]="[5, 10]"
-      showFirstLastButtons
-      aria-label="Select page of products"
-    >
-    </mat-paginator>
+    [length]="totalProducts"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)">
+  </mat-paginator>
+  
       
   </div>
 </div>
