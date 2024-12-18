@@ -1,4 +1,4 @@
-<div class="login-container">
+<div class="login-container" *ngIf="!authService.isAuthenticated()">
   <div class="presentation-container">
     <h1>Retail Shop Proyect</h1>
     <div class="background-logo"></div>

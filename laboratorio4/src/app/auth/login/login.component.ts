@@ -17,7 +17,7 @@ export class LoginComponent {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    public authService: AuthService
   ) {
     this.loginForm = this.formBuilder.group({
       dni: ['', [Validators.required,numbersOnly()]],
