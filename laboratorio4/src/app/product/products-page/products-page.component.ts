@@ -9,12 +9,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-import { MatSort, Sort } from '@angular/material/sort';
-
+import { MatSort } from '@angular/material/sort';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductDetailComponent } from '../product-detail/product-detail.component';
-
 import { ProductService } from '../../services/product/product.service';
 import { CartService } from '../../services/cart/cart.service';
 import { Category, Product, CartProduct } from '../../types/types';
@@ -43,7 +40,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
 
   searchForm!: FormGroup; // Formulario reactivo
 
-  ///Filtros y busqueda
+  // Filtros y busqueda
   searchTerm: string = ''; // Valor para el campo de búsqueda
   selectedFilterName: string = 'description'; // Columna de búsqueda seleccionada, por defecto es 'name'
   selectedCategory: number | null = null; // Categoría seleccionada
@@ -51,7 +48,6 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   currentPage: number = 0;
   pageSize: number = 5; // Cambia según el tamaño que desees
   totalProducts: number = 0; // Para almacenar el total de productos
-
 
   noResultsFound: boolean = false;
 
@@ -67,16 +63,14 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private dialog: MatDialog
   ) {
-
     this.searchForm = this.fb.group({
       name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
     });
   }
 
   ngOnInit(): void {
     this.loadProducts();
-    // console.log(this.productList.data);
     this.loadCategories();
 
     this.searchForm = this.fb.group({
@@ -87,15 +81,14 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    // Asignar paginator y sort en el ciclo de vida AfterViewInit
     if (this.productList.data.length > 0) {
       this.productList.paginator = this.paginator;
       this.productList.sort = this.sort;
-
-      
     }
   }
 
-  //Función de filtrado de la tabla de productos Material
+  // Función de filtrado de la tabla de productos Material
   applyFilter(event: Event) {
     const searchTerm = (event.target as HTMLInputElement).value;
     this.productList.filter = searchTerm.trim().toLowerCase();
@@ -115,14 +108,13 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
       this.loadProducts();
     }
   }
-    
 
   loadProducts(): void {
     const formData = this.searchForm.value;
     const searchTerm = formData.searchTerm || '';
     const selectedFilterName = formData.selectedFilterName;
     const selectedCategory = formData.category;
-  
+
     this.productService
       .getPaginatedProducts(
         this.currentPage,
@@ -134,32 +126,33 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (response) => {
           this.productList.data = response.content;
-          console.log('cantidad de elementos', response.totalElements)
-          this.totalProducts = response.totalElements;
-          this.noResultsFound = response.content.length === 0;
-  
-          // Inicializa el paginador y el ordenamiento
-          if (this.paginator && this.sort) {
-            this.productList.paginator = this.paginator;
-            this.productList.sort = this.sort;
+          this.totalProducts = response.totalElements; // Asegúrate de que totalElements sea correcto
+
+          // Aquí aseguras que el paginador siempre recibe los valores adecuados
+          if (this.paginator) {
+            this.paginator.length = this.totalProducts;
+            this.paginator.pageIndex = this.currentPage;
           }
+
+          // Confirmar si la respuesta tiene resultados
+          this.noResultsFound = response.content.length === 0;
         },
-        error: (error) => {
-          this.noResultsFound = true;
+        error: () => {
+          this.showErrorSnackBar('Error al cargar los productos.');
         },
       });
   }
-  
 
   onPageChange(event: any): void {
+    // Aquí se actualiza currentPage y pageSize al cambiar de página
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
+
+    // Recargar los productos con los valores de página y tamaño actualizados
     this.loadProducts();
   }
-  
 
   add_to_cart(product: Product): void {
-    // const cartProduct: CartProduct = {
     const cartProduct: CartProduct = {
       id: product.id,
       sku: product.sku,
@@ -177,9 +170,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
         this.categories = categories;
       },
       error: (error) => {
-        this.showErrorSnackBar(
-          'Error al cargar categorías. Intenta más tarde.'
-        );
+        this.showErrorSnackBar('Error al cargar categorías. Intenta más tarde.');
       },
     });
   }
@@ -200,13 +191,10 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     this.productService.createCategory({ name }).subscribe({
       next: () => {
         this.loadCategories();
-        /// TODO implementar TOASTS
         this.showErrorSnackBar('Categoría agregada con éxito.');
       },
       error: () => {
-        this.showErrorSnackBar(
-          'Hubo un error al agregar la categoría. Intenta nuevamente.'
-        );
+        this.showErrorSnackBar('Hubo un error al agregar la categoría. Intenta nuevamente.');
       },
     });
   }
@@ -220,22 +208,15 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   }
 
   deleteProduct(product: Product): void {
-    if (
-      confirm(
-        `¿Estás seguro de que quieres eliminar el producto ${product.description}?`
-      )
-    ) {
+    if (confirm(`¿Estás seguro de que quieres eliminar el producto ${product.description}?`)) {
       this.productService.deleteProduct(product.id).subscribe({
         next: () => {
           this.loadProducts();
           this.showErrorSnackBar('Producto eliminado con éxito');
         },
-
         error: (error) => {
           console.error('Error al eliminar el producto:', error);
-          this.showErrorSnackBar(
-            'Hubo un error al eliminar el producto. Intenta nuevamente.'
-          );
+          this.showErrorSnackBar('Hubo un error al eliminar el producto. Intenta nuevamente.');
         },
       });
     }
